@@ -9,11 +9,16 @@ import { JobObject } from "../types";
 router.get("/jobs/:id", (req: Request, res: Response, next: NextFunction) => {
   void (async () => {
     try {
-      const result = await db.query(
+      const result: unknown = await db.query(
         `SELECT job_title, job_desc, date_of_apply, current_status_desc, active
                 FROM jobs_data WHERE user_id = $1 ORDER BY "date_of_apply" DESC`,
         [req.params.id]
       );
+
+      /* Narrowing received object from server */
+      if (!result || typeof result !== "object" || !("rows" in result)) {
+        throw Error("received invalid array of job objects from server");
+      }
 
       res.status(200).send(result.rows);
     } catch (error) {
@@ -26,11 +31,22 @@ router.get("/jobs/:id", (req: Request, res: Response, next: NextFunction) => {
 router.get("/job/:id", (req: Request, res: Response, next: NextFunction) => {
   void (async () => {
     try {
-      const result = await db.query(
+      const result: unknown = await db.query(
         `SELECT job_title, job_desc, date_of_apply, current_status_desc, active
                 FROM jobs_data WHERE id = $1`,
         [req.params.id]
       );
+
+      /* Narrowing received object from server */
+      if (
+        !result ||
+        typeof result !== "object" ||
+        !("rowCount" in result) ||
+        !("rows" in result) ||
+        !Array.isArray(result.rows)
+      ) {
+        throw Error("received invalid user object from server");
+      }
 
       /* If user not found throwing error to error handler middleware */
       if (!result.rowCount)

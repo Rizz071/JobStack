@@ -5,12 +5,25 @@ const router = express();
 
 import db from "../db";
 import { UserObject } from "../types";
+import { isString } from "../services/service";
 
 /* Request all users from DB */
 router.get("/", (_req: Request, res: Response, next: NextFunction) => {
   void (async () => {
     try {
-      const result = await db.query("SELECT * FROM users");
+      const result: unknown = await db.query("SELECT * FROM users");
+
+      /* Narrowing received object from server */
+      if (
+        !result ||
+        typeof result !== "object" ||
+        !("rowCount" in result) ||
+        !("rows" in result) ||
+        !Array.isArray(result.rows)
+      ) {
+        throw Error("received invalid user object from server");
+      }
+
       res.status(200).send(result.rows);
     } catch (error) {
       next(error);
@@ -22,9 +35,21 @@ router.get("/", (_req: Request, res: Response, next: NextFunction) => {
 router.get("/:id", (req: Request, res: Response, next: NextFunction) => {
   void (async () => {
     try {
-      const result = await db.query(`SELECT * FROM users WHERE id = $1`, [
-        req.params.id,
-      ]);
+      const result: unknown = await db.query(
+        `SELECT * FROM users WHERE id = $1`,
+        [req.params.id]
+      );
+
+      /* Narrowing received object from server */
+      if (
+        !result ||
+        typeof result !== "object" ||
+        !("rowCount" in result) ||
+        !("rows" in result) ||
+        !Array.isArray(result.rows)
+      ) {
+        throw Error("received invalid user object from server");
+      }
 
       /* If user not found throwing error to error handler middleware */
       if (!result.rowCount) {
@@ -40,11 +65,30 @@ router.get("/:id", (req: Request, res: Response, next: NextFunction) => {
 
 /* Adding new user to users DB */
 router.post("/", (req: Request, res: Response, next: NextFunction) => {
-  //TODO not safe
-  const { username, fullname, password }: UserObject = req.body as UserObject;
+  // const { username, fullname, password }: UserObject = req.body as UserObject;
 
+  const obj: unknown = req.body;
   void (async () => {
     try {
+      /* Narrowing username, password and fullname.
+       * fullname must exist in req.body
+       */
+      if (
+        !obj ||
+        typeof obj !== "object" ||
+        !("username" in obj) ||
+        !("password" in obj) ||
+        !("fullname" in obj) ||
+        !isString(obj.username) ||
+        !isString(obj.password) ||
+        !isString(obj.fullname)
+      ) {
+        throw Error(
+          "corrupted data or some field absent in job object received from server"
+        );
+      }
+      const { username, password, fullname } = obj;
+
       await db.query(
         `INSERT INTO users (username, password, fullname) VALUES ($1, $2, $3)`,
         [username, password, fullname]
