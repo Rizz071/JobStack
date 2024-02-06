@@ -111,7 +111,7 @@ router.delete("/:id", (async (
     await db.query(`DELETE FROM users WHERE id = $1`, [req.params.id]);
 
     /* Sending No Content if success*/
-    res.status(204);
+    res.sendStatus(204);
   } catch (error) {
     next(error);
   }

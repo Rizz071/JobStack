@@ -1,10 +1,14 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import "dotenv/config";
 import { Pool } from "pg";
 
 const pool = new Pool({
   host: process.env.HOST,
   user: process.env.USER,
-  database: process.env.DATABASE,
+  database:
+    process.env.NODE_ENV !== "development"
+      ? process.env.DATABASE
+      : process.env.DATABASE_TEST,
   password: process.env.PASSWORD,
   port: Number(process.env.PORT_DB),
   max: Number(process.env.MAX),
