@@ -1,0 +1,8 @@
+PUT http://127.0.0.1:3001/api/users/8
+Content-Type: application/json
+
+{
+    "username": "testuser10",
+    "password": "test_password_10",
+    "fullname": "Penny March"
+}
