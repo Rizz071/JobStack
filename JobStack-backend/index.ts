@@ -1,4 +1,6 @@
-const express = require('express')
+import express, { Request, Response, NextFunction } from "express"
+
+// const express = require('express')
 const app = express()
 
 
@@ -17,15 +19,20 @@ app.use('/api/', jobsRouter)
 
 
 /* MIDLLEWARE: unknown endpoint handling */
-const unknownEndpoint = (req, res) => {
+const unknownEndpoint = (_req: Request, res: Response) => {
     res.status(404).send({ error: 'unknown endpoint' })
 }
 app.use(unknownEndpoint)
 
 
 /* MIDLLEWARE: error handling */
-const errorHandler = (err, req, res, next) => {
+const errorHandler = (err: unknown, _req: Request, res: Response, _next: NextFunction) => {
     console.log('Error handler received error')
+
+    if (!(err instanceof Error) || !('code' in err)) {
+        return res.status(500).send('Unknown server error! Error object didn\'t come')
+    }
+
 
     switch (err.code) {
         case '42P01':
@@ -38,9 +45,6 @@ const errorHandler = (err, req, res, next) => {
             console.log(err)
             return res.status(500).send(err)
     }
-
-
-    return res.status(400).send(err)
 }
 app.use(errorHandler)
 

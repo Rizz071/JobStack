@@ -1,9 +1,10 @@
+import { Request, Response, NextFunction } from "express"
 const router = require('express').Router()
 const db = require('../db')
 
 
 /* Request all jobs for user by user ID */
-router.get('/jobs/:id', async (req, res, next) => {
+router.get('/jobs/:id', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const result = await db.query(
             `SELECT job_title, job_desc, date_of_apply, current_status_desc, active
@@ -18,7 +19,7 @@ router.get('/jobs/:id', async (req, res, next) => {
 })
 
 /* Request one job entity by job ID */
-router.get('/job/:id', async (req, res, next) => {
+router.get('/job/:id', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const result = await db.query(
             `SELECT job_title, job_desc, date_of_apply, current_status_desc, active
@@ -36,7 +37,7 @@ router.get('/job/:id', async (req, res, next) => {
 })
 
 /* Adding new job */
-router.post('/', async (req, res, next) => {
+router.post('/', async (req: Request, res: Response, next: NextFunction) => {
     const { job_title, job_desc, date_of_apply, current_status_desc, active } = req.body
     const user_id = req.params.id
 
@@ -55,7 +56,7 @@ router.post('/', async (req, res, next) => {
 })
 
 /* Deleting job by ID */
-router.delete('/:id', async (req, res, next) => {
+router.delete('/:id', async (req: Request, res: Response, next: NextFunction) => {
     try {
         await db.query(
             `DELETE FROM jobs_data WHERE id = $1`,
@@ -71,7 +72,7 @@ router.delete('/:id', async (req, res, next) => {
 
 
 /* Changing one job*/
-router.put('/:id', async (req, res, next) => {
+router.put('/:id', async (req: Request, res: Response, next: NextFunction) => {
     const { job_title, job_desc, date_of_apply, current_status_desc, active } = req.body
     const user_id = req.params.id
 

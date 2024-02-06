@@ -39,7 +39,7 @@ const createTableUsers = async () => {
 }
 
 
-const execQuery = async (query) => {
+const execQuery = async (query: string) => {
     try {
         const result = await db.query(query)
         console.log(result)

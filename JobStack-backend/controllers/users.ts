@@ -1,9 +1,10 @@
+import { Request, Response, NextFunction } from "express"
 const router = require('express').Router()
 const db = require('../db')
 
 
 /* Request all users from DB */
-router.get('/', async (req, res, next) => {
+router.get('/', async (_req: Request, res: Response, next: NextFunction) => {
     try {
         const result = await db.query('SELECT * FROM users')
         res.status(200).send(result.rows)
@@ -16,7 +17,7 @@ router.get('/', async (req, res, next) => {
 
 
 /* Request one user by ID from DB */
-router.get('/:id', async (req, res, next) => {
+router.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const result = await db.query(
             `SELECT * FROM users WHERE id = $1`,
@@ -33,7 +34,7 @@ router.get('/:id', async (req, res, next) => {
 })
 
 /* Adding new user to users DB */
-router.post('/', async (req, res, next) => {
+router.post('/', async (req: Request, res: Response, next: NextFunction) => {
     const { username, fullname, password } = req.body
 
     try {
@@ -49,7 +50,7 @@ router.post('/', async (req, res, next) => {
 })
 
 /* Deleting user by ID */
-router.delete('/:id', async (req, res, next) => {
+router.delete('/:id', async (req: Request, res: Response, next: NextFunction) => {
     try {
         await db.query(
             `DELETE FROM users WHERE id = $1`,
@@ -64,7 +65,7 @@ router.delete('/:id', async (req, res, next) => {
 })
 
 /* Adding new user to users DB */
-router.put('/:id', async (req, res, next) => {
+router.put('/:id', async (req: Request, res: Response, next: NextFunction) => {
     const { username, fullname, password } = req.body
     const user_id = req.params.id
 

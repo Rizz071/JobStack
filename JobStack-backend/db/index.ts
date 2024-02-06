@@ -13,7 +13,7 @@ const pool = new Pool({
 })
 
 
-const query = async (text, params) => {
+const query = async (text: string, params?: any[]) => {
     const start = Date.now()
     const res = await pool.query(text, params)
     const duration = Date.now() - start
