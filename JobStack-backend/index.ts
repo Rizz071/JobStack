@@ -1,12 +1,12 @@
 import express, { Request, Response, NextFunction } from "express";
 // import "dotenv/config";
 const app = express();
-var cors = require("cors");
+// const cors = require("cors");
 
 import usersRouter from "./controllers/users";
 import jobsRouter from "./controllers/jobs";
 
-app.use(cors());
+// app.use(cors());
 app.use(express.json());
 
 /* Setup routers */
@@ -38,7 +38,7 @@ const errorHandler = (
 
   switch (err.code) {
     case "42P01":
-      return res.status(404).send("ERROR: users database not found");
+      return res.status(404).send("Error: users database not found");
     case "42P18":
       return res
         .status(404)
