@@ -59,12 +59,11 @@ describe("template spec", () => {
       // headers: { Authorization: `Bearer ${token}` },
     ).then((res) => {
       expect(res.status).to.equal(201);
-      console.log(res);
       //other assertions you find convinient
     });
   });
 
-  it("it should CREATE and DELETE one user", () => {
+  it("it should DELETE one user", () => {
     cy.request({
       method: "GET",
       url: "/users",
@@ -72,6 +71,7 @@ describe("template spec", () => {
     }).then((res) => {
       expect(res.status).to.equal(200);
 
+      /* Narrowing */
       if (!res || !("body" in res) || !Array.isArray(res.body)) return;
 
       cy.request({
