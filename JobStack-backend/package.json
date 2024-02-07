@@ -7,7 +7,7 @@
     "tsc": "tsc",
     "dev": "NODE_ENV=development ts-node-dev index.ts",
     "lint": "eslint --ext .ts .",
-    "start": "node build/index.js",
+    "start": "NODE_ENV=production node build/index.js",
     "test": "npx cypress run"
   },
   "author": "Igor Burykin",

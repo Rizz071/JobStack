@@ -72,9 +72,11 @@ describe("template spec", () => {
     }).then((res) => {
       expect(res.status).to.equal(200);
 
+      if (!res || !("body" in res) || !Array.isArray(res.body)) return;
+
       cy.request({
         method: "DELETE",
-        url: "/users/" + res.body.slice(-1)[0].id,
+        url: "/users/" + String(res.body.slice(-1)[0].id),
         // headers: { Content-Type: "application/json" },
       }).then((res) => {
         expect(res.status).to.equal(204);
