@@ -10,7 +10,7 @@ router.get("/jobs/:id", (req: Request, res: Response, next: NextFunction) => {
   void (async () => {
     try {
       const result: unknown = await db.query(
-        `SELECT job_title, job_desc, date_of_apply, current_status_desc, active
+        `SELECT id, job_title, job_desc, date_of_apply, current_status_desc, active
                 FROM jobs_data WHERE user_id = $1 ORDER BY "date_of_apply" DESC`,
         [req.params.id]
       );
@@ -60,7 +60,7 @@ router.get("/job/:id", (req: Request, res: Response, next: NextFunction) => {
 });
 
 /* Adding new job */
-router.post("/", (req: Request, res: Response, next: NextFunction) => {
+router.post("/jobs/:id", (req: Request, res: Response, next: NextFunction) => {
   //TODO not safe
   const {
     job_title,
@@ -71,12 +71,15 @@ router.post("/", (req: Request, res: Response, next: NextFunction) => {
   }: JobObject = req.body as JobObject;
   const user_id = req.params.id;
 
+  console.log(req.body);
+
   void (async () => {
     try {
-      await db.query(
-        `INSERT INTO jobs_data (job_title, job_desc, date_of_apply,
+      const result: unknown = await db.query(
+        `INSERT INTO jobs_data (user_id, job_title, job_desc, date_of_apply,
                 current_status_desc, active)
-                VALUES ($1, $2, $3, $4, $5) WHERE id = $6`,
+                VALUES ($6, $1, $2, $3, $4, $5)
+                RETURNING *`,
         [
           job_title,
           job_desc,
@@ -87,7 +90,18 @@ router.post("/", (req: Request, res: Response, next: NextFunction) => {
         ]
       );
 
-      res.status(201).send(req.body);
+      /* Narrowing received object from server */
+      if (
+        !result ||
+        typeof result !== "object" ||
+        !("rowCount" in result) ||
+        !("rows" in result) ||
+        !Array.isArray(result.rows)
+      ) {
+        throw new Error("received invalid user object from server");
+      }
+
+      res.status(201).send(result.rows[0]);
     } catch (error) {
       next(error);
     }
@@ -95,18 +109,21 @@ router.post("/", (req: Request, res: Response, next: NextFunction) => {
 });
 
 /* Deleting job by ID */
-router.delete("/:id", (req: Request, res: Response, next: NextFunction) => {
-  void (async () => {
-    try {
-      await db.query(`DELETE FROM jobs_data WHERE id = $1`, [req.params.id]);
+router.delete(
+  "/jobs/:id",
+  (req: Request, res: Response, next: NextFunction) => {
+    void (async () => {
+      try {
+        await db.query(`DELETE FROM jobs_data WHERE id = $1`, [req.params.id]);
 
-      /* Sending No Content if success*/
-      res.status(204);
-    } catch (error) {
-      next(error);
-    }
-  })();
-});
+        /* Sending No Content if success*/
+        res.status(204);
+      } catch (error) {
+        next(error);
+      }
+    })();
+  }
+);
 
 /* Changing one job*/
 router.put("/:id", (req: Request, res: Response, next: NextFunction) => {

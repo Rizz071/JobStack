@@ -1,12 +1,12 @@
 import express, { Request, Response, NextFunction } from "express";
 // import "dotenv/config";
 const app = express();
-// const cors = require("cors");
+import cors from "cors";
 
 import usersRouter from "./controllers/users";
 import jobsRouter from "./controllers/jobs";
 
-// app.use(cors());
+app.use(cors());
 app.use(express.json());
 
 /* Setup routers */
@@ -45,6 +45,7 @@ const errorHandler = (
         .send("ERROR: could not determine data type of parameter $1");
 
     default:
+      console.log(err);
       return res.status(500).send(err);
   }
 };

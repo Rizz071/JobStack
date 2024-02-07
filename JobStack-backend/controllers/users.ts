@@ -21,7 +21,7 @@ router.get("/", (_req: Request, res: Response, next: NextFunction) => {
         !("rows" in result) ||
         !Array.isArray(result.rows)
       ) {
-        throw Error("received invalid user object from server");
+        throw new Error("received invalid user object from server");
       }
 
       res.status(200).send(result.rows);
@@ -48,12 +48,12 @@ router.get("/:id", (req: Request, res: Response, next: NextFunction) => {
         !("rows" in result) ||
         !Array.isArray(result.rows)
       ) {
-        throw Error("received invalid user object from server");
+        throw new Error("received invalid user object from server");
       }
 
       /* If user not found throwing error to error handler middleware */
       if (!result.rowCount) {
-        throw Error(`user with ID ${req.params.id} not found in DB`);
+        throw new Error(`user with ID ${req.params.id} not found in DB`);
       }
 
       res.send(result.rows[0]);

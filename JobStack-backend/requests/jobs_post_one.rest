@@ -1,0 +1,11 @@
+POST http://127.0.0.1:3001/api/jobs/1
+Content-Type: application/json
+
+{
+    "user_id": 1,
+    "job_title": "title job1",
+    "job_desc": "desc job1",
+    "date_of_apply": "2024-02-06T22:59:19.000Z",
+    "current_status_desc": "sdf sdfsdfsdfs dfsd fsdfsd fsdf df dsf",
+    "active": true
+}
