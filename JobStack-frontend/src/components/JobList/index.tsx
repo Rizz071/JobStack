@@ -1,15 +1,17 @@
-import { useEffect, useState } from "react";
+import { MouseEventHandler, useEffect, useRef, useState } from "react";
 import { JobItem } from "../../types";
 import axios from "axios";
 import thrashIcon from "../../assets/icons/thrash.svg";
 import editIcon from "../../assets/icons/edit.svg";
 import SearchField from "./SearchField";
+import AddJobForm from "../AddJobForm";
 
 interface Props {
   filterString: string;
   jobsList: JobItem[];
   setFilterString: React.Dispatch<React.SetStateAction<string>>;
   setJobsList: React.Dispatch<React.SetStateAction<JobItem[]>>;
+  handleShowAddJobForm: MouseEventHandler<HTMLElement>;
 }
 
 interface CheckboxSelect {
@@ -22,9 +24,9 @@ export default function JobsList({
   setFilterString,
   jobsList,
   setJobsList,
+  handleShowAddJobForm,
 }: Props) {
-  const [deleteAllButtonDisabled, setDeleteAllButtonDisabled] =
-    useState<boolean>(false);
+  const modalAddJobForm = useRef<HTMLDialogElement>(null);
 
   const [checkedState, setCheckedState] = useState<CheckboxSelect[]>([]);
   useEffect(() => {
@@ -104,132 +106,135 @@ export default function JobsList({
   }, [jobsList]);
 
   return (
-    <div className="mb-5 rounded-xl p-2 shadow-blue-950">
-      <div className="rounded-lg border-b border-l border-r">
-        <div className="mt-4 flex flex-row justify-between  rounded-t-lg bg-gray-800 py-4">
-          <h2 className="ml-4 text-3xl font-extralight leading-7 text-white">
-            Jobs list
-          </h2>
-          {/* <label
-              htmlFor="search_jobs"
-              className="block text-sm font-medium leading-6 text-gray-900"
-            >
-              Search in saved jobs
-            </label> */}
-          <div className="flex flex-row">
-            <button
-              // onClick={void () => void}
-              className="mr-6 rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-            >
-              Add new
-              {/* <img src={thrashIcon}></img> */}
+    <>
+      <dialog ref={modalAddJobForm} id="my_modal_3" className="modal">
+        <div className="modal-box w-1/3 max-w-none">
+          <form method="dialog">
+            {/* if there is a button in form, it will close the modal */}
+            <button className="btn btn-circle btn-ghost btn-sm absolute right-2 top-2">
+              ✕
             </button>
-            <button
-              disabled={
-                checkedState.every((checkElem) => !checkElem.state)
-                  ? true
-                  : false
-              }
-              onClick={() => handleBulkDelete()}
-              className="mr-6 rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:bg-gray-500"
-            >
-              Delete selected
-              {/* <img src={thrashIcon}></img> */}
-            </button>
-            {/* <div className="my-auto mr-4">
-              <input
-                placeholder="Search"
-                type="text"
-                name="search_jobs"
-                id="search_jobs"
-                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                value={filterString}
-                onChange={(event) => setFilterString(event.target.value)}
-              />
-            </div> */}
-            <SearchField
-              filterString={filterString}
-              setFilterString={setFilterString}
-            />
-          </div>
+            <h3 className="text-lg font-bold">New job vacancy</h3>
+            {/* <p className="py-4">Press ESC key or click on ✕ button to close</p> */}
+            <AddJobForm jobsList={jobsList} setJobsList={setJobsList} />
+          </form>
         </div>
-        {jobsList.filter(
-          (jobItem) =>
-            jobItem.job_title
-              .toLowerCase()
-              .includes(filterString.toLowerCase()) ||
-            jobItem.job_desc.toLowerCase().includes(filterString.toLowerCase())
-        ).length === 0 ? (
-          <p className="p-2 text-sm font-semibold leading-6 text-gray-900">
-            Jobs not found
-          </p>
-        ) : (
-          <ul role="list" className="divide-y divide-gray-300">
-            {jobsList
-              .filter(
-                (jobItem) =>
-                  jobItem.job_title
-                    .toLowerCase()
-                    .includes(filterString.toLowerCase()) ||
-                  jobItem.job_desc
-                    .toLowerCase()
-                    .includes(filterString.toLowerCase())
-              )
-              .map((jobItem) => (
-                <li
-                  key={jobItem.id}
-                  className="flex justify-between gap-x-6 odd:bg-white even:bg-gray-100"
-                >
-                  <input
-                    type="checkbox"
-                    checked={
-                      checkedState.find(
-                        (stateElem: CheckboxSelect) =>
-                          stateElem.id === jobItem.id
-                      )?.state || false
-                    }
-                    onChange={() => handleCheckboxChange(jobItem.id)}
-                    className="dark:bg-white-800 my-auto ml-6 size-6 shrink-0 rounded  border-gray-200 text-blue-600 focus:ring-blue-500 disabled:pointer-events-none disabled:opacity-50 dark:border-gray-700 dark:checked:border-blue-500 dark:checked:bg-blue-500 dark:focus:ring-offset-gray-800"
-                    id={`custom-checkbox-${jobItem.id}`}
-                  />
+      </dialog>
 
-                  <div className="my-4 min-w-0 flex-1 gap-x-4">
-                    <div className="min-w-0 flex-auto">
-                      <p className="text-sm font-semibold leading-6 text-gray-900">
-                        {jobItem.job_title}
-                      </p>
+      <div className="mb-5 rounded-box shadow-xl">
+        <div className="rounded-lg border-b border-l border-r">
+          <div className="mt-6 flex flex-row justify-between rounded-t-lg bg-neutral py-2">
+            <div className="flex w-1/3 flex-row justify-start">
+              <h2 className="ml-4 text-xl font-light text-white">
+                Applied jobs
+              </h2>
+            </div>
 
-                      <div className="flex gap-x-4">
-                        <p className="mt-1 text-xs leading-5 text-gray-500">
-                          Applyed date:{" "}
-                          <time dateTime={jobItem.date_of_apply.toString()}>
-                            {jobItem.date_of_apply.split("T")[0]}
-                          </time>
+            <div className="flex w-1/3 flex-row justify-center">
+              <SearchField
+                filterString={filterString}
+                setFilterString={setFilterString}
+              />
+            </div>
+            <div className="flex w-1/3 flex-row justify-end">
+              <button
+                onClick={() => handleBulkDelete()}
+                className={`${
+                  checkedState.every((checkElem) => !checkElem.state)
+                    ? "hidden"
+                    : ""
+                } btn btn-error btn-sm  mr-6`}
+              >
+                Delete selected
+              </button>
+              <button
+                onClick={() => modalAddJobForm.current?.showModal()}
+                className="btn btn-primary btn-sm  mr-6"
+              >
+                Add new
+              </button>
+            </div>
+          </div>
+          {jobsList.filter(
+            (jobItem) =>
+              jobItem.job_title
+                .toLowerCase()
+                .includes(filterString.toLowerCase()) ||
+              jobItem.job_desc
+                .toLowerCase()
+                .includes(filterString.toLowerCase())
+          ).length === 0 ? (
+            <p className="p-2 text-sm font-semibold leading-6 text-gray-900">
+              Jobs not found
+            </p>
+          ) : (
+            <ul role="list" className="divide-y divide-gray-300">
+              {jobsList
+                .filter(
+                  (jobItem) =>
+                    jobItem.job_title
+                      .toLowerCase()
+                      .includes(filterString.toLowerCase()) ||
+                    jobItem.job_desc
+                      .toLowerCase()
+                      .includes(filterString.toLowerCase())
+                )
+                .map((jobItem) => (
+                  <li
+                    key={jobItem.id}
+                    className="flex justify-between gap-x-6 odd:bg-white even:bg-gray-100"
+                  >
+                    <input
+                      type="checkbox"
+                      checked={
+                        checkedState.find(
+                          (stateElem: CheckboxSelect) =>
+                            stateElem.id === jobItem.id
+                        )?.state || false
+                      }
+                      onChange={() => handleCheckboxChange(jobItem.id)}
+                      className="checkbox-primary my-auto ml-6 size-6 shrink-0"
+                      id={`custom-checkbox-${jobItem.id}`}
+                    />
+
+                    <div className="my-4 min-w-0 flex-1 gap-x-4">
+                      <div className="min-w-0 flex-auto">
+                        <p className="text-sm font-semibold leading-6 text-gray-900">
+                          {jobItem.job_title}
                         </p>
 
-                        <p className="mt-1 text-xs leading-5 text-gray-500">
-                          Current status: {jobItem.current_status_desc}
-                        </p>
+                        <div className="flex gap-x-4">
+                          <p className="mt-1 text-xs leading-5 text-gray-500">
+                            Applyed date:{" "}
+                            <time dateTime={jobItem.date_of_apply.toString()}>
+                              {jobItem.date_of_apply.split("T")[0]}
+                            </time>
+                          </p>
+
+                          <p className="mt-1 text-xs leading-5 text-gray-500">
+                            Current status: {jobItem.current_status_desc}
+                          </p>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <button
-                    onClick={() => handleDelete(jobItem.id)}
-                    className="my-auto w-6"
-                  >
-                    <img src={editIcon}></img>
-                  </button>
-                  <button
-                    onClick={() => handleDelete(jobItem.id)}
-                    className="my-auto mr-6 w-6"
-                  >
-                    <img src={thrashIcon}></img>
-                  </button>
-                </li>
-              ))}
-          </ul>
-        )}
+                    <button
+                      onClick={() => handleDelete(jobItem.id)}
+                      className="my-auto w-6"
+                    >
+                      <img src={editIcon}></img>
+                    </button>
+                    <button
+                      onClick={() => handleDelete(jobItem.id)}
+                      className="my-auto mr-6 w-6"
+                    >
+                      <img src={thrashIcon}></img>
+                    </button>
+                  </li>
+                ))}
+            </ul>
+          )}
+        </div>
       </div>
-    </div>
+    </>
   );
 }
