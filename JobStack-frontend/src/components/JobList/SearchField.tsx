@@ -1,3 +1,5 @@
+import React from "react";
+
 interface Props {
   filterString: string;
   setFilterString: React.Dispatch<React.SetStateAction<string>>;

@@ -1,3 +1,4 @@
+import React from "react";
 import { MouseEventHandler, useCallback, useRef, useState } from "react";
 import JobsList from "./components/JobList";
 import NavBar from "./components/NavBar";
@@ -5,7 +6,7 @@ import { JobItem } from "./types";
 
 function App() {
   const [jobsList, setJobsList] = useState<JobItem[]>([]);
-  const [filterString, setFilterString] = useState<string>("");
+  // const [filterString, setFilterString] = useState<string>("");
   const [pagesTotalAmount, setPagesTotalAmount] = useState<number>(0);
   const [currentPage, setCurrentPage] = useState<number>(0);
   const [jobsPerPage, setJobsPerPage] = useState<number>(0);
@@ -30,8 +31,8 @@ function App() {
       <NavBar />
       <div className="container mx-auto h-auto sm:w-full md:w-3/4 lg:w-3/5 xl:w-1/2">
         <JobsList
-          filterString={filterString}
-          setFilterString={setFilterString}
+          // filterString={filterString}
+          // setFilterString={setFilterString}
           jobsList={jobsList}
           setJobsList={setJobsList}
           handleShowAddJobForm={handleShowAddJobForm}

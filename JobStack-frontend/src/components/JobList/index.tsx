@@ -6,11 +6,9 @@ import thrashIcon from "../../assets/icons/thrash.svg";
 import editIcon from "../../assets/icons/edit.svg";
 import SearchField from "./SearchField";
 import PaginationBox from "./PaginationBox";
-import ModalAddJob from "./ModalAddJob";
+import ModalAddJob from "./AddModalJob";
 
 interface Props {
-  filterString: string;
-  setFilterString: React.Dispatch<React.SetStateAction<string>>;
   jobsList: JobItem[];
   setJobsList: React.Dispatch<React.SetStateAction<JobItem[]>>;
   handleShowAddJobForm: MouseEventHandler<HTMLElement>;
@@ -28,8 +26,6 @@ interface CheckboxSelect {
 }
 
 export default function JobsList({
-  filterString,
-  setFilterString,
   jobsList,
   setJobsList,
   pagesTotalAmount,
@@ -40,7 +36,8 @@ export default function JobsList({
   setJobsPerPage,
 }: Props) {
   const modalAddJobForm = useRef<HTMLDialogElement>(null);
-  // const [pages, setPages] = useState<number>(0);
+  const [filteredJobList, setFilteredJobList] = useState<JobItem[]>([]);
+  const [filterString, setFilterString] = useState<string>("");
 
   // const [width, setWidth] = useState(window.innerWidth);
   const [height, setHeight] = useState(window.innerHeight);
@@ -50,10 +47,12 @@ export default function JobsList({
   };
   useEffect(() => {
     window.addEventListener("resize", updateDimensions);
-    return () => window.removeEventListener("resize", updateDimensions);
+    // return () => window.removeEventListener("resize", updateDimensions);
   }, []);
 
   const [checkedState, setCheckedState] = useState<CheckboxSelect[]>([]);
+
+  /* Requesting data from server via REST API */
   useEffect(() => {
     void (async () => {
       try {
@@ -73,6 +72,52 @@ export default function JobsList({
     })();
   }, []);
 
+  useEffect(() => {
+    if (JobsList.length !== 0) {
+      setFilteredJobList(
+        jobsList.filter(
+          (jobItem) =>
+            jobItem.job_title
+              .toLowerCase()
+              .includes(filterString.toLowerCase()) ||
+            jobItem.job_desc.toLowerCase().includes(filterString.toLowerCase())
+        )
+      );
+    }
+  }, [jobsList.length, filterString]);
+
+  /* Initialization state of  all checkboxes to false
+   * CONDITION: jobsList.length changed
+   */
+  useEffect(() => {
+    if (jobsList.length !== 0) {
+      console.log("Updating states of all checkboxes");
+      setCheckedState(
+        jobsList.map((job) => {
+          return { id: job.id, state: false };
+        })
+      );
+    }
+  }, [jobsList.length]);
+
+  useEffect(() => {
+    const jobs_per_page: number = Math.floor((height - 200) / 80);
+
+    if (jobs_per_page < 3) {
+      setJobsPerPage(3);
+    } else {
+      setJobsPerPage(jobs_per_page);
+    }
+    console.log(filteredJobList);
+    setPagesTotalAmount(Math.ceil(filteredJobList.length / jobsPerPage));
+  }, [jobsList.length, height, filteredJobList]);
+
+  /* Last page calculaion after window resizing */
+  useEffect(() => {
+    if (currentPage >= pagesTotalAmount) setCurrentPage(pagesTotalAmount - 1);
+    if (currentPage < 0) setCurrentPage(0);
+  }, [pagesTotalAmount]);
+
   const handleCheckboxChange = (position: number) => {
     if (!checkedState) return false;
 
@@ -82,7 +127,7 @@ export default function JobsList({
           ? { id: position, state: !checkElem.state }
           : checkElem
     );
-    setCheckedState([...updatedCheckedState]);
+    setCheckedState(updatedCheckedState);
   };
 
   const handleDelete = async (id: number) => {
@@ -120,35 +165,7 @@ export default function JobsList({
   };
 
   /* Waiting for data arrival */
-  if (!jobsList) return null;
-
-  useEffect(() => {
-    setCheckedState((jobsList) =>
-      jobsList.map((job) => {
-        return { id: job.id, state: false };
-      })
-    );
-  }, [jobsList]);
-
-  const jobs_per_page: number = Math.floor((height - 200) / 80);
-  console.log(jobs_per_page);
-
-  if (jobs_per_page < 3) {
-    setJobsPerPage(3);
-  } else {
-    setJobsPerPage(jobs_per_page);
-  }
-  setPagesTotalAmount(
-    Math.ceil(
-      jobsList.filter(
-        (jobItem) =>
-          jobItem.job_title
-            .toLowerCase()
-            .includes(filterString.toLowerCase()) ||
-          jobItem.job_desc.toLowerCase().includes(filterString.toLowerCase())
-      ).length / jobsPerPage
-    )
-  );
+  if (jobsList.length === 0) return null;
 
   return (
     <>
@@ -191,30 +208,13 @@ export default function JobsList({
               />
             </div>
           </div>
-          {jobsList.filter(
-            (jobItem) =>
-              jobItem.job_title
-                .toLowerCase()
-                .includes(filterString.toLowerCase()) ||
-              jobItem.job_desc
-                .toLowerCase()
-                .includes(filterString.toLowerCase())
-          ).length === 0 ? (
-            <p className="p-2 text-sm font-semibold leading-6 text-gray-900">
+          {jobsList.length === 0 ? (
+            <p className="bg-white p-2 text-sm font-semibold leading-6 text-gray-900">
               Jobs not found
             </p>
           ) : (
             <ul role="list" className="divide-y divide-gray-300">
-              {jobsList
-                .filter(
-                  (jobItem) =>
-                    jobItem.job_title
-                      .toLowerCase()
-                      .includes(filterString.toLowerCase()) ||
-                    jobItem.job_desc
-                      .toLowerCase()
-                      .includes(filterString.toLowerCase())
-                )
+              {filteredJobList
                 .slice(
                   currentPage * jobsPerPage,
                   currentPage * jobsPerPage + jobsPerPage
@@ -233,7 +233,7 @@ export default function JobsList({
                         )?.state || false
                       }
                       onChange={() => handleCheckboxChange(jobItem.id)}
-                      className="checkbox-primary my-auto ml-6 size-6 shrink-0"
+                      className="checkbox-primary my-auto ml-6 size-6 shrink-0 rounded-sm"
                       id={`custom-checkbox-${jobItem.id}`}
                     />
 
