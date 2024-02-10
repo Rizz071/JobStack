@@ -1,5 +1,5 @@
-import { SyntheticEvent, useState } from "react";
-import { JobItem } from "../../types";
+import React, { SyntheticEvent, useState } from "react";
+import { JobItem } from "../../../types";
 import axios from "axios";
 
 interface Props {

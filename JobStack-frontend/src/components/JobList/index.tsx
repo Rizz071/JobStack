@@ -5,13 +5,13 @@ import axios from "axios";
 import thrashIcon from "../../assets/icons/thrash.svg";
 import editIcon from "../../assets/icons/edit.svg";
 import SearchField from "./SearchField";
-import AddJobForm from "../AddJobForm";
 import PaginationBox from "./PaginationBox";
+import ModalAddJob from "./ModalAddJob";
 
 interface Props {
   filterString: string;
-  jobsList: JobItem[];
   setFilterString: React.Dispatch<React.SetStateAction<string>>;
+  jobsList: JobItem[];
   setJobsList: React.Dispatch<React.SetStateAction<JobItem[]>>;
   handleShowAddJobForm: MouseEventHandler<HTMLElement>;
   pagesTotalAmount: number;
@@ -152,19 +152,11 @@ export default function JobsList({
 
   return (
     <>
-      <dialog ref={modalAddJobForm} id="my_modal_3" className="modal">
-        <div className="modal-box w-1/3 max-w-none  rounded-md">
-          <form method="dialog">
-            {/* if there is a button in form, it will close the modal */}
-            <button className="btn btn-circle btn-ghost btn-sm absolute right-2 top-2">
-              ✕
-            </button>
-            <h3 className="text-lg font-bold">New job vacancy</h3>
-            {/* <p className="py-4">Press ESC key or click on ✕ button to close</p> */}
-            <AddJobForm jobsList={jobsList} setJobsList={setJobsList} />
-          </form>
-        </div>
-      </dialog>
+      <ModalAddJob
+        modalAddJobForm={modalAddJobForm}
+        jobsList={jobsList}
+        setJobsList={setJobsList}
+      />
 
       <div className="mb-5 shadow-xl">
         <div className="border-b border-l border-r">
@@ -283,15 +275,13 @@ export default function JobsList({
           )}
         </div>
       </div>
-      <div className="flex justify-end">
-        {jobsList.length !== 0 && (
-          <PaginationBox
-            currentPage={currentPage}
-            setCurrentPage={setCurrentPage}
-            pagesTotalAmount={pagesTotalAmount}
-          />
-        )}
-      </div>
+      {jobsList.length !== 0 && (
+        <PaginationBox
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+          pagesTotalAmount={pagesTotalAmount}
+        />
+      )}
     </>
   );
 }

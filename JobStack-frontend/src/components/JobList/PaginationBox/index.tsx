@@ -1,3 +1,4 @@
+import React from "react";
 interface Props {
   pagesTotalAmount: number;
   currentPage: number;
@@ -29,7 +30,16 @@ const PaginationBox = ({
     );
   }
 
-  return <div className="join shadow-xl">{pagArray}</div>;
+  return (
+    <div className="flex justify-between">
+      <div>
+        {/* <button className="btn btn-sm  text-xs">
+          Total {pagesTotalAmount} entries
+        </button> */}
+      </div>
+      <div className="join shadow-xl">{pagArray}</div>
+    </div>
+  );
 };
 
 export default PaginationBox;
