@@ -52,7 +52,7 @@ const AddJobForm = ({ jobsList, setJobsList }: Props) => {
             name="job_title"
             id="job_title"
             //   autoComplete="given-name"
-            className="input input-sm input-bordered input-primary w-full"
+            className="input input-sm input-bordered input-primary w-full  rounded-md"
             value={newJobTitle}
             onChange={(event) => setNewJobTitle(event.target.value)}
           />
@@ -66,7 +66,7 @@ const AddJobForm = ({ jobsList, setJobsList }: Props) => {
             id="job_desc"
             name="job_desc"
             rows={6}
-            className="textarea textarea-primary w-full"
+            className="textarea textarea-primary w-full  rounded-md"
             value={newJobDesc}
             onChange={(event) => setNewJobDesc(event.target.value)}
           />
@@ -75,13 +75,16 @@ const AddJobForm = ({ jobsList, setJobsList }: Props) => {
       </div>
 
       <div className="mt-4 flex justify-between ">
-        <button type="submit" className="btn btn-neutral  btn-sm mr-6">
+        <button
+          type="submit"
+          className="btn btn-neutral btn-sm mr-6 rounded-md"
+        >
           Close
         </button>
         <button
           type="button"
           onClick={handleSubmit}
-          className="btn btn-primary btn-sm"
+          className="btn btn-primary btn-sm rounded-md"
         >
           Save
         </button>

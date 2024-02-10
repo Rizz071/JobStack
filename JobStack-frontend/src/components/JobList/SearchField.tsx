@@ -11,7 +11,7 @@ const SearchField = ({ filterString, setFilterString }: Props) => {
         type="text"
         name="search_jobs"
         id="search_jobs"
-        className="input input-sm input-bordered w-full"
+        className="input input-sm input-bordered w-48 rounded-md"
         value={filterString}
         onChange={(event) => setFilterString(event.target.value)}
       />

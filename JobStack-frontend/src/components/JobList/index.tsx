@@ -5,6 +5,7 @@ import thrashIcon from "../../assets/icons/thrash.svg";
 import editIcon from "../../assets/icons/edit.svg";
 import SearchField from "./SearchField";
 import AddJobForm from "../AddJobForm";
+import PaginationBox from "./PaginationBox";
 
 interface Props {
   filterString: string;
@@ -12,6 +13,12 @@ interface Props {
   setFilterString: React.Dispatch<React.SetStateAction<string>>;
   setJobsList: React.Dispatch<React.SetStateAction<JobItem[]>>;
   handleShowAddJobForm: MouseEventHandler<HTMLElement>;
+  pagesTotalAmount: number;
+  setPagesTotalAmount: React.Dispatch<React.SetStateAction<number>>;
+  currentPage: number;
+  setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
+  jobsPerPage: number;
+  setJobsPerPage: React.Dispatch<React.SetStateAction<number>>;
 }
 
 interface CheckboxSelect {
@@ -25,8 +32,26 @@ export default function JobsList({
   jobsList,
   setJobsList,
   handleShowAddJobForm,
+  pagesTotalAmount,
+  setPagesTotalAmount,
+  currentPage,
+  setCurrentPage,
+  jobsPerPage,
+  setJobsPerPage,
 }: Props) {
   const modalAddJobForm = useRef<HTMLDialogElement>(null);
+  const [pages, setPages] = useState<number>(0);
+
+  const [width, setWidth] = useState(window.innerWidth);
+  const [height, setHeight] = useState(window.innerHeight);
+  const updateDimensions = () => {
+    setWidth(window.innerWidth);
+    setHeight(window.innerHeight);
+  };
+  useEffect(() => {
+    window.addEventListener("resize", updateDimensions);
+    return () => window.removeEventListener("resize", updateDimensions);
+  }, []);
 
   const [checkedState, setCheckedState] = useState<CheckboxSelect[]>([]);
   useEffect(() => {
@@ -105,10 +130,20 @@ export default function JobsList({
     );
   }, [jobsList]);
 
+  const jobs_per_page: number = Math.floor((height - 200) / 80);
+  console.log(jobs_per_page);
+
+  if (jobs_per_page < 3) {
+    setJobsPerPage(3);
+  } else {
+    setJobsPerPage(jobs_per_page);
+  }
+  setPagesTotalAmount(Math.ceil(jobsList.length / jobsPerPage));
+
   return (
     <>
       <dialog ref={modalAddJobForm} id="my_modal_3" className="modal">
-        <div className="modal-box w-1/3 max-w-none">
+        <div className="modal-box w-1/3 max-w-none  rounded-md">
           <form method="dialog">
             {/* if there is a button in form, it will close the modal */}
             <button className="btn btn-circle btn-ghost btn-sm absolute right-2 top-2">
@@ -121,21 +156,15 @@ export default function JobsList({
         </div>
       </dialog>
 
-      <div className="mb-5 rounded-box shadow-xl">
-        <div className="rounded-lg border-b border-l border-r">
-          <div className="mt-6 flex flex-row justify-between rounded-t-lg bg-neutral py-2">
+      <div className="mb-5 shadow-xl">
+        <div className="border-b border-l border-r">
+          <div className="mt-6 flex flex-row justify-between rounded-t-md bg-neutral py-2">
             <div className="flex w-1/3 flex-row justify-start">
               <h2 className="ml-4 text-xl font-light text-white">
                 Applied jobs
               </h2>
             </div>
 
-            <div className="flex w-1/3 flex-row justify-center">
-              <SearchField
-                filterString={filterString}
-                setFilterString={setFilterString}
-              />
-            </div>
             <div className="flex w-1/3 flex-row justify-end">
               <button
                 onClick={() => handleBulkDelete()}
@@ -149,10 +178,15 @@ export default function JobsList({
               </button>
               <button
                 onClick={() => modalAddJobForm.current?.showModal()}
-                className="btn btn-primary btn-sm  mr-6"
+                className="btn btn-primary btn-sm  mr-6 rounded-md"
               >
                 Add new
               </button>
+
+              <SearchField
+                filterString={filterString}
+                setFilterString={setFilterString}
+              />
             </div>
           </div>
           {jobsList.filter(
@@ -178,6 +212,10 @@ export default function JobsList({
                     jobItem.job_desc
                       .toLowerCase()
                       .includes(filterString.toLowerCase())
+                )
+                .slice(
+                  currentPage * jobsPerPage,
+                  currentPage * jobsPerPage + jobsPerPage
                 )
                 .map((jobItem) => (
                   <li
@@ -234,6 +272,15 @@ export default function JobsList({
             </ul>
           )}
         </div>
+      </div>
+      <div className="flex justify-end">
+        {jobsList.length !== 0 && (
+          <PaginationBox
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+            pagesTotalAmount={pagesTotalAmount}
+          />
+        )}
       </div>
     </>
   );

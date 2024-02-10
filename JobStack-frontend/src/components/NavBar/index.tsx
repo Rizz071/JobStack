@@ -5,7 +5,7 @@ import { ChevronDoubleUpIcon } from "@heroicons/react/24/outline";
 
 export default function NavBar() {
   return (
-    <div className="navbar sticky top-2 mx-auto bg-neutral text-neutral-content shadow-xl sm:w-full md:w-full lg:w-full xl:w-3/4 xl:rounded-box">
+    <div className="navbar sticky top-2 mx-auto bg-neutral text-neutral-content shadow-xl sm:w-full md:w-full lg:w-full xl:w-3/4 xl:rounded-md">
       <div className="navbar-start">
         <div className="dropdown">
           <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
@@ -26,7 +26,7 @@ export default function NavBar() {
           </div>
           <ul
             tabIndex={0}
-            className="menu dropdown-content menu-sm z-[1] mt-3 w-52 rounded-box bg-base-100 p-2 shadow"
+            className="menu dropdown-content menu-sm z-[1] mt-3 w-52 rounded-md bg-base-100 p-2 shadow"
           >
             <li>
               <a>Home</a>
@@ -79,7 +79,7 @@ export default function NavBar() {
         </ul>
       </div>
       <div className="navbar-end">
-        <a className="btn btn-primary btn-sm mr-4">Logout</a>
+        <a className="btn btn-primary btn-sm mr-4 rounded-md">Logout</a>
       </div>
     </div>
   );

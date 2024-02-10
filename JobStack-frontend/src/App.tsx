@@ -1,13 +1,14 @@
 import { MouseEventHandler, useCallback, useRef, useState } from "react";
-import AddJobForm from "./components/AddJobForm";
 import JobsList from "./components/JobList";
 import NavBar from "./components/NavBar";
 import { JobItem } from "./types";
-import Footer from "./components/Footer";
 
 function App() {
   const [jobsList, setJobsList] = useState<JobItem[]>([]);
   const [filterString, setFilterString] = useState<string>("");
+  const [pagesTotalAmount, setPagesTotalAmount] = useState<number>(0);
+  const [currentPage, setCurrentPage] = useState<number>(0);
+  const [jobsPerPage, setJobsPerPage] = useState<number>(0);
 
   const ref = useRef<HTMLDialogElement>(null);
   const handleShowAddJobForm = useCallback<
@@ -25,7 +26,7 @@ function App() {
   };
 
   return (
-    <div style={Style} className="flex flex-col">
+    <div style={Style} className="flex h-screen flex-col">
       <NavBar />
       <div className="container mx-auto h-auto sm:w-full md:w-3/4 lg:w-3/5 xl:w-1/2">
         <JobsList
@@ -34,9 +35,15 @@ function App() {
           jobsList={jobsList}
           setJobsList={setJobsList}
           handleShowAddJobForm={handleShowAddJobForm}
+          pagesTotalAmount={pagesTotalAmount}
+          setPagesTotalAmount={setPagesTotalAmount}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+          jobsPerPage={jobsPerPage}
+          setJobsPerPage={setJobsPerPage}
         />
       </div>
-      <Footer />
+      {/* <Footer /> */}
     </div>
   );
 }
