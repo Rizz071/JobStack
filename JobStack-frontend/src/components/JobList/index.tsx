@@ -138,7 +138,17 @@ export default function JobsList({
   } else {
     setJobsPerPage(jobs_per_page);
   }
-  setPagesTotalAmount(Math.ceil(jobsList.length / jobsPerPage));
+  setPagesTotalAmount(
+    Math.ceil(
+      jobsList.filter(
+        (jobItem) =>
+          jobItem.job_title
+            .toLowerCase()
+            .includes(filterString.toLowerCase()) ||
+          jobItem.job_desc.toLowerCase().includes(filterString.toLowerCase())
+      ).length / jobsPerPage
+    )
+  );
 
   return (
     <>
