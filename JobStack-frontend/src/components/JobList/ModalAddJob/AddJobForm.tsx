@@ -79,7 +79,7 @@ const AddJobForm = ({ jobsList, setJobsList }: Props) => {
           type="submit"
           className="btn btn-neutral btn-sm mr-6 rounded-md"
         >
-          Close
+          Cancel
         </button>
         <button
           type="button"
@@ -87,6 +87,9 @@ const AddJobForm = ({ jobsList, setJobsList }: Props) => {
           className="btn btn-primary btn-sm rounded-md"
         >
           Save
+        </button>
+        <button type="submit" className="btn btn-primary btn-sm rounded-md">
+          Save and close
         </button>
       </div>
     </div>
