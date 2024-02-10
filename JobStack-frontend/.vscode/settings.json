@@ -6,6 +6,9 @@
   "tailwindCSS.includeLanguages": {
     "plaintext": "html"
   },
+  "files.associations": {
+    "*.css": "tailwindcss"
+  },
   "editor.quickSuggestions": {
     "strings": true
   }

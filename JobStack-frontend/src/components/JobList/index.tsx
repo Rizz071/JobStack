@@ -1,3 +1,4 @@
+import React from "react";
 import { MouseEventHandler, useEffect, useRef, useState } from "react";
 import { JobItem } from "../../types";
 import axios from "axios";
@@ -31,7 +32,6 @@ export default function JobsList({
   setFilterString,
   jobsList,
   setJobsList,
-  handleShowAddJobForm,
   pagesTotalAmount,
   setPagesTotalAmount,
   currentPage,
@@ -40,12 +40,12 @@ export default function JobsList({
   setJobsPerPage,
 }: Props) {
   const modalAddJobForm = useRef<HTMLDialogElement>(null);
-  const [pages, setPages] = useState<number>(0);
+  // const [pages, setPages] = useState<number>(0);
 
-  const [width, setWidth] = useState(window.innerWidth);
+  // const [width, setWidth] = useState(window.innerWidth);
   const [height, setHeight] = useState(window.innerHeight);
   const updateDimensions = () => {
-    setWidth(window.innerWidth);
+    // setWidth(window.innerWidth);
     setHeight(window.innerHeight);
   };
   useEffect(() => {
@@ -123,7 +123,7 @@ export default function JobsList({
   if (!jobsList) return null;
 
   useEffect(() => {
-    setCheckedState((jobList) =>
+    setCheckedState((jobsList) =>
       jobsList.map((job) => {
         return { id: job.id, state: false };
       })
