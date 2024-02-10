@@ -3,13 +3,17 @@ import { MouseEventHandler, useCallback, useRef, useState } from "react";
 import JobsList from "./components/JobList";
 import NavBar from "./components/NavBar";
 import { JobItem } from "./types";
+import { Views } from "./types";
 
 function App() {
   const [jobsList, setJobsList] = useState<JobItem[]>([]);
-  // const [filterString, setFilterString] = useState<string>("");
   const [pagesTotalAmount, setPagesTotalAmount] = useState<number>(0);
   const [currentPage, setCurrentPage] = useState<number>(0);
   const [jobsPerPage, setJobsPerPage] = useState<number>(0);
+  const [windowsView, setWindowsView] = useState<Views>({
+    jobsListWindow: true,
+    detailJobWindow: false,
+  });
 
   const ref = useRef<HTMLDialogElement>(null);
   const handleShowAddJobForm = useCallback<
@@ -42,6 +46,8 @@ function App() {
           setCurrentPage={setCurrentPage}
           jobsPerPage={jobsPerPage}
           setJobsPerPage={setJobsPerPage}
+          windowsView={windowsView}
+          setWindowsView={setWindowsView}
         />
       </div>
       {/* <Footer /> */}

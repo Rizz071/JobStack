@@ -8,4 +8,9 @@ export interface JobItem {
   active: boolean;
 }
 
+export interface Views {
+  jobsListWindow: boolean;
+  detailJobWindow: boolean;
+}
+
 export type NewJob = Omit<JobItem, "id">;

@@ -1,6 +1,6 @@
 import React from "react";
 import { MouseEventHandler, useEffect, useRef, useState } from "react";
-import { JobItem } from "../../types";
+import { JobItem, Views } from "../../types";
 import axios from "axios";
 import thrashIcon from "../../assets/icons/thrash.svg";
 import editIcon from "../../assets/icons/edit.svg";
@@ -18,6 +18,8 @@ interface Props {
   setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
   jobsPerPage: number;
   setJobsPerPage: React.Dispatch<React.SetStateAction<number>>;
+  windowsView: Views;
+  setWindowsView: React.Dispatch<React.SetStateAction<Views>>;
 }
 
 interface CheckboxSelect {
@@ -34,10 +36,13 @@ export default function JobsList({
   setCurrentPage,
   jobsPerPage,
   setJobsPerPage,
+  windowsView,
+  setWindowsView,
 }: Props) {
   const modalAddJobForm = useRef<HTMLDialogElement>(null);
   const [filteredJobList, setFilteredJobList] = useState<JobItem[]>([]);
   const [filterString, setFilterString] = useState<string>("");
+  const [checkAll, setCheckAll] = useState<boolean>(false);
 
   // const [width, setWidth] = useState(window.innerWidth);
   const [height, setHeight] = useState(window.innerHeight);
@@ -73,7 +78,7 @@ export default function JobsList({
   }, []);
 
   useEffect(() => {
-    if (JobsList.length !== 0) {
+    if (((jobsList: JobItem[]) => jobsList).length !== 0) {
       setFilteredJobList(
         jobsList.filter(
           (jobItem) =>
@@ -90,8 +95,8 @@ export default function JobsList({
    * CONDITION: jobsList.length changed
    */
   useEffect(() => {
-    if (jobsList.length !== 0) {
-      console.log("Updating states of all checkboxes");
+    if (((jobsList: JobItem[]) => jobsList).length !== 0) {
+      // console.log("Updating states of all checkboxes");
       setCheckedState(
         jobsList.map((job) => {
           return { id: job.id, state: false };
@@ -108,7 +113,6 @@ export default function JobsList({
     } else {
       setJobsPerPage(jobs_per_page);
     }
-    console.log(filteredJobList);
     setPagesTotalAmount(Math.ceil(filteredJobList.length / jobsPerPage));
   }, [jobsList.length, height, filteredJobList]);
 
@@ -162,23 +166,53 @@ export default function JobsList({
         await handleDelete(checkElem.id);
       }
     });
+    setCheckAll(false);
   };
 
   /* Waiting for data arrival */
-  if (jobsList.length === 0) return null;
+  if (((jobsList: JobItem[]) => jobsList).length === 0) return null;
 
   return (
-    <>
+    <div
+      className={`${windowsView.jobsListWindow ? `flex flex-col` : `hidden`}`}
+    >
       <ModalAddJob
         modalAddJobForm={modalAddJobForm}
         jobsList={jobsList}
         setJobsList={setJobsList}
       />
-
       <div className="mb-5 shadow-xl">
         <div className="border-b border-l border-r">
           <div className="mt-6 flex flex-row justify-between rounded-t-md bg-neutral py-2">
             <div className="flex w-1/3 flex-row justify-start">
+              <input
+                type="checkbox"
+                checked={checkAll}
+                onChange={() => {
+                  if (
+                    ((filteredJobList: JobItem[]) => filteredJobList).length !==
+                    0
+                  ) {
+                    setCheckedState(
+                      checkedState.map((checkItem: CheckboxSelect) => {
+                        filteredJobList
+                          .slice(
+                            currentPage * jobsPerPage,
+                            currentPage * jobsPerPage + jobsPerPage
+                          )
+                          .forEach((jobOnScreen: JobItem) => {
+                            if (jobOnScreen.id === checkItem.id)
+                              checkItem.state = !checkAll;
+                          });
+                        return checkItem;
+                      })
+                    );
+                    setCheckAll(!checkAll);
+                  }
+                }}
+                className="checkbox-primary checkbox my-auto ml-6 size-6 shrink-0 rounded-sm"
+                id={`custom-checkbox-select-all`}
+              />
               <h2 className="ml-4 text-xl font-light text-white">
                 Applied jobs
               </h2>
@@ -222,7 +256,7 @@ export default function JobsList({
                 .map((jobItem) => (
                   <li
                     key={jobItem.id}
-                    className="flex justify-between gap-x-6 odd:bg-white even:bg-gray-100"
+                    className="flex justify-between gap-x-6 odd:bg-white even:bg-gray-100 hover:bg-base-200"
                   >
                     <input
                       type="checkbox"
@@ -233,7 +267,7 @@ export default function JobsList({
                         )?.state || false
                       }
                       onChange={() => handleCheckboxChange(jobItem.id)}
-                      className="checkbox-primary my-auto ml-6 size-6 shrink-0 rounded-sm"
+                      className="checkbox-primary checkbox my-auto ml-6 size-6 shrink-0 rounded-sm"
                       id={`custom-checkbox-${jobItem.id}`}
                     />
 
@@ -250,7 +284,6 @@ export default function JobsList({
                               {jobItem.date_of_apply.split("T")[0]}
                             </time>
                           </p>
-
                           <p className="mt-1 text-xs leading-5 text-gray-500">
                             Current status: {jobItem.current_status_desc}
                           </p>
@@ -282,6 +315,6 @@ export default function JobsList({
           pagesTotalAmount={pagesTotalAmount}
         />
       )}
-    </>
+    </div>
   );
 }
