@@ -45,7 +45,7 @@ const ModalAddJob = ({ modalAddJobForm, jobsList, setJobsList }: Props) => {
 
   return (
     <dialog ref={modalAddJobForm} id="modal_add_job" className="modal">
-      <div className="modal-box w-1/3 max-w-none  rounded-md">
+      <div className="modal-box w-1/3 max-w-none rounded-md">
         <form method="dialog" onSubmit={handleSubmit}>
           {/* if there is a button in form, it will close the modal */}
           <button
@@ -59,7 +59,10 @@ const ModalAddJob = ({ modalAddJobForm, jobsList, setJobsList }: Props) => {
           {/* <p className="py-4">Press ESC key or click on ✕ button to close</p> */}
           <div>
             <div className="flex flex-col">
-              <label htmlFor="job_title" className="label-text mt-6">
+              <label
+                htmlFor="job_title"
+                className="label-text mt-6 text-neutral"
+              >
                 Job header
               </label>
               <div className="mt-2">
@@ -67,14 +70,16 @@ const ModalAddJob = ({ modalAddJobForm, jobsList, setJobsList }: Props) => {
                   type="text"
                   name="job_title"
                   id="job_title"
-                  //   autoComplete="given-name"
-                  className="input input-sm input-bordered input-primary w-full resize-none rounded-md"
+                  className="input input-sm input-bordered w-full resize-none rounded-md border-neutral"
                   value={newJobTitle}
                   onChange={(event) => setNewJobTitle(event.target.value)}
                 />
               </div>
 
-              <label htmlFor="job_desc" className="label-text mt-6">
+              <label
+                htmlFor="job_desc"
+                className="label-text mt-6 text-neutral"
+              >
                 Long job description
               </label>
               <div className="mt-2">
@@ -82,7 +87,7 @@ const ModalAddJob = ({ modalAddJobForm, jobsList, setJobsList }: Props) => {
                   id="job_desc"
                   name="job_desc"
                   rows={6}
-                  className="textarea textarea-primary w-full resize-none rounded-md"
+                  className="textarea textarea-bordered w-full resize-none rounded-md border-neutral"
                   value={newJobDesc}
                   onChange={(event) => setNewJobDesc(event.target.value)}
                 />
@@ -98,14 +103,14 @@ const ModalAddJob = ({ modalAddJobForm, jobsList, setJobsList }: Props) => {
                   setNewJobDesc("");
                   modalAddJobForm.current?.close();
                 }}
-                className="btn btn-neutral btn-sm mr-6 rounded-md"
+                className="btn btn-active btn-sm mr-6"
               >
                 Cancel
               </button>
               <button
                 type="button"
                 onClick={handleSubmit}
-                className="btn btn-primary btn-sm rounded-md"
+                className="btn btn-active btn-sm"
               >
                 Save
               </button>
@@ -114,7 +119,7 @@ const ModalAddJob = ({ modalAddJobForm, jobsList, setJobsList }: Props) => {
                 onClick={() => {
                   modalAddJobForm.current?.close();
                 }}
-                className="btn btn-primary btn-sm rounded-md"
+                className="btn btn-active btn-sm"
               >
                 Save and close
               </button>

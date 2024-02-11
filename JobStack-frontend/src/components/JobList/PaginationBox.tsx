@@ -21,8 +21,8 @@ const PaginationBox = ({
       <button
         onClick={() => handleClick(i)}
         key={i}
-        className={`btn join-item rounded-md ${
-          currentPage === i ? "btn-active bg-primary" : ""
+        className={`btn join-item border-neutral ${
+          currentPage === i ? "btn-neutral" : ""
         } btn-sm`}
       >
         {i + 1}

@@ -29,7 +29,7 @@ export default function NavBar() {
           </div>
           <ul
             tabIndex={0}
-            className="menu dropdown-content menu-sm z-[1] mt-3 w-52 rounded-md bg-base-100 p-2 shadow"
+            className="menu dropdown-content menu-sm z-[1] mt-3 w-52 rounded-md bg-neutral-content p-2"
           >
             <li>
               <a>Home</a>
@@ -82,7 +82,7 @@ export default function NavBar() {
         </ul>
       </div>
       <div className="navbar-end">
-        <a className="btn btn-primary btn-sm mr-4 rounded-md">Logout</a>
+        <a className="btn btn-sm mr-4 rounded-md">Logout</a>
       </div>
     </div>
   );

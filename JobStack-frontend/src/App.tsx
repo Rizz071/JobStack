@@ -5,6 +5,7 @@ import NavBar from "./components/NavBar";
 import { JobItem } from "./types";
 import DetailJobView from "./components/DetailJobView";
 import { Routes, Route } from "react-router-dom";
+import StatusBox from "./components/StatusBox";
 
 function App() {
   const [jobsList, setJobsList] = useState<JobItem[]>([]);
@@ -30,11 +31,11 @@ function App() {
   return (
     <div style={Style} className="flex h-screen flex-col">
       <NavBar />
-      <div className="container mx-auto flex flex-col sm:w-full md:w-3/4 lg:w-3/5 xl:w-1/2">
-        <Routes>
-          <Route
-            path="/"
-            element={
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <div className="container mx-auto flex w-3/4 flex-1 flex-row justify-between gap-x-6">
               <JobsList
                 jobsList={jobsList}
                 setJobsList={setJobsList}
@@ -46,19 +47,25 @@ function App() {
                 jobsPerPage={jobsPerPage}
                 setJobsPerPage={setJobsPerPage}
               />
-              // <DetailJobView job_id={213} />
-            }
-          >
-            {/* <Route index element={<Home />} /> */}
-          </Route>
-          <Route path="/detailview/:id" element={<DetailJobView />} />
+              <StatusBox />
+            </div>
 
-          {/* Using path="*"" means "match anything", so this route acts like a
+            // <DetailJobView job_id={213} />
+          }
+        >
+          {/* <Route index element={<Home />} /> */}
+        </Route>
+        <Route
+          path="/detailview/:id"
+          element={
+            <DetailJobView jobsList={jobsList} setJobsList={setJobsList} />
+          }
+        />
+
+        {/* Using path="*"" means "match anything", so this route acts like a
           catch-all for URLs that we don't have explicit routes for. */}
-          <Route path="*" element={<p>404 page not found</p>} />
-        </Routes>
-      </div>
-      {/* <Footer /> */}
+        <Route path="*" element={<p>404 page not found</p>} />
+      </Routes>
     </div>
   );
 }

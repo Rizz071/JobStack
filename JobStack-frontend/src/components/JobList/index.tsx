@@ -172,14 +172,14 @@ export default function JobsList({
   if (((jobsList: JobItem[]) => jobsList).length === 0) return null;
 
   return (
-    <div>
+    <div className="flex w-4/5 flex-col">
       <ModalAddJob
         modalAddJobForm={modalAddJobForm}
         jobsList={jobsList}
         setJobsList={setJobsList}
       />
-      <div className="mb-5 rounded-b-md border-b border-l border-r shadow-xl">
-        <div className="mt-6 flex flex-row justify-between rounded-t-md bg-neutral py-2">
+      <div className="mb-5 mt-8 flex w-full flex-col rounded-lg border border-neutral shadow-xl">
+        <div className="flex flex-row justify-between rounded-t-md bg-neutral py-2">
           <div className="flex w-1/3 flex-row justify-start">
             <input
               type="checkbox"
@@ -205,10 +205,12 @@ export default function JobsList({
                   setCheckAll(!checkAll);
                 }
               }}
-              className="checkbox-primary checkbox my-auto ml-6 size-6 shrink-0 rounded-sm"
+              className="checkbox-primary checkbox my-auto ml-6 size-6 shrink-0 rounded-md"
               id={`custom-checkbox-select-all`}
             />
-            <h2 className="ml-6 text-xl font-light text-white">Applied jobs</h2>
+            <h2 className="ml-6 text-xl font-light text-neutral-content">
+              Applied jobs
+            </h2>
           </div>
 
           <div className="flex w-1/3 flex-row justify-end">
@@ -224,7 +226,7 @@ export default function JobsList({
             </button>
             <button
               onClick={() => modalAddJobForm.current?.showModal()}
-              className="btn btn-primary btn-sm  mr-6 rounded-md"
+              className="btn btn-sm  mr-6 rounded-md"
             >
               Add new
             </button>
@@ -236,11 +238,11 @@ export default function JobsList({
           </div>
         </div>
         {jobsList.length === 0 ? (
-          <p className="bg-white p-2 text-sm font-semibold leading-6 text-gray-900">
+          <p className="bg-base-content p-2 text-sm font-semibold leading-6">
             Jobs not found
           </p>
         ) : (
-          <ul role="list" className="divide-y divide-gray-300">
+          <ul role="list" className="">
             {filteredJobList
               .slice(
                 currentPage * jobsPerPage,
@@ -249,10 +251,7 @@ export default function JobsList({
               .map((jobItem) => (
                 <li
                   key={jobItem.id}
-                  onClick={() =>
-                    navigate(`/detailview/${jobItem.id}`, { replace: true })
-                  }
-                  className="flex justify-between gap-x-6 odd:bg-white even:bg-gray-100 hover:bg-base-200"
+                  className="flex max-h-20 min-h-20 justify-between gap-x-6  border-black bg-base-100 last:rounded-b-lg hover:bg-base-200"
                 >
                   <input
                     type="checkbox"
@@ -263,31 +262,38 @@ export default function JobsList({
                       )?.state || false
                     }
                     onChange={() => handleCheckboxChange(jobItem.id)}
-                    className="checkbox-primary checkbox my-auto ml-6 size-6 shrink-0 rounded-sm"
+                    className="checkbox-primary checkbox my-auto ml-6 size-6 shrink-0 rounded-md"
                     id={`custom-checkbox-${jobItem.id}`}
                   />
 
-                  <div className="my-4 min-w-0 flex-1 gap-x-4">
-                    <div className="min-w-0 flex-auto">
-                      <p className="text-sm font-semibold leading-6 text-gray-900">
+                  <div
+                    onClick={() =>
+                      navigate(`/detailview/${jobItem.id}`, { replace: true })
+                    }
+                    className="my-4 min-w-0 flex-1 gap-x-4"
+                  >
+                    <div className="max-w-26 min-w-0 flex-auto">
+                      <p className="truncate text-sm font-semibold leading-6 text-base-content">
                         {jobItem.job_title}
                       </p>
 
                       <div className="flex gap-x-4">
-                        <p className="mt-1 text-xs leading-5 text-gray-500">
+                        <p className="mt-1 text-xs leading-5 text-base-content">
                           Applyed date:{" "}
                           <time dateTime={jobItem.date_of_apply.toString()}>
                             {jobItem.date_of_apply.split("T")[0]}
                           </time>
                         </p>
-                        <p className="mt-1 text-xs leading-5 text-gray-500">
+                        <p className="mt-1 text-xs leading-5 text-base-content">
                           Current status: {jobItem.current_status_desc}
                         </p>
                       </div>
                     </div>
                   </div>
                   <button
-                    onClick={() => handleDelete(jobItem.id)}
+                    onClick={() =>
+                      navigate(`/detailview/${jobItem.id}`, { replace: true })
+                    }
                     className="my-auto w-6"
                   >
                     <img src={editIcon}></img>
