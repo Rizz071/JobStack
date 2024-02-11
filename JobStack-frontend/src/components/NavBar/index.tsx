@@ -1,9 +1,12 @@
-// import { Fragment } from "react";
+import React from "react";
 // import { Disclosure, Menu, Transition } from "@headlessui/react";
 // import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { ChevronDoubleUpIcon } from "@heroicons/react/24/outline";
+import { useNavigate } from "react-router-dom";
 
 export default function NavBar() {
+  const navigate = useNavigate();
+
   return (
     <div className="navbar sticky top-2 mx-auto bg-neutral text-neutral-content shadow-xl sm:w-full md:w-full lg:w-full xl:w-3/4 xl:rounded-md">
       <div className="navbar-start">
@@ -47,8 +50,8 @@ export default function NavBar() {
             </li>
           </ul>
         </div>
-        <a className="btn btn-ghost text-xl">
-          <ChevronDoubleUpIcon className="w-10" />
+        <a className="btn btn-ghost text-xl" onClick={() => navigate("/")}>
+          <ChevronDoubleUpIcon className="w-10 " />
           Job Stack
         </a>
       </div>

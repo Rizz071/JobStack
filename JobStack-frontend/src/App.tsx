@@ -3,17 +3,14 @@ import { MouseEventHandler, useCallback, useRef, useState } from "react";
 import JobsList from "./components/JobList";
 import NavBar from "./components/NavBar";
 import { JobItem } from "./types";
-import { Views } from "./types";
+import DetailJobView from "./components/DetailJobView";
+import { Routes, Route } from "react-router-dom";
 
 function App() {
   const [jobsList, setJobsList] = useState<JobItem[]>([]);
   const [pagesTotalAmount, setPagesTotalAmount] = useState<number>(0);
   const [currentPage, setCurrentPage] = useState<number>(0);
   const [jobsPerPage, setJobsPerPage] = useState<number>(0);
-  const [windowsView, setWindowsView] = useState<Views>({
-    jobsListWindow: true,
-    detailJobWindow: false,
-  });
 
   const ref = useRef<HTMLDialogElement>(null);
   const handleShowAddJobForm = useCallback<
@@ -33,22 +30,33 @@ function App() {
   return (
     <div style={Style} className="flex h-screen flex-col">
       <NavBar />
-      <div className="container mx-auto h-auto sm:w-full md:w-3/4 lg:w-3/5 xl:w-1/2">
-        <JobsList
-          // filterString={filterString}
-          // setFilterString={setFilterString}
-          jobsList={jobsList}
-          setJobsList={setJobsList}
-          handleShowAddJobForm={handleShowAddJobForm}
-          pagesTotalAmount={pagesTotalAmount}
-          setPagesTotalAmount={setPagesTotalAmount}
-          currentPage={currentPage}
-          setCurrentPage={setCurrentPage}
-          jobsPerPage={jobsPerPage}
-          setJobsPerPage={setJobsPerPage}
-          windowsView={windowsView}
-          setWindowsView={setWindowsView}
-        />
+      <div className="container mx-auto flex flex-col sm:w-full md:w-3/4 lg:w-3/5 xl:w-1/2">
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <JobsList
+                jobsList={jobsList}
+                setJobsList={setJobsList}
+                handleShowAddJobForm={handleShowAddJobForm}
+                pagesTotalAmount={pagesTotalAmount}
+                setPagesTotalAmount={setPagesTotalAmount}
+                currentPage={currentPage}
+                setCurrentPage={setCurrentPage}
+                jobsPerPage={jobsPerPage}
+                setJobsPerPage={setJobsPerPage}
+              />
+              // <DetailJobView job_id={213} />
+            }
+          >
+            {/* <Route index element={<Home />} /> */}
+          </Route>
+          <Route path="/detailview/:id" element={<DetailJobView />} />
+
+          {/* Using path="*"" means "match anything", so this route acts like a
+          catch-all for URLs that we don't have explicit routes for. */}
+          <Route path="*" element={<p>404 page not found</p>} />
+        </Routes>
       </div>
       {/* <Footer /> */}
     </div>

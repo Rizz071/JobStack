@@ -68,7 +68,7 @@ const ModalAddJob = ({ modalAddJobForm, jobsList, setJobsList }: Props) => {
                   name="job_title"
                   id="job_title"
                   //   autoComplete="given-name"
-                  className="input input-sm input-bordered input-primary w-full  rounded-md"
+                  className="input input-sm input-bordered input-primary w-full resize-none rounded-md"
                   value={newJobTitle}
                   onChange={(event) => setNewJobTitle(event.target.value)}
                 />
@@ -82,7 +82,7 @@ const ModalAddJob = ({ modalAddJobForm, jobsList, setJobsList }: Props) => {
                   id="job_desc"
                   name="job_desc"
                   rows={6}
-                  className="textarea textarea-primary w-full  rounded-md"
+                  className="textarea textarea-primary w-full resize-none rounded-md"
                   value={newJobDesc}
                   onChange={(event) => setNewJobDesc(event.target.value)}
                 />

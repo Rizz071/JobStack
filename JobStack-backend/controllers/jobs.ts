@@ -52,7 +52,7 @@ router.get("/job/:id", (req: Request, res: Response, next: NextFunction) => {
 
             /* If user not found throwing error to error handler middleware */
             if (!result.rowCount)
-                throw Error(`user with ID ${req.params.id} not found in DB`);
+                throw Error(`job with ID ${req.params.id} not found in DB`);
 
             res.send(result.rows[0]);
         } catch (error) {
@@ -131,7 +131,7 @@ router.delete(
 );
 
 /* Changing one job*/
-router.put("/:id", (req: Request, res: Response, next: NextFunction) => {
+router.put("/job/:id", (req: Request, res: Response, next: NextFunction) => {
     const {
         job_title,
         job_desc,
