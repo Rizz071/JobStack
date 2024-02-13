@@ -1,7 +1,7 @@
 # Job Stack
 ## _Resume submission tracking application_
 
-Dillinger will be a cloud-enabled, mobile-ready, offline-storage compatible,
+Job Stack will be a cloud-enabled, mobile-ready,
 ReactJS- and ExpressJS-powered web application.
 - Easily add a record of applying for a job opening.
 - You will always be informed about the submitted applications and won't submit an application twice.
