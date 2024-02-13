@@ -1,5 +1,5 @@
 # Job Stack
-## _Resume submission tracking application_
+## _CV submission tracking application_
 
 Job Stack will be a cloud-enabled, mobile-ready,
 ReactJS- and ExpressJS-powered web application.
