@@ -17,17 +17,29 @@
 //   }
 // };
 
+
+
+// CREATE TABLE IF NOT EXISTS "job_status" (
+//     "id" SERIAL PRIMARY KEY,
+//     "job_id" INTEGER REFERENCES jobs_data ("id") ON DELETE CASCADE,
+//     "position" INTEGER NOT NULL,
+//     "status" TEXT NOT NULL,
+//     "status_desc" TEXT,
+//     "date" TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+// );
+
+
 // const createTableUsers = async () => {
 //   try {
 //     await query(`
-//         CREATE TABLE IF NOT EXISTS "test_users" (
-//             "id" SERIAL PRIMARY KEY,
-//             "username" TEXT NOT NULL,
-//             "password" TEXT NOT NULL,
-//             "fullname" TEXT,
-//             "is_admin" BOOLEAN NOT NULL DEFAULT false,
-//             "date_of_reg" TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-//         );`);
+// CREATE TABLE IF NOT EXISTS "test_users" (
+//     "id" SERIAL PRIMARY KEY,
+//     "username" TEXT NOT NULL,
+//     "password" TEXT NOT NULL,
+//     "fullname" TEXT,
+//     "is_admin" BOOLEAN NOT NULL DEFAULT false,
+//     "date_of_reg" TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+// );`);
 //   } catch (error) {
 //     console.log(error);
 //   }

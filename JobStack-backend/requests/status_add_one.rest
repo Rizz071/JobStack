@@ -1,0 +1,9 @@
+POST http://127.0.0.1:3001/api/status/220
+Content-Type: application/json
+
+{
+    "position": 4,
+    "status": "interview",
+    "status_desc": "tech interview",
+    "date": "2024-02-12T15:23:05.081Z"
+}
