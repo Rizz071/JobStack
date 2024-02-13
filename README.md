@@ -60,8 +60,7 @@ npm run dev
 ## Development
 
 Want to contribute? Great!
-
-Job Stack uses Vite for fast developing.
+You are welcom!
 
 
 ## Docker
