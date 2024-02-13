@@ -157,40 +157,35 @@ export default function DetailJobView({ jobsList, setJobsList }: Props) {
                 </div>
             </div>
 
-            {!currentJob ? (
-                <p className="bg-base-100 p-2 text-sm font-semibold leading-6 text-gray-900">
-                    Job not found
-                </p>
-            ) : (
-                <div className="mx-4 flex h-full flex-col gap-y-2">
-                    <label htmlFor="job_title_desc" className="label-text mt-6">
-                        Job title
-                    </label>
-                    <textarea
-                        id="job_title_desc"
-                        name="job_title_desc"
-                        className="textarea textarea-bordered textarea-md resize-none border-neutral"
-                        defaultValue={`${currentJob.job_title}`}
-                        onChange={(event) =>
-                            setCurrentJob({ ...currentJob, job_title: event.target.value })
-                        }
-                    />
-                    <div className="border-dotted border-black"></div>
 
-                    <label htmlFor="job_detail_desc" className="label-text">
-                        Job description
-                    </label>
-                    <textarea
-                        id="job_detail_desc"
-                        name="job_detail_desc"
-                        className="textarea textarea-bordered mb-4 h-full resize-none border-neutral"
-                        defaultValue={`${currentJob.job_desc}`}
-                        onChange={(event) =>
-                            setCurrentJob({ ...currentJob, job_desc: event.target.value })
-                        }
-                    />
-                </div>
-            )}
+            <div className="mx-8 mb-4 flex h-full flex-col gap-y-2">
+                <label htmlFor="job_title_desc" className="label-text mt-6">
+                    Job title
+                </label>
+                <textarea
+                    id="job_title_desc"
+                    name="job_title_desc"
+                    className="textarea textarea-bordered textarea-md resize-none border-neutral text-lg"
+                    defaultValue={`${currentJob.job_title}`}
+                    onChange={(event) =>
+                        setCurrentJob({ ...currentJob, job_title: event.target.value })
+                    }
+                />
+                <div className="border-dotted border-black"></div>
+
+                <label htmlFor="job_detail_desc" className="label-text">
+                    Job description
+                </label>
+                <textarea
+                    id="job_detail_desc"
+                    name="job_detail_desc"
+                    className="textarea border mb-4 h-full resize-none border-neutral"
+                    defaultValue={`${currentJob.job_desc}`}
+                    onChange={(event) =>
+                        setCurrentJob({ ...currentJob, job_desc: event.target.value })
+                    }
+                />
+            </div>
         </div>
     );
 }

@@ -346,7 +346,7 @@ export default function JobsList({
                     </ul>
                 )}
             </div>
-            {jobsList.length !== 0 && (
+            {pagesTotalAmount > 0 && (
                 <PaginationBox
                     currentPage={currentPage}
                     setCurrentPage={setCurrentPage}
