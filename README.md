@@ -60,7 +60,7 @@ npm run dev
 ## Development
 
 Want to contribute? Great!
-You are welcom!
+You are welcome!
 
 
 ## Docker
