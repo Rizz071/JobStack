@@ -9,7 +9,7 @@
         "lint": "eslint --ext .ts .",
         "start": "NODE_ENV=production node build/index.js",
         "test": "npx cypress run",
-        "build:ui": "rm -rf dist && cd ../JobStack-frontend && npm run build && cp -r dist ../JobStack-backend",
+        "build:ui": "rm -rf dist && rm -rf build && tsc && cd ../JobStack-frontend && npm run build && cp -r dist ../JobStack-backend",
         "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && git push"
     },
     "author": "Igor Burykin",
