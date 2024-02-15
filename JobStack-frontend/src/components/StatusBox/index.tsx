@@ -16,9 +16,9 @@ const StatusBox = ({ job_id }: Props) => {
     useEffect(() => {
         if (!job_id) return;
 
-        (async function() {
+        (async function () {
             try {
-                const response: unknown = await axios.get<StatusObject[]>(`http://127.0.0.1:3001/api/status/${job_id}`);
+                const response: unknown = await axios.get<StatusObject[]>(`/api/status/${job_id}`);
 
                 /* Narrowing type Status Object*/
                 if (!response
@@ -37,7 +37,8 @@ const StatusBox = ({ job_id }: Props) => {
                 console.log(error);
             }
         }
-        ());
+            // eslint-disable-next-line indent
+            ());
     }, [job_id]);
 
     /* Waiting for statusArray */

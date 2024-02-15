@@ -24,7 +24,7 @@ export default function DetailJobView({ jobsList, setJobsList }: Props) {
         void (async () => {
             try {
                 const result = await axios.get<JobItem>(
-                    `http://127.0.0.1:3001/api/job/${id}`
+                    `/api/job/${id}`
                 );
 
                 if (
@@ -51,7 +51,7 @@ export default function DetailJobView({ jobsList, setJobsList }: Props) {
         navigate("/");
         // try {
         //     const response: unknown = await axios.delete(
-        //         `http://127.0.0.1:3001/api/jobs/${id}`
+        //         `/api/jobs/${id}`
         //     );
         //
         //     /* Narrowing response from server and checking code 204 */
@@ -90,7 +90,7 @@ export default function DetailJobView({ jobsList, setJobsList }: Props) {
 
         try {
             const response: unknown = await axios.put<JobItem>(
-                `http://127.0.0.1:3001/api/job/${id}`,
+                `/api/job/${id}`,
                 jobToPut
             );
 

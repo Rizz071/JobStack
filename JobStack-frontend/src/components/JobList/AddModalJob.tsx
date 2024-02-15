@@ -19,7 +19,7 @@ const ModalAddJob = ({ modalAddJobForm, jobsList, setJobsList }: Props) => {
         void (async () => {
             try {
                 const response = await axios.post(
-                    "http://127.0.0.1:3001/api/jobs/1",
+                    "/api/jobs/1",
                     {
                         job_title: newJobTitle,
                         job_desc: newJobDesc,
@@ -39,7 +39,7 @@ const ModalAddJob = ({ modalAddJobForm, jobsList, setJobsList }: Props) => {
 
                 /* Adding first status for new job */
                 await axios.post(
-                    `http://127.0.0.1:3001/api/status/${job_id}`,
+                    `/api/status/${job_id}`,
                     {
                         position: 0,
                         status: "Just applied",

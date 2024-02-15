@@ -3,11 +3,14 @@ import "dotenv/config";
 import { Pool } from "pg";
 
 const pool = new Pool({
-	// host: process.env.HOST,
-	// user: 
-    //     process.env.NODE_ENV !== "development"
-    //         ? process.env.USER
-    //         : process.env.USER_TEST,   
+	host:         
+        process.env.NODE_ENV !== "development"
+            ? process.env.HOST
+            : process.env.HOST_TEST, 
+	user: 
+        process.env.NODE_ENV !== "development"
+            ? process.env.USER
+            : process.env.USER_TEST,   
 	database:
 		process.env.NODE_ENV !== "development"
 			? process.env.DATABASE
