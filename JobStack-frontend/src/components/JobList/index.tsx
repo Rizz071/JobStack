@@ -1,13 +1,13 @@
-import React, { useLayoutEffect } from "react";
+import React from "react";
 import { MouseEventHandler, useEffect, useRef, useState } from "react";
 import { JobItem } from "../../types";
-import axios from "axios";
 import thrashIcon from "../../assets/icons/thrash.svg";
 import editIcon from "../../assets/icons/edit.svg";
 import SearchField from "./SearchField";
 import PaginationBox from "./PaginationBox";
 import ModalAddJob from "./AddModalJob";
 import { useNavigate } from "react-router-dom";
+import serviceJobs from "../../../services/serviceJobs";
 
 interface Props {
     jobsList: JobItem[];
@@ -59,27 +59,13 @@ export default function JobsList({
 
     const [checkedState, setCheckedState] = useState<CheckboxSelect[]>([]);
 
+
     /* Requesting data from server via REST API */
     useEffect(() => {
         console.log("useEffect => setJobsList");
-        void (async () => {
-            try {
-                const result = await axios.get<JobItem[]>(
-                    "http://127.0.0.1:3001/api/jobs/1"
-                );
-
-                if (!result || !Array.isArray(result.data))
-                    throw new Error("error while retrieving job list from server");
-
-                setJobsList(result.data);
-                console.log("Data received: ", (() => jobsList)());
-            } catch (error) {
-                if (error instanceof Error) {
-                    throw new Error("unknown server error", error);
-                }
-            }
-        })();
+        void serviceJobs.requestJobList(setJobsList);
     }, []);
+
 
     useEffect(() => {
         console.log("useEffect => setFilteredJobList");
@@ -120,7 +106,7 @@ export default function JobsList({
         );
     }, [jobsList.length]);
 
-    useLayoutEffect(() => {
+    useEffect(() => {
         console.log("useEffect => setCheckedState + setPagesTotalAmount");
 
         const jobs_per_page: number = Math.floor((height - 200) / 80);
@@ -130,13 +116,14 @@ export default function JobsList({
         } else {
             setJobsPerPage(jobs_per_page);
         }
+
         setPagesTotalAmount(Math.ceil(filteredJobList.length / jobsPerPage));
         console.log("jobsPerPage", jobsPerPage);
-        console.log("pageTotalAmount: ", pagesTotalAmount);
-    }, [height]);
+        console.log("pagesTotalAmount: ", pagesTotalAmount);
+    }, [filteredJobList.length, height]);
 
-    /* Last page calculaion after window resizing */
-    useLayoutEffect(() => {
+    /* Last page calculation after window resizing */
+    useEffect(() => {
         console.log("useEffect => setCurrentPage");
 
         /* Checking for useless actions:
@@ -149,7 +136,7 @@ export default function JobsList({
 
         if (currentPage >= pagesTotalAmount) setCurrentPage(pagesTotalAmount - 1);
         if (currentPage < 0) setCurrentPage(0);
-    }, [pagesTotalAmount]);
+    }, [filteredJobList.length, pagesTotalAmount]);
 
     const handleCheckboxChange = (position: number) => {
         if (!checkedState) return false;
@@ -164,46 +151,24 @@ export default function JobsList({
     };
 
     const handleDelete = async (id: number) => {
-        try {
-
-            /* Deleting job entity with ON DELETE CASCADE,
-             * so will be deleted also status rows in job_status table
-             */
-            const response: unknown = await axios.delete(
-                `http://127.0.0.1:3001/api/jobs/${id}`
-            );
-
-            /* Narrowing response from server and checking code 204 */
-            if (
-                !response ||
-                typeof response !== "object" ||
-                !("status" in response) ||
-                response.status !== 204
-            )
-                throw new Error("error while deleting entity");
-
-            setJobsList((jobsList) => jobsList.filter((job) => job.id !== id));
-        } catch (error) {
-            if (error instanceof Error) {
-                throw new Error(
-                    "unknown server error occured while attemped to delete item from server",
-                    error
-                );
-            }
-        }
+        await serviceJobs.deleteJob(id);
+        setJobsList((jobsList) => jobsList.filter((job) => job.id !== id));
     };
 
-    const handleBulkDelete = async () => {
-        checkedState.forEach(async (checkElem) => {
+    const handleBulkDelete = () => {
+        checkedState.forEach((checkElem) => {
             if (checkElem.state) {
-                await handleDelete(checkElem.id);
+                void handleDelete(checkElem.id);
             }
         });
         setCheckAll(false);
     };
 
     /* Waiting for data arrival */
-    if (((jobsList: JobItem[]) => jobsList).length === 0) return null;
+    if (((jobsList: JobItem[]) => jobsList).length === 0) {
+        console.log("waiting for data arrival");
+        return null;
+    }
 
     return (
         <div className="flex w-4/5 flex-col">
@@ -254,7 +219,7 @@ export default function JobsList({
                                 ? "hidden"
                                 : ""
                                 // eslint-disable-next-line indent
-                                } btn btn-error btn-sm  mr-6`}
+                            } btn btn-error btn-sm  mr-6`}
                         >
                             Delete selected
                         </button>

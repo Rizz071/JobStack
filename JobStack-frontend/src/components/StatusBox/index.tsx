@@ -8,7 +8,7 @@ interface Props {
 }
 
 
-export default function StatusBox({ job_id }: Props) {
+const StatusBox = ({ job_id }: Props) => {
     const [statusArray, setStatusArray] = useState<StatusObject[]>([]);
 
 
@@ -16,13 +16,16 @@ export default function StatusBox({ job_id }: Props) {
     useEffect(() => {
         if (!job_id) return;
 
-        (async () => {
+        (async function() {
             try {
                 const response: unknown = await axios.get<StatusObject[]>(`http://127.0.0.1:3001/api/status/${job_id}`);
 
                 /* Narrowing type Status Object*/
-                if (!response || typeof response !== "object" || !("data" in response) || !Array.isArray(response.data))
-                    throw new Error("error while retrieving job list from server");
+                if (!response
+                    || typeof response !== "object"
+                    || !("data" in response)
+                    || !Array.isArray(response.data))
+                    return new Error("error while retrieving job list from server");
 
                 setStatusArray(response.data);
                 console.log("Statuses received: ", response.data);
@@ -33,12 +36,13 @@ export default function StatusBox({ job_id }: Props) {
                 }
                 console.log(error);
             }
-        })();
-
+        }
+        ());
     }, [job_id]);
 
     /* Waiting for statusArray */
     if (!job_id) return (
+
         <div className="mt-8 flex h-fit w-1/5 flex-col rounded-lg border border-neutral bg-base-100 shadow-xl">
             <div className="flex flex-row justify-between rounded-t-md bg-neutral py-2">
                 <h2 className="my-auto mb-1 ml-6 text-xl font-light text-neutral-content">
@@ -51,7 +55,7 @@ export default function StatusBox({ job_id }: Props) {
         </div>
     );
 
-    if (!statusArray) return;
+    if (!statusArray) return <div></div>;
 
     return (
         <div className="mt-8 flex h-fit w-1/5 flex-col rounded-lg border border-neutral bg-base-100 shadow-xl">
@@ -60,7 +64,7 @@ export default function StatusBox({ job_id }: Props) {
                     Status box
                 </h2>
                 <button
-                    onClick={() => 0}
+                    onClick={(): number => 0}
                     className="btn btn-sm  mr-6 rounded-md"
                 >
                     Add
@@ -69,4 +73,6 @@ export default function StatusBox({ job_id }: Props) {
             <StatusTimeLine statusArray={statusArray} />
         </div>
     );
-}
+};
+
+export default StatusBox;

@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { JobItem } from "../../types";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
+import serviceJobs from "../../../services/serviceJobs";
 
 interface Props {
     jobsList: JobItem[];
@@ -45,32 +46,35 @@ export default function DetailJobView({ jobsList, setJobsList }: Props) {
     }, []);
 
     const handleDelete = async (id: number) => {
-        try {
-            const response: unknown = await axios.delete(
-                `http://127.0.0.1:3001/api/jobs/${id}`
-            );
-
-            /* Narrowing response from server and checking code 204 */
-            if (
-                !response ||
-                typeof response !== "object" ||
-                !("status" in response) ||
-                response.status !== 204
-            )
-                throw new Error("error while deleting entity");
-
-            /* Updating list of jobs */
-            setJobsList(jobsList.filter((job) => job.id !== id));
-
-            navigate("/");
-        } catch (error) {
-            if (error instanceof Error) {
-                throw new Error(
-                    "unknown server error occured while attemped to delete item from server",
-                    error
-                );
-            }
-        }
+        await serviceJobs.deleteJob(id);
+        setJobsList((jobsList) => jobsList.filter((job) => job.id !== id));
+        navigate("/");
+        // try {
+        //     const response: unknown = await axios.delete(
+        //         `http://127.0.0.1:3001/api/jobs/${id}`
+        //     );
+        //
+        //     /* Narrowing response from server and checking code 204 */
+        //     if (
+        //         !response ||
+        //         typeof response !== "object" ||
+        //         !("status" in response) ||
+        //         response.status !== 204
+        //     )
+        //         throw new Error("error while deleting entity");
+        //
+        //     /* Updating list of jobs */
+        //     setJobsList(jobsList.filter((job) => job.id !== id));
+        //
+        //     navigate("/");
+        // } catch (error) {
+        //     if (error instanceof Error) {
+        //         throw new Error(
+        //             "unknown server error occured while attemped to delete item from server",
+        //             error
+        //         );
+        //     }
+        // }
     };
 
     const handleSave = async (id: number) => {

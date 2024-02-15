@@ -30,6 +30,8 @@ const PaginationBox = ({
         );
     }
 
+    if(pagesTotalAmount === 1) return null;
+
     return (
         <div className="flex justify-between">
             <div>
