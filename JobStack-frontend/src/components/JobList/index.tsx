@@ -74,7 +74,7 @@ export default function JobsList({
             return;
         }
         if (filterString) {
-            console.log("filterstring=true");
+            console.log("filterString=true");
             setFilteredJobList(
                 (() => jobsList)().filter(
                     (jobItem: JobItem) =>
@@ -279,7 +279,7 @@ export default function JobsList({
 
                                             <div className="flex gap-x-4">
                                                 <p className="mt-1 text-xs leading-5 text-base-content">
-                                                    Applyed date:{" "}
+                                                    Applied date:{" "}
                                                     <time dateTime={jobItem.date_of_apply.toString()}>
                                                         {jobItem.date_of_apply.split("T")[0]}
                                                     </time>

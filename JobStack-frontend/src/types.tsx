@@ -8,7 +8,7 @@ export interface JobItem {
     active: boolean;
 }
 
-export type NewJob = Omit<JobItem, "id">;
+// export type NewJob = Omit<JobItem, "id">;
 
 
 export interface StatusObject {

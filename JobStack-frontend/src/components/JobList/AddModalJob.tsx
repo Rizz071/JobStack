@@ -24,7 +24,7 @@ const ModalAddJob = ({ modalAddJobForm, jobsList, setJobsList }: Props) => {
                         job_title: newJobTitle,
                         job_desc: newJobDesc,
                         date_of_apply: new Date().toISOString(),
-                        current_status_desc: "Just applyed",
+                        current_status_desc: "Just applied",
                         active: true,
                     },
                     {
