@@ -70,7 +70,7 @@ const deleteJob = async (id: number) => {
             );
         }
     }
-}
+};
 
 
 export default {
