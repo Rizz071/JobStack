@@ -22,7 +22,7 @@ const isJobItemArray = (object: unknown[]): object is JobItem[] => {
 const requestJobList = async (setJobsList: React.Dispatch<React.SetStateAction<JobItem[]>>) => {
     try {
         const response: unknown = await axios.get(
-            "http://127.0.0.1:3001/api/jobs/1"
+            "/api/jobs/1"
         );
 
         if (!response
@@ -50,7 +50,7 @@ const deleteJob = async (id: number) => {
          * so will be deleted also status rows in job_status table
          */
         const response: unknown = await axios.delete(
-            `http://127.0.0.1:3001/api/jobs/${id}`
+            `/api/jobs/${id}`
         );
 
         /* Narrowing response from server and checking code 204 */
