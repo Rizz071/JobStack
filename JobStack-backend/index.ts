@@ -1,5 +1,5 @@
 import express, { Request, Response, NextFunction } from "express";
-// import "dotenv/config";
+import "dotenv/config";
 const app = express();
 import cors from "cors";
 
