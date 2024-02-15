@@ -15,6 +15,8 @@ app.use("/api/users", usersRouter);
 app.use("/api/", jobsRouter);
 app.use("/api/status/", statusRouter);
 
+app.use(express.static('frontend'));
+
 /* MIDLLEWARE: unknown endpoint handling */
 const unknownEndpoint = (_req: Request, res: Response) => {
 	res.status(404).send({ error: "unknown endpoint" });
