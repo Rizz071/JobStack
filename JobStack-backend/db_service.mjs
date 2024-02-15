@@ -65,3 +65,39 @@
 // // execQuery(`INSERT INTO users (username, password, fullname) VALUES ('testuser', '11111', 'Esi Merkki') RETURNING *;`)
 // // execQuery(`INSERT INTO jobs_data (user_id, job_title, job_desc) VALUES (4, 'Test job title', 'Test description of job') RETURNING *;`)
 // // execQuery(``);
+
+
+
+
+
+
+
+
+// CREATE TABLE IF NOT EXISTS "users" (
+//     "id" SERIAL PRIMARY KEY,
+//     "username" TEXT NOT NULL,
+//     "password" TEXT NOT NULL,
+//     "fullname" TEXT,
+//     "is_admin" BOOLEAN NOT NULL DEFAULT false,
+//     "date_of_reg" TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+// );
+
+
+// CREATE TABLE IF NOT EXISTS "jobs_data" (
+//     "id" SERIAL PRIMARY KEY,
+//     "user_id" INTEGER REFERENCES users ("id"),
+//     "job_title" TEXT,
+//     "job_desc" TEXT NOT NULL,
+//     "date_of_apply" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+//     "current_status_desc" TEXT,
+//     "active" BOOLEAN NOT NULL DEFAULT true
+// );
+
+// CREATE TABLE IF NOT EXISTS "job_status" (
+//     "id" SERIAL PRIMARY KEY,
+//     "job_id" INTEGER REFERENCES jobs_data ("id") ON DELETE CASCADE,
+//     "position" INTEGER NOT NULL,
+//     "status" TEXT NOT NULL,
+//     "status_desc" TEXT,
+//     "date" TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+// );

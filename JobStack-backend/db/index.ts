@@ -3,13 +3,19 @@ import "dotenv/config";
 import { Pool } from "pg";
 
 const pool = new Pool({
-	host: process.env.HOST,
-	user: process.env.USER,
+	// host: process.env.HOST,
+	// user: 
+    //     process.env.NODE_ENV !== "development"
+    //         ? process.env.USER
+    //         : process.env.USER_TEST,   
 	database:
 		process.env.NODE_ENV !== "development"
 			? process.env.DATABASE
 			: process.env.DATABASE_TEST,
-	password: process.env.PASSWORD,
+	password: 
+        process.env.NODE_ENV !== "development"
+            ? process.env.PASSWORD
+            : process.env.PASSWORD_TEST,    
 	port: Number(process.env.PORT_DB),
 	max: Number(process.env.MAX),
 	idleTimeoutMillis: Number(process.env.IDLETIMEOUTMILLIS),
