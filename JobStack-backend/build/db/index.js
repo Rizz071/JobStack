@@ -13,11 +13,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 require("dotenv/config");
 const pg_1 = require("pg");
 const pool = new pg_1.Pool({
-    // host: process.env.HOST,
-    // user: 
-    //     process.env.NODE_ENV !== "development"
-    //         ? process.env.USER
-    //         : process.env.USER_TEST,   
+    host: process.env.NODE_ENV !== "development"
+        ? process.env.HOST
+        : process.env.HOST_TEST,
+    user: process.env.NODE_ENV !== "development"
+        ? process.env.USER
+        : process.env.USER_TEST,
     database: process.env.NODE_ENV !== "development"
         ? process.env.DATABASE
         : process.env.DATABASE_TEST,
