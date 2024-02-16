@@ -91,14 +91,13 @@ router.post("/jobs/:id", (req, res, next) => {
     }))();
 });
 /* Deleting job by ID */
-router.delete("/:id", (req, res, next) => {
+router.delete("/jobs/:id", (req, res, next) => {
     void (() => __awaiter(void 0, void 0, void 0, function* () {
         try {
             yield db_1.default.query(`DELETE FROM jobs_data WHERE id = $1`, [
                 req.params.id,
             ]);
             /* Sending No Content if success*/
-            // res.status(204).send("item deleted");
             res.sendStatus(204);
         }
         catch (error) {

@@ -112,7 +112,7 @@ router.post("/jobs/:id", (req: Request, res: Response, next: NextFunction) => {
 
 /* Deleting job by ID */
 router.delete(
-	"/:id",
+	"/jobs/:id",
 	(req: Request, res: Response, next: NextFunction) => {
 		void (async () => {
 			try {
@@ -121,7 +121,6 @@ router.delete(
 				]);
 
 				/* Sending No Content if success*/
-				// res.status(204).send("item deleted");
 				res.sendStatus(204);
 			} catch (error) {
 				next(error);
