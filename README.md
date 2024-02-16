@@ -1,7 +1,7 @@
 # Job Stack
 ## _CV submission tracking application_
 
-### Live build (very early beta): [https://jobstack-5nto.onrender.com/](https://jobstack-5nto.onrender.com/)
+### Live build (very early beta, just for DB deployment test): [https://jobstack-5nto.onrender.com/](https://jobstack-5nto.onrender.com/)
 <hr />
 
 Job Stack will be a cloud-enabled, mobile-ready,
