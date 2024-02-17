@@ -1,6 +1,9 @@
 # Job Stack
 ## _CV submission tracking application_
 
+#### Live build: [https://jobstack-5nto.onrender.com/](https://jobstack-5nto.onrender.com/) (just for DB deployment test)
+<hr />
+
 Job Stack will be a cloud-enabled, mobile-ready,
 ReactJS- and ExpressJS-powered web application.
 - Easily add a record of applying for a job opening.
