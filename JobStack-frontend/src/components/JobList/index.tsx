@@ -148,6 +148,7 @@ export default function JobsList({
                     : checkElem
         );
         setCheckedState(updatedCheckedState);
+        return true;
     };
 
     const handleDelete = async (id: number) => {
@@ -219,7 +220,7 @@ export default function JobsList({
                                 ? "hidden"
                                 : ""
                                 // eslint-disable-next-line indent
-                            } btn btn-error btn-sm  mr-6`}
+                                } btn btn-error btn-sm  mr-6`}
                         >
                             Delete selected
                         </button>

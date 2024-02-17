@@ -5,7 +5,7 @@
         "dev": "vite",
         "build": "tsc && vite build",
         "preview": "vite preview",
-        "lint": "npx eslint"
+        "lint": "eslint src --ext js,jsx,ts,tsx --report-unused-disable-directives"
     },
     "dependencies": {
         "@headlessui/react": "^1.7.18",

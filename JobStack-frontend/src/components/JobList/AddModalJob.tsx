@@ -56,15 +56,7 @@ const ModalAddJob = ({ modalAddJobForm, jobsList, setJobsList }: Props) => {
                 setNewJobTitle("");
                 setNewJobDesc("");
 
-
-
                 setJobsList(jobsList.concat(response.data));
-
-
-
-
-
-
 
                 setNewJobTitle("");
                 setNewJobDesc("");
