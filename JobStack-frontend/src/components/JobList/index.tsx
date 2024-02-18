@@ -64,7 +64,7 @@ export default function JobsList({
     useEffect(() => {
         console.log("useEffect => setJobsList");
         void serviceJobs.requestJobList(setJobsList);
-    }, []);
+    }, [setJobsList]);
 
 
     useEffect(() => {
@@ -88,7 +88,7 @@ export default function JobsList({
             setFilteredJobList([...jobsList]);
         }
         console.log("filtered", ((filteredJobList) => filteredJobList)());
-    }, [jobsList.length, filterString]);
+    }, [jobsList, jobsList.length, filterString]);
 
     /* Initialization state of all checkboxes to false
      * CONDITION: jobsList.length changed
@@ -104,7 +104,7 @@ export default function JobsList({
                 return { id: job.id, state: false };
             })
         );
-    }, [jobsList.length]);
+    }, [jobsList, jobsList.length]);
 
     useEffect(() => {
         console.log("useEffect => setCheckedState + setPagesTotalAmount");
@@ -120,7 +120,7 @@ export default function JobsList({
         setPagesTotalAmount(Math.ceil(filteredJobList.length / jobsPerPage));
         console.log("jobsPerPage", jobsPerPage);
         console.log("pagesTotalAmount: ", pagesTotalAmount);
-    }, [filteredJobList.length, height]);
+    }, [filteredJobList.length, height, jobsPerPage, pagesTotalAmount, setJobsPerPage, setPagesTotalAmount]);
 
     /* Last page calculation after window resizing */
     useEffect(() => {
@@ -136,7 +136,7 @@ export default function JobsList({
 
         if (currentPage >= pagesTotalAmount) setCurrentPage(pagesTotalAmount - 1);
         if (currentPage < 0) setCurrentPage(0);
-    }, [filteredJobList.length, pagesTotalAmount]);
+    }, [filteredJobList.length, pagesTotalAmount, currentPage, setCurrentPage]);
 
     const handleCheckboxChange = (position: number) => {
         if (!checkedState) return false;
