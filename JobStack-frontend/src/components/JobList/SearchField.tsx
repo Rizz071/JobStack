@@ -8,7 +8,7 @@ interface Props {
 const SearchField = ({ filterString, setFilterString }: Props) => {
     return (
         <div className="my-auto mr-4">
-            <label className="my-auto input input-bordered input-sm flex pl-1 items-center">
+            <label className="my-auto input input-bordered input-sm flex pl-1 items-center rounded-none">
                 <input
                     placeholder="Search"
                     type="text"

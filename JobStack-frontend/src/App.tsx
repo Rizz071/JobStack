@@ -62,11 +62,13 @@ function App() {
                         path="/"
                         element={
                             <>
-                                <div id="main-field-without-margins" className="flex flex-col mt-6 mb-6 mx-10">
-                                    <div id="main-content-field" className="">
-                                        <Stats />
+                                <div id="main-field-without-margins" className="w-full h-full flex justify-center">
+                                    <div id="main-content-field" className="m-10 flex flex-col">
+                                        <div className="">
+                                            <Stats />
+                                        </div>
 
-                                        <div className="flex flex-row gap-x-10 justify-between">
+                                        <div className="flex flex-row gap-x-10">
                                             <JobsList
                                                 jobsList={jobsList}
                                                 // setJobsList={setJobsList}

@@ -4,6 +4,7 @@ import { StatusObject } from "../../types";
 import AddStatusModal from "./AddStatusModal";
 import { useQuery } from "@tanstack/react-query";
 import serviceStatuses from "../../../services/serviceStatuses";
+import LoadingProgress from "../LoadingProgress";
 
 interface Props {
     job_id: number;
@@ -22,15 +23,13 @@ const StatusBox = ({ job_id }: Props) => {
     /* Waiting for statusArray */
     if (result.isLoading) {
         return (
-            <div className="mt-8 flex h-fit w-full flex-col rounded-lg border border-neutral bg-base-100 shadow-xl">
-                <div className="flex flex-row justify-between rounded-t-md bg-neutral py-2">
-                    <h2 className="my-auto mb-1 ml-6 text-xl font-light text-neutral-content">
-                        Status box
+            <div className="mt-8 flex h-fit flex-col bg-base-100 shadow">
+                <div className="flex flex-row justify-between bg-base-100 py-2">
+                    <h2 className="my-auto mb-1 ml-6 text-xl font-light text-neutral">
+                        Stage
                     </h2>
                 </div>
-                <div className="flex flex-row justify-center prose p-2">
-                    <span className="">Select job in list</span>
-                </div>
+                <LoadingProgress />
             </div>
         );
     }
@@ -52,14 +51,14 @@ const StatusBox = ({ job_id }: Props) => {
                     statusArray={statusArray}
                 />
 
-                <div className="mt-8 flex h-fit flex-col bg-base-100 shadow-xl">
-                    <div className="flex flex-row justify-between bg-primary py-2">
-                        <h2 className="my-auto mb-1 ml-6 text-xl font-light text-neutral-content">
-                            Status box
+                <div className="mt-8 flex h-fit flex-col bg-base-100 shadow">
+                    <div className="flex flex-row justify-between bg-base-100 py-2">
+                        <h2 className="my-auto mb-1 ml-6 text-xl font-light text-neutral">
+                            Stage
                         </h2>
                         <button
                             onClick={() => modalAddStatusForm.current?.showModal()}
-                            className="btn btn-sm mr-6 rounded-md"
+                            className="btn btn-sm btn-primary mr-6 rounded-none"
                         >
                             Add
                         </button>

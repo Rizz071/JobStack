@@ -175,12 +175,12 @@ export default function JobsList({
     }
 
     return (
-        <div className="flex w-full flex-col">
+        <div className="flex  flex-col">
 
             <ModalAddJob modalAddJobForm={modalAddJobForm} />
-            <div className="mb-5 mt-8 flex w-full flex-col shadow-xl">
-                <div className="flex flex-row justify-between bg-primary py-2">
-                    <div className="flex flex-row justify-start">
+            <div className="mb-5 mt-8 flex w-full flex-col shadow">
+                <div className="flex flex-row justify-between bg-base-100 py-2">
+                    <div className="flex flex-row justify-start w-1/2">
                         <input
                             type="checkbox"
                             checked={checkAll}
@@ -205,36 +205,38 @@ export default function JobsList({
                                     setCheckAll(!checkAll);
                                 }
                             }}
-                            className="checkbox-primary checkbox my-auto ml-6 size-6 shrink-0 rounded-md"
+                            className="checkbox-primary checkbox my-auto ml-6 size-5 shrink-0 rounded-none"
                             id={"custom-checkbox-select-all"}
                         />
-                        <h2 className="ml-6 text-xl font-light text-neutral-content">
+                        <h2 className="ml-6 text-xl font-light text-neutral">
                             Applied jobs
                         </h2>
                     </div>
 
-                    <div className="flex w-1/3 flex-row justify-end">
+                    <div className="flex w-1/2 flex-row justify-end">
                         <button
                             onClick={() => handleBulkDelete()}
                             className={`${checkedState.every((checkElem) => !checkElem.state)
                                 ? "hidden"
                                 : ""
                                 // eslint-disable-next-line indent
-                                } btn btn-error btn-sm  mr-6`}
+                                } btn btn-error btn-sm mr-6 rounded-none`}
                         >
                             Delete selected
                         </button>
                         <button
                             onClick={() => modalAddJobForm.current?.showModal()}
-                            className="btn btn-sm  mr-6 rounded-md"
+                            className="btn btn-sm btn-primary mr-6 rounded-none"
                         >
-                            Add new
+                            Add
                         </button>
 
-                        <SearchField
-                            filterString={filterString}
-                            setFilterString={setFilterString}
-                        />
+                        <div className="shrink-0 w-3/5">
+                            <SearchField
+                                filterString={filterString}
+                                setFilterString={setFilterString}
+                            />
+                        </div>
                     </div>
                 </div>
                 {jobsList.length === 0 ? (
@@ -251,7 +253,7 @@ export default function JobsList({
                             .map((jobItem) => (
                                 <li
                                     key={jobItem.id}
-                                    className="flex max-h-20 min-h-20 justify-between gap-x-6  border-black bg-base-100 last:rounded-b-lg hover:bg-base-200"
+                                    className="flex max-h-20 min-h-20 justify-between gap-x-6 border-black bg-base-100 last:rounded-b-lg hover:bg-base-200"
                                 >
                                     <input
                                         type="checkbox"
@@ -262,32 +264,29 @@ export default function JobsList({
                                             )?.state || false
                                         }
                                         onChange={() => handleCheckboxChange(jobItem.id)}
-                                        className="checkbox-primary checkbox my-auto ml-6 size-6 shrink-0 rounded-md"
+                                        className="checkbox-primary checkbox my-auto ml-6 size-5 shrink-0 rounded-none"
                                         id={`custom-checkbox-${jobItem.id}`}
                                     />
 
                                     <div
-                                        onClick={() =>
-
-                                            setSelectedJob(jobItem.id)
-                                        }
+                                        onClick={() => setSelectedJob(jobItem.id)}
                                         className="my-4 min-w-0 flex-1 gap-x-4"
                                     >
                                         <div className="max-w-26 min-w-0 flex-auto">
-                                            <p className="truncate text-sm font-semibold leading-6 text-base-content">
+                                            <p className="truncate text-sm leading-6 text-base-content">
                                                 {jobItem.job_title}
                                             </p>
 
                                             <div className="flex gap-x-4">
-                                                <p className="mt-1 text-xs leading-5 text-base-content">
+                                                <p className="mt-1 text-xs leading-5 text-secondary">
                                                     Applied date:{" "}
                                                     <time dateTime={jobItem.date_of_apply.toString()}>
                                                         {jobItem.date_of_apply.split("T")[0]}
                                                     </time>
                                                 </p>
-                                                <p className="mt-1 text-xs leading-5 text-base-content">
+                                                {/* <p className="mt-1 text-xs leading-5 text-base-content">
                                                     Current status: {jobItem.current_status_desc}
-                                                </p>
+                                                </p> */}
                                             </div>
                                         </div>
                                     </div>
@@ -297,15 +296,15 @@ export default function JobsList({
                                             navigate(`/detailview/${jobItem.id}`, { replace: true });
                                         }
                                         }
-                                        className="my-auto w-6"
+                                        className="my-auto w-5"
                                     >
                                         <img src={editIcon}></img>
                                     </button>
                                     <button
                                         onClick={() => handleDelete(jobItem.id)}
-                                        className="my-auto mr-6 w-6"
+                                        className="my-auto mr-5 w-5"
                                     >
-                                        <img src={thrashIcon}></img>
+                                        <img className="" src={thrashIcon}></img>
                                     </button>
                                 </li>
                             ))}
