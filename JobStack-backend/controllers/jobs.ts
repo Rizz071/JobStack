@@ -11,7 +11,8 @@ router.get("/jobs/:id", (req: Request, res: Response, next: NextFunction) => {
 		try {
 			const result: unknown = await db.query(
 				`SELECT id, job_title, job_desc, date_of_apply, current_status_desc, active
-                FROM jobs_data WHERE user_id = $1 ORDER BY "date_of_apply" DESC`,
+                FROM jobs_data WHERE user_id = $1 
+                ORDER BY "date_of_apply" DESC`,
 				[req.params.id]
 			);
 

@@ -1,72 +1,95 @@
 import React, { useState, SyntheticEvent } from "react";
 import { StatusObject, NewStatusObject } from "../../types";
-import axios from "axios";
-import serviceJobs from "../../../services/serviceJobs";
+import { useQueryClient, useMutation } from "@tanstack/react-query";
+import serviceStatuses from "../../../services/serviceStatuses";
+
+interface PassObject {
+    job_id: number;
+    newStatusObject: NewStatusObject;
+}
 
 interface Props {
     modalAddStatusForm: React.RefObject<HTMLDialogElement>;
     job_id: number;
     statusArray: StatusObject[];
-    setStatusArray: React.Dispatch<React.SetStateAction<StatusObject[]>>;
+    // setStatusArray: React.Dispatch<React.SetStateAction<StatusObject[]>>;
 }
 
-const AddStatusModal = ({ modalAddStatusForm, job_id, statusArray, setStatusArray }: Props) => {
+const AddStatusModal = ({ modalAddStatusForm, job_id, statusArray }: Props) => {
     const [statusName, setStatusName] = useState<string>("");
     const [statusDesc, setStatusDesc] = useState<string>("");
     const [statusDate, setStatusDate] = useState<string>(new Date().toISOString().split("T")[0]);
 
+    const queryClient = useQueryClient();
 
+    const addStatusMutation = useMutation({
+        mutationFn: (passObject: PassObject) => serviceStatuses.addStatus(passObject.job_id, passObject.newStatusObject),
+        onSuccess: () => {
+            setStatusName("");
+            setStatusDesc("");
+            setStatusDate(new Date().toISOString().split("T")[0]);
+            queryClient.invalidateQueries({ queryKey: ["statuses"] });
+        }
+    });
 
     const handleSubmit = (event: SyntheticEvent) => {
         event.preventDefault();
 
         /* Adding new stage */
-        void (async () => {
-            const newStatusObject: NewStatusObject = {
-                position: Math.max(...statusArray.map(status => Number(status.position))) + 1,
-                status: statusName,
-                status_desc: statusDesc,
-                date: new Date(statusDate)
-            };
+        // void (async () => {
+        const newStatusObject: NewStatusObject = {
+            position: Math.max(...statusArray.map(status => Number(status.position))) + 1,
+            status: statusName,
+            status_desc: statusDesc,
+            date: new Date(statusDate)
+        };
 
-            try {
-                const response: unknown = await axios.post(
-                    `/api/status/${job_id}`,
-                    newStatusObject,
-                    {
-                        headers: {
-                            "Content-Type": "application/json",
-                        }
-                    }
-                );
 
-                /* Narrowing response */
-                if (!response
-                    || typeof response !== "object"
-                    || !("status" in response)
-                    || !("data" in response)
-                    || !serviceJobs.isStatusObject(response.data)
+        const passObject: PassObject = {
+            job_id,
+            newStatusObject
+        };
 
-                ) {
-                    throw Error("Error: server did not properly respond");
-                }
+        addStatusMutation.mutate(passObject);
 
-                if (response.status === 201) {
-                    setStatusName("");
-                    setStatusDesc("");
-                    setStatusDate(new Date().toISOString().split("T")[0]);
+        //     try {
+        //         const response: unknown = await axios.post(
+        //             `/api/status/${job_id}`,
+        //             newStatusObject,
+        //             {
+        //                 headers: {
+        //                     "Content-Type": "application/json",
+        //                 }
+        //             }
+        //         );
 
-                    setStatusArray(statusArray.concat(response.data));
-                } else {
-                    throw Error("Error: unknown error occured on server while creating new stage status");
-                }
+        //         /* Narrowing response */
+        //         if (!response
+        //             || typeof response !== "object"
+        //             || !("status" in response)
+        //             || !("data" in response)
+        //             || !serviceJobs.isStatusObject(response.data)
 
-            } catch (error) {
-                if (error instanceof Error) {
-                    console.log(error.message);
-                }
-            }
-        })();
+        //         ) {
+        //             throw Error("Error: server did not properly respond");
+        //         }
+
+        //         if (response.status === 201) {
+        //             setStatusName("");
+        //             setStatusDesc("");
+        //             setStatusDate(new Date().toISOString().split("T")[0]);
+
+        //             // setStatusArray(statusArray.concat(response.data));
+        //         } else {
+        //             throw Error("Error: unknown error occured on server while creating new stage status");
+        //         }
+
+        //     } catch (error) {
+        //         if (error instanceof Error) {
+        //             console.log(error.message);
+        //         }
+        //     }
+        // })();
     };
 
 

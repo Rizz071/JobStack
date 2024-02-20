@@ -1,6 +1,5 @@
 import axios from "axios";
-import { JobItem, StatusObject } from "../src/types";
-import React from "react";
+import { JobItem } from "../src/types";
 
 /*Narrowing JobItem type*/
 const isJobItem = (object: unknown): object is JobItem => {
@@ -14,15 +13,15 @@ const isJobItem = (object: unknown): object is JobItem => {
 };
 
 /*Narrowing StatusObject type*/
-const isStatusObject = (object: unknown): object is StatusObject => {
-    return !!(object && typeof object === "object"
-        && "id" in object && typeof object.id === "number"
-        && "status" in object && typeof object.status === "string"
-        && "status_desc" in object && typeof object.status_desc === "string"
-        && "date" in object
-        && "position" in object && typeof object.position === "number"
-        && "job_id" in object && typeof object.job_id === "number");
-};
+// const isStatusObject = (object: unknown): object is StatusObject => {
+//     return !!(object && typeof object === "object"
+//         && "id" in object && typeof object.id === "number"
+//         && "status" in object && typeof object.status === "string"
+//         && "status_desc" in object && typeof object.status_desc === "string"
+//         && "date" in object
+//         && "position" in object && typeof object.position === "number"
+//         && "job_id" in object && typeof object.job_id === "number");
+// };
 
 /*Narrowing Array of JobItem*/
 const isJobItemArray = (object: unknown[]): object is JobItem[] => {
@@ -30,7 +29,7 @@ const isJobItemArray = (object: unknown[]): object is JobItem[] => {
 };
 
 /*Requesting all jobs from backend*/
-const requestJobList = async (setJobsList: React.Dispatch<React.SetStateAction<JobItem[]>>) => {
+const requestJobList = async () => {
     try {
         const response: unknown = await axios.get("/api/jobs/1");
 
@@ -43,13 +42,13 @@ const requestJobList = async (setJobsList: React.Dispatch<React.SetStateAction<J
         }
 
         const data: unknown[] = response.data;
-
-        if (data && isJobItemArray(data)) setJobsList(data);
+        if (data && isJobItemArray(data)) return data;
     } catch (error) {
         if (error instanceof Error) {
             throw new Error("unknown server error");
         }
     }
+    return [];
 };
 
 const deleteJob = async (id: number) => {
@@ -68,6 +67,7 @@ const deleteJob = async (id: number) => {
         )
             throw new Error("error while deleting entity");
 
+        // return response;
     } catch (error) {
         if (error instanceof Error) {
             throw new Error("Unknown server error occured while attemped to delete item from server");
@@ -75,7 +75,33 @@ const deleteJob = async (id: number) => {
     }
 };
 
+const putJob = async (jobToPut: JobItem) => {
+
+    try {
+        const response: unknown = await axios.put<JobItem>(
+            `/api/job/${jobToPut.id}`,
+            jobToPut
+        );
+
+        /* Narrowing response from server and checking code 204 */
+        if (
+            !response ||
+            typeof response !== "object" ||
+            !("status" in response) ||
+            response.status !== 201
+        )
+            throw new Error("error while changing entity on server");
+
+    } catch (error) {
+        if (error instanceof Error) {
+            throw new Error(
+                "unknown server error occured while attemped to delete item from server",
+                error
+            );
+        }
+    }
+};
 
 export default {
-    requestJobList, deleteJob, isStatusObject
+    requestJobList, deleteJob, putJob
 };

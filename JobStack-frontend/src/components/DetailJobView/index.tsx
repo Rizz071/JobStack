@@ -1,131 +1,58 @@
 import React from "react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { JobItem } from "../../types";
-import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import serviceJobs from "../../../services/serviceJobs";
+import { useQueryClient, useMutation } from "@tanstack/react-query";
 
-interface Props {
-    jobsList: JobItem[];
-    setJobsList: React.Dispatch<React.SetStateAction<JobItem[]>>;
-}
 
-export default function DetailJobView({ jobsList, setJobsList }: Props) {
-    const [currentJob, setCurrentJob] = useState<JobItem>();
+const DetailJobView = () => {
+    const [jobTitle, setJobTitle] = useState<string>("");
+    const [jobDescription, setJobDescription] = useState<string>("");
 
-    //   const [jobTitle, setJobTitle] = useState<string>("");
-    //   const [jobDescription, setJobDescription] = useState<string>("");
+    const queryClient = useQueryClient();
 
     const { id } = useParams();
     const navigate = useNavigate();
 
-    /* Requesting single job data from server via REST API */
-    useEffect(() => {
-        void (async () => {
-            try {
-                const result = await axios.get<JobItem>(
-                    `/api/job/${id}`
-                );
+    const jobsList: JobItem[] = queryClient.getQueryData(["jobs"]) || [];
 
-                if (
-                    !result ||
-                    typeof result !== "object" ||
-                    !result.data ||
-                    !("data" in result) ||
-                    typeof result.data !== "object"
-                )
-                    throw new Error("error while retrieving job list from server");
+    const currentJob: JobItem | undefined = jobsList.find(job => job.id === Number(id));
 
-                setCurrentJob(result.data);
-            } catch (error) {
-                if (error instanceof Error) {
-                    throw new Error("unknown server error", error);
-                }
-            }
-        })();
-    }, []);
 
-    const handleDelete = async (id: number) => {
-        await serviceJobs.deleteJob(id);
-        setJobsList((jobsList) => jobsList.filter((job) => job.id !== id));
+    const deleteMutation = useMutation({
+        mutationFn: (id: number) => serviceJobs.deleteJob(id),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["jobs"] });
+        }
+    });
+
+    const saveMutation = useMutation({
+        mutationFn: (jobToPut: JobItem) => serviceJobs.putJob(jobToPut),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["jobs"] });
+        }
+    });
+
+    const handleDelete = async () => {
+        if (!currentJob) return null;
+
+        deleteMutation.mutate(currentJob.id);
         navigate("/");
-        // try {
-        //     const response: unknown = await axios.delete(
-        //         `/api/jobs/${id}`
-        //     );
-        //
-        //     /* Narrowing response from server and checking code 204 */
-        //     if (
-        //         !response ||
-        //         typeof response !== "object" ||
-        //         !("status" in response) ||
-        //         response.status !== 204
-        //     )
-        //         throw new Error("error while deleting entity");
-        //
-        //     /* Updating list of jobs */
-        //     setJobsList(jobsList.filter((job) => job.id !== id));
-        //
-        //     navigate("/");
-        // } catch (error) {
-        //     if (error instanceof Error) {
-        //         throw new Error(
-        //             "unknown server error occured while attemped to delete item from server",
-        //             error
-        //         );
-        //     }
-        // }
     };
 
-    const handleSave = async (id: number) => {
+    const handleSave = async () => {
         if (!currentJob) return;
-
-        console.log(currentJob.job_title, currentJob.job_desc);
 
         const jobToPut: JobItem = {
             ...currentJob,
-            job_title: currentJob.job_title,
-            job_desc: currentJob.job_desc,
+            job_title: jobTitle,
+            job_desc: jobDescription
         };
 
-        try {
-            const response: unknown = await axios.put<JobItem>(
-                `/api/job/${id}`,
-                jobToPut
-            );
+        saveMutation.mutate(jobToPut);
 
-            /* Narrowing response from server and checking code 204 */
-            if (
-                !response ||
-                typeof response !== "object" ||
-                !("status" in response) ||
-                response.status !== 201
-            )
-                throw new Error("error while changing entity on server");
-
-            setJobsList(
-                jobsList.map((job) => {
-                    if (job.id === id) {
-                        return {
-                            ...job,
-                            job_title: currentJob.job_title,
-                            job_desc: currentJob.job_desc,
-                        };
-                    } else {
-                        return { ...job };
-                    }
-                })
-            );
-
-            navigate("/");
-        } catch (error) {
-            if (error instanceof Error) {
-                throw new Error(
-                    "unknown server error occured while attemped to delete item from server",
-                    error
-                );
-            }
-        }
+        navigate("/");
     };
 
     /* Waiting for data arrival */
@@ -141,13 +68,13 @@ export default function DetailJobView({ jobsList, setJobsList }: Props) {
                 </div>
                 <div className="flex w-1/3 shrink flex-row justify-end align-baseline">
                     <button
-                        onClick={() => handleDelete(Number(id))}
+                        onClick={() => handleDelete()}
                         className="btn btn-sm my-auto mr-4 w-1/3"
                     >
                         Delete
                     </button>
                     <button
-                        onClick={() => handleSave(Number(id))}
+                        onClick={() => handleSave()}
                         className="btn btn-sm my-auto mr-4  w-1/3"
                     >
                         Save
@@ -172,7 +99,7 @@ export default function DetailJobView({ jobsList, setJobsList }: Props) {
                     className="textarea textarea-bordered textarea-md resize-none border-neutral text-lg"
                     defaultValue={`${currentJob.job_title}`}
                     onChange={(event) =>
-                        setCurrentJob({ ...currentJob, job_title: event.target.value })
+                        setJobTitle(event.target.value)
                     }
                 />
                 <div className="border-dotted border-black"></div>
@@ -186,10 +113,13 @@ export default function DetailJobView({ jobsList, setJobsList }: Props) {
                     className="textarea border mb-4 h-full resize-none border-neutral"
                     defaultValue={`${currentJob.job_desc}`}
                     onChange={(event) =>
-                        setCurrentJob({ ...currentJob, job_desc: event.target.value })
+                        setJobDescription(event.target.value)
                     }
                 />
             </div>
         </div>
     );
-}
+};
+
+
+export default DetailJobView;

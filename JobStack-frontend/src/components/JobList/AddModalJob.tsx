@@ -1,74 +1,70 @@
 import React, { useState, SyntheticEvent } from "react";
-import { JobItem } from "../../types";
 import axios from "axios";
+import { useQueryClient, useMutation } from "@tanstack/react-query";
 
 interface Props {
     modalAddJobForm: React.RefObject<HTMLDialogElement>;
-    jobsList: JobItem[];
-    setJobsList: React.Dispatch<React.SetStateAction<JobItem[]>>;
+    // jobsList: JobItem[];
+    // setJobsList: React.Dispatch<React.SetStateAction<JobItem[]>>;
 }
 
-const ModalAddJob = ({ modalAddJobForm, jobsList, setJobsList }: Props) => {
+const ModalAddJob = ({ modalAddJobForm }: Props) => {
+
+    const queryClient = useQueryClient();
+
     const [newJobTitle, setNewJobTitle] = useState<string>("");
     const [newJobDesc, setNewJobDesc] = useState<string>("");
+
+    const newJobsMutation = useMutation({
+        mutationFn: () => axios
+            .post(
+                "/api/jobs/1",
+                {
+                    job_title: newJobTitle,
+                    job_desc: newJobDesc,
+                    date_of_apply: new Date().toISOString(),
+                    current_status_desc: "Just applied",
+                    active: true,
+                },
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                })
+            /* Getting id of created job */
+            /* Adding first status for new job */
+            .then(response => newStatusMutation.mutate(response.data.id)),
+
+    });
+
+    // /* Adding first status for new job */
+    const newStatusMutation = useMutation({
+        mutationFn: (job_id) =>
+            axios.post(
+                `/api/status/${job_id}`,
+                {
+                    position: 0,
+                    status: "Just applied",
+                    status_desc: "",
+                    date: new Date().toISOString()
+                },
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                }
+            ),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["jobs"] });
+        },
+    });
+
 
     const handleSubmit = (event: SyntheticEvent) => {
         event.preventDefault();
 
         /* Adding new job */
-        void (async () => {
-            try {
-                const response = await axios.post(
-                    "/api/jobs/1",
-                    {
-                        job_title: newJobTitle,
-                        job_desc: newJobDesc,
-                        date_of_apply: new Date().toISOString(),
-                        current_status_desc: "Just applied",
-                        active: true,
-                    },
-                    {
-                        headers: {
-                            "Content-Type": "application/json",
-                        },
-                    }
-                );
-
-                /* Getting id of created job */
-                const job_id: number = response.data.id;
-
-                /* Adding first status for new job */
-                await axios.post(
-                    `/api/status/${job_id}`,
-                    {
-                        position: 0,
-                        status: "Just applied",
-                        status_desc: "",
-                        date: new Date().toISOString()
-                    },
-                    {
-                        headers: {
-                            "Content-Type": "application/json",
-                        },
-                    }
-                );
-                setJobsList(jobsList.concat(response.data));
-                setNewJobTitle("");
-                setNewJobDesc("");
-
-                setJobsList(jobsList.concat(response.data));
-
-                setNewJobTitle("");
-                setNewJobDesc("");
-            } catch (error) {
-                if (error instanceof Error) {
-                    console.log(error);
-                }
-            }
-        })();
-
-
-
+        newJobsMutation.mutate();
     };
 
     return (

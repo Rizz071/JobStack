@@ -31,12 +31,10 @@ const StatusTimeLine = ({ statusArray }: Props) => {
                                     clipRule="evenodd" />
                             </svg>
                         </div>
-                        <div className="timeline-end">
-                            <p className="text-base-content prose-sm my-auto">{statusElement.status.toUpperCase()}</p>
-                            <p className="text-base-content text-xs my-auto">{statusElement.status_desc}</p>
-
+                        <div className="flex flex-col w-20 timeline-end">
+                            <p className="text-base-content text-xs my-auto">{statusElement.status.toUpperCase()}</p>
+                            {statusElement.status_desc && <p className="text-base-content text-xs my-auto">{statusElement.status_desc}</p>}
                         </div>
-
                         {index !== arr.length - 1 && <hr className="bg-success" />}
                     </li>
                 );

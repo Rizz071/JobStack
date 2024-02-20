@@ -8,10 +8,11 @@ import PaginationBox from "./PaginationBox";
 import ModalAddJob from "./AddModalJob";
 import { useNavigate } from "react-router-dom";
 import serviceJobs from "../../../services/serviceJobs";
+import { useQueryClient, useMutation } from "@tanstack/react-query";
 
 interface Props {
     jobsList: JobItem[];
-    setJobsList: React.Dispatch<React.SetStateAction<JobItem[]>>;
+    // setJobsList: React.Dispatch<React.SetStateAction<JobItem[]>>;
     handleShowAddJobForm: MouseEventHandler<HTMLElement>;
     pagesTotalAmount: number;
     setPagesTotalAmount: React.Dispatch<React.SetStateAction<number>>;
@@ -29,7 +30,7 @@ interface CheckboxSelect {
 
 export default function JobsList({
     jobsList,
-    setJobsList,
+    // setJobsList,
     pagesTotalAmount,
     setPagesTotalAmount,
     currentPage,
@@ -45,6 +46,15 @@ export default function JobsList({
 
     const navigate = useNavigate();
 
+    const queryClient = useQueryClient();
+
+    const deleteMutation = useMutation({
+        mutationFn: (id: number) => serviceJobs.deleteJob(id),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["jobs"] });
+        }
+    });
+
     // const [width, setWidth] = useState(window.innerWidth);
     const [height, setHeight] = useState(window.innerHeight);
     const updateDimensions = () => {
@@ -58,14 +68,6 @@ export default function JobsList({
     }, []);
 
     const [checkedState, setCheckedState] = useState<CheckboxSelect[]>([]);
-
-
-    /* Requesting data from server via REST API */
-    useEffect(() => {
-        console.log("useEffect => setJobsList");
-        void serviceJobs.requestJobList(setJobsList);
-    }, [setJobsList]);
-
 
     useEffect(() => {
         console.log("useEffect => setFilteredJobList");
@@ -151,15 +153,16 @@ export default function JobsList({
         return true;
     };
 
+    /* Handling deleting one job */
     const handleDelete = async (id: number) => {
-        await serviceJobs.deleteJob(id);
-        setJobsList((jobsList) => jobsList.filter((job) => job.id !== id));
+        deleteMutation.mutate(id);
     };
 
+    /* Handling deleting group of jobs */
     const handleBulkDelete = () => {
         checkedState.forEach((checkElem) => {
             if (checkElem.state) {
-                void handleDelete(checkElem.id);
+                deleteMutation.mutate(checkElem.id);
             }
         });
         setCheckAll(false);
@@ -173,11 +176,7 @@ export default function JobsList({
 
     return (
         <div className="flex w-4/5 flex-col">
-            <ModalAddJob
-                modalAddJobForm={modalAddJobForm}
-                jobsList={jobsList}
-                setJobsList={setJobsList}
-            />
+            <ModalAddJob modalAddJobForm={modalAddJobForm} />
             <div className="mb-5 mt-8 flex w-full flex-col rounded-lg border border-neutral shadow-xl">
                 <div className="flex flex-row justify-between rounded-t-md bg-neutral py-2">
                     <div className="flex w-1/3 flex-row justify-start">
