@@ -21,7 +21,7 @@ const PaginationBox = ({
             <button
                 onClick={() => handleClick(i)}
                 key={i}
-                className={`btn join-item border-neutral ${currentPage === i ? "btn-neutral" : ""
+                className={`btn join-item shadow rounded-none ${currentPage === i ? "btn-primary" : ""
                     // eslint-disable-next-line indent
                     } btn-sm`}
             >
@@ -30,7 +30,7 @@ const PaginationBox = ({
         );
     }
 
-    if(pagesTotalAmount === 1) return null;
+    if (pagesTotalAmount === 1) return null;
 
     return (
         <div className="flex justify-between">

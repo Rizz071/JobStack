@@ -21,7 +21,7 @@ const StatusTimeLine = ({ statusArray }: Props) => {
                     <li key={statusElement.id}>
                         {index !== 0 && <hr className="bg-success my-4" />}
                         <div className="timeline-start"><span
-                            className="text-base-content text-sm my-auto font-light">{statusElement.date.toString().split("T")[0]}</span>
+                            className="text-base-content text-xs my-auto font-light">{statusElement.date.toString().split("T")[0]}</span>
                         </div>
                         <div className="timeline-middle mx-1">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"

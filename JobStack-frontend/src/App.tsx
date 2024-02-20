@@ -9,6 +9,8 @@ import StatusBox from "./components/StatusBox";
 import Stats from "./components/Stats";
 import { useQuery } from "@tanstack/react-query";
 import serviceJobs from "../services/serviceJobs";
+import LoadingProgress from "./components/LoadingProgress";
+import Layout from "./components/Layout";
 
 
 function App() {
@@ -41,7 +43,7 @@ function App() {
     console.log(JSON.parse(JSON.stringify(result)));
 
     if (result.isLoading) {
-        return <div>Loading data...</div>;
+        return <LoadingProgress />;
     }
 
     if (result.isError) {
@@ -50,6 +52,60 @@ function App() {
 
     if (result.isSuccess) {
         const jobsList: JobItem[] = result.data;
+
+
+
+        return (
+            <Layout>
+                <Routes>
+                    <Route
+                        path="/"
+                        element={
+                            <>
+                                <div id="main-field-without-margins" className="flex flex-col mt-6 mb-6 mx-10">
+                                    <div id="main-content-field" className="">
+                                        <Stats />
+
+                                        <div className="flex flex-row gap-x-10 justify-between">
+                                            <JobsList
+                                                jobsList={jobsList}
+                                                // setJobsList={setJobsList}
+                                                handleShowAddJobForm={handleShowAddJobForm}
+                                                pagesTotalAmount={pagesTotalAmount}
+                                                setPagesTotalAmount={setPagesTotalAmount}
+                                                currentPage={currentPage}
+                                                setCurrentPage={setCurrentPage}
+                                                jobsPerPage={jobsPerPage}
+                                                setJobsPerPage={setJobsPerPage}
+                                                setSelectedJob={setSelectedJob}
+                                            />
+                                            <div className="shrink-0">
+                                                {selectedJob && <StatusBox job_id={selectedJob} />}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </>
+                        }
+                    >
+                        {/* <Route index element={<Home />} /> */}
+                    </Route>
+                    <Route
+                        path="/detailview/:id"
+                        element={
+                            <div className="flex flex-row gap-x-6 justify-center w-full">
+                                <DetailJobView />
+                            </div>
+                        }
+                    />
+
+                    {/* Using path="*"" means "match anything", so this route acts like a
+          catch-all for URLs that we don't have explicit routes for. */}
+                    <Route path="*" element={<p>404 page not found</p>} />
+                </Routes>
+            </Layout>
+        );
+
 
 
         return (
@@ -74,8 +130,7 @@ function App() {
                                         setSelectedJob={setSelectedJob}
                                     />
                                     <div className="flex flex-col w-1/5">
-                                        {selectedJob && <StatusBox job_id={selectedJob} />}
-                                        <Stats />
+                                        {/* {selectedJob && <StatusBox job_id={selectedJob} />} */}
                                     </div>
                                 </>
                             }
@@ -98,6 +153,8 @@ function App() {
                 </div>
             </div>
         );
+    } else {
+        return null;
     }
 }
 

@@ -52,14 +52,14 @@ const StatusBox = ({ job_id }: Props) => {
                     statusArray={statusArray}
                 />
 
-                <div className="mt-8 flex h-fit w-full flex-col rounded-lg border border-neutral bg-base-100 shadow-xl">
-                    <div className="flex flex-row justify-between rounded-t-md bg-neutral py-2">
+                <div className="mt-8 flex h-fit flex-col bg-base-100 shadow-xl">
+                    <div className="flex flex-row justify-between bg-primary py-2">
                         <h2 className="my-auto mb-1 ml-6 text-xl font-light text-neutral-content">
                             Status box
                         </h2>
                         <button
                             onClick={() => modalAddStatusForm.current?.showModal()}
-                            className="btn btn-sm  mr-6 rounded-md"
+                            className="btn btn-sm mr-6 rounded-md"
                         >
                             Add
                         </button>
@@ -69,7 +69,10 @@ const StatusBox = ({ job_id }: Props) => {
             </>
 
         );
+    } else {
+        return null;
     }
-};
+}
+    ;
 
 export default StatusBox;

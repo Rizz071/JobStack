@@ -111,7 +111,7 @@ export default function JobsList({
     useEffect(() => {
         console.log("useEffect => setCheckedState + setPagesTotalAmount");
 
-        const jobs_per_page: number = Math.floor((height - 200) / 80);
+        const jobs_per_page: number = Math.floor((height - 320) / 80);
 
         if (jobs_per_page < 3) {
             setJobsPerPage(3);
@@ -175,11 +175,12 @@ export default function JobsList({
     }
 
     return (
-        <div className="flex w-4/5 flex-col">
+        <div className="flex w-full flex-col">
+
             <ModalAddJob modalAddJobForm={modalAddJobForm} />
-            <div className="mb-5 mt-8 flex w-full flex-col rounded-lg border border-neutral shadow-xl">
-                <div className="flex flex-row justify-between rounded-t-md bg-neutral py-2">
-                    <div className="flex w-1/3 flex-row justify-start">
+            <div className="mb-5 mt-8 flex w-full flex-col shadow-xl">
+                <div className="flex flex-row justify-between bg-primary py-2">
+                    <div className="flex flex-row justify-start">
                         <input
                             type="checkbox"
                             checked={checkAll}
