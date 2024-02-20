@@ -20,7 +20,8 @@ router.get("/jobs/:id", (req, res, next) => {
     void (() => __awaiter(void 0, void 0, void 0, function* () {
         try {
             const result = yield db_1.default.query(`SELECT id, job_title, job_desc, date_of_apply, current_status_desc, active
-                FROM jobs_data WHERE user_id = $1 ORDER BY "date_of_apply" DESC`, [req.params.id]);
+                FROM jobs_data WHERE user_id = $1 
+                ORDER BY "date_of_apply" DESC`, [req.params.id]);
             /* Narrowing received object from server */
             if (!result || typeof result !== "object" || !("rows" in result)) {
                 throw Error("received invalid array of job objects from server");
