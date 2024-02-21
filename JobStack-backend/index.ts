@@ -19,47 +19,47 @@ app.use(express.static('dist'));
 
 /* MIDLLEWARE: unknown endpoint handling */
 const unknownEndpoint = (_req: Request, res: Response) => {
-	res.status(404).send({ error: "unknown endpoint" });
+    res.status(404).send({ error: "unknown endpoint" });
 };
 app.use(unknownEndpoint);
 
 /* MIDLLEWARE: error handling */
 const errorHandler = (
-	err: unknown,
-	_req: Request,
-	res: Response,
-	_next: NextFunction
+    err: unknown,
+    _req: Request,
+    res: Response,
+    _next: NextFunction
 ) => {
-	console.log("Error handler received error");
+    console.log("Error handler received error");
 
-	if (!(err instanceof Error)) {
-		return res.status(500).send("Error wasn't defined");
-	}
+    if (!(err instanceof Error)) {
+        return res.status(500).send("Error wasn't defined");
+    }
 
-	if (!("code" in err)) {
-		return res.status(404).send(err.message);
-	}
+    if (!("code" in err)) {
+        return res.status(404).send(err.message);
+    }
 
-	switch (err.code) {
-		case "42P01":
-			return res.status(404).send("Error: users database not found");
-		case "42P18":
-			return res
-				.status(404)
-				.send("ERROR: could not determine data type of parameter $1");
+    switch (err.code) {
+        case "42P01":
+            return res.status(404).send("Error: users database not found");
+        case "42P18":
+            return res
+                .status(404)
+                .send("ERROR: could not determine data type of parameter $1");
 
-		default:
-			console.log(err);
-			return res.status(500).send(err);
-	}
+        default:
+            console.log(err);
+            return res.status(500).send(err);
+    }
 };
 app.use(errorHandler);
 
 /* SERVER starts */
 const start = () => {
-	app.listen(process.env.PORT || 3001, () => {
-		console.log(`Server running on port ${process.env.PORT || 3001}`);
-	});
+    app.listen(process.env.PORT || 3001, () => {
+        console.log(`Server running on port ${process.env.PORT || 3001}`);
+    });
 };
 
 start();
