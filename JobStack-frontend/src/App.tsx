@@ -52,7 +52,7 @@ function App() {
 
     if (result.isSuccess) {
         const jobsList: JobItem[] = result.data;
-
+        !selectedJob ? setSelectedJob(jobsList[0].id) : undefined;
 
 
         return (
@@ -71,7 +71,6 @@ function App() {
                                         <div className="flex flex-row gap-x-10">
                                             <JobsList
                                                 jobsList={jobsList}
-                                                // setJobsList={setJobsList}
                                                 handleShowAddJobForm={handleShowAddJobForm}
                                                 pagesTotalAmount={pagesTotalAmount}
                                                 setPagesTotalAmount={setPagesTotalAmount}

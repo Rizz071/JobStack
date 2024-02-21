@@ -4,8 +4,6 @@ import { useQueryClient, useMutation } from "@tanstack/react-query";
 
 interface Props {
     modalAddJobForm: React.RefObject<HTMLDialogElement>;
-    // jobsList: JobItem[];
-    // setJobsList: React.Dispatch<React.SetStateAction<JobItem[]>>;
 }
 
 const ModalAddJob = ({ modalAddJobForm }: Props) => {

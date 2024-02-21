@@ -12,7 +12,6 @@ import { useQueryClient, useMutation } from "@tanstack/react-query";
 
 interface Props {
     jobsList: JobItem[];
-    // setJobsList: React.Dispatch<React.SetStateAction<JobItem[]>>;
     handleShowAddJobForm: MouseEventHandler<HTMLElement>;
     pagesTotalAmount: number;
     setPagesTotalAmount: React.Dispatch<React.SetStateAction<number>>;
@@ -30,7 +29,6 @@ interface CheckboxSelect {
 
 export default function JobsList({
     jobsList,
-    // setJobsList,
     pagesTotalAmount,
     setPagesTotalAmount,
     currentPage,
@@ -226,7 +224,7 @@ export default function JobsList({
                         </button>
                         <button
                             onClick={() => modalAddJobForm.current?.showModal()}
-                            className="btn btn-sm btn-primary mr-6 rounded-none"
+                            className="btn btn-sm btn-primary btn-outline mr-6 rounded-none"
                         >
                             Add
                         </button>

@@ -58,7 +58,7 @@ const StatusBox = ({ job_id }: Props) => {
                         </h2>
                         <button
                             onClick={() => modalAddStatusForm.current?.showModal()}
-                            className="btn btn-sm btn-primary mr-6 rounded-none"
+                            className="btn btn-sm btn-primary btn-outline mr-6 rounded-none"
                         >
                             Add
                         </button>
