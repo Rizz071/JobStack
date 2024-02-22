@@ -27,7 +27,13 @@ const Stats = () => {
     const firstDate = new Date(sortedJobsList_byDate[0].date_of_apply);
     const lastDate = new Date(sortedJobsList_byDate.slice(-1)[0].date_of_apply);
     const totalDaysAmount = lastDate.getDate() - firstDate.getDate();
-    const avgJobs_perDay = (totalJobsAmount / totalDaysAmount).toFixed(1);
+
+    let avgJobs_perDay: number;
+    if (totalDaysAmount !== 0) {
+        avgJobs_perDay = Number((totalJobsAmount / totalDaysAmount).toFixed(1));
+    } else {
+        avgJobs_perDay = totalJobsAmount;
+    }
 
 
     //TODO compare jobs amount in this month to last month
