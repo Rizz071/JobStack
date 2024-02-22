@@ -62,13 +62,12 @@ function App() {
                         path="/"
                         element={
                             <>
-                                {/* <div id="main-field-without-margins" className="w-full h-full flex justify-center"> */}
                                 <div id="main-content-field" className="flex flex-col justify-center">
                                     <div className="">
                                         <Stats />
                                     </div>
 
-                                    <div className="flex flex-row gap-x-10">
+                                    <div className="flex flex-col md:flex-row md:gap-x-10">
                                         <JobsList
                                             jobsList={jobsList}
                                             handleShowAddJobForm={handleShowAddJobForm}
@@ -85,7 +84,6 @@ function App() {
                                         </div>
                                     </div>
                                 </div>
-                                {/* </div> */}
                             </>
                         }
                     >
