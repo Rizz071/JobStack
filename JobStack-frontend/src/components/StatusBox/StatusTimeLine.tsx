@@ -15,7 +15,7 @@ const StatusTimeLine = ({ statusArray }: Props) => {
     }
 
     return (
-        <ul className="flex timeline timeline-vertical my-6 mx-auto">
+        <ul className="flex timeline timeline-vertical my-6 mx-6">
             {statusArray.map((statusElement, index, arr) => {
                 return (
                     <li key={statusElement.id}>

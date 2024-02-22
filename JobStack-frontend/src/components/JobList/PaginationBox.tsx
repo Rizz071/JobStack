@@ -21,7 +21,7 @@ const PaginationBox = ({
             <button
                 onClick={() => handleClick(i)}
                 key={i}
-                className={`btn join-item shadow rounded-none ${currentPage === i ? "btn-primary" : ""
+                className={`btn join-item shadow rounded-none ${currentPage === i ? "btn-neutral" : ""
                     // eslint-disable-next-line indent
                     } btn-sm`}
             >
