@@ -7,7 +7,7 @@ const SidePanel = () => {
 
 
     return (
-        <div className="flex flex-col w-1/6 h-screen bg-primary text-primary-content font-light">
+        <div className="hidden flex-col w-1/6 h-screen bg-neutral text-neutral-content font-light md:flex">
 
             <div id="menu-content" className="mx-10 flex flex-col h-full gap-y-10">
 

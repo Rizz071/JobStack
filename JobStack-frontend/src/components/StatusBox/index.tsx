@@ -52,13 +52,13 @@ const StatusBox = ({ job_id }: Props) => {
                 />
 
                 <div className="mt-8 flex h-fit flex-col bg-base-100 shadow">
-                    <div className="flex flex-row justify-between bg-base-100 py-2">
+                    <div className="flex flex-row justify-between bg-base-100 pt-5">
                         <h2 className="my-auto mb-1 ml-6 text-xl font-light text-neutral">
                             Stage
                         </h2>
                         <button
                             onClick={() => modalAddStatusForm.current?.showModal()}
-                            className="btn btn-sm btn-primary btn-outline mr-6 rounded-none"
+                            className="btn btn-sm btn-success btn-outline mr-6 rounded-none"
                         >
                             Add
                         </button>

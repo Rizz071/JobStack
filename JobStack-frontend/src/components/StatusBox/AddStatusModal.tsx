@@ -12,7 +12,6 @@ interface Props {
     modalAddStatusForm: React.RefObject<HTMLDialogElement>;
     job_id: number;
     statusArray: StatusObject[];
-    // setStatusArray: React.Dispatch<React.SetStateAction<StatusObject[]>>;
 }
 
 const AddStatusModal = ({ modalAddStatusForm, job_id, statusArray }: Props) => {
@@ -51,45 +50,6 @@ const AddStatusModal = ({ modalAddStatusForm, job_id, statusArray }: Props) => {
         };
 
         addStatusMutation.mutate(passObject);
-
-        //     try {
-        //         const response: unknown = await axios.post(
-        //             `/api/status/${job_id}`,
-        //             newStatusObject,
-        //             {
-        //                 headers: {
-        //                     "Content-Type": "application/json",
-        //                 }
-        //             }
-        //         );
-
-        //         /* Narrowing response */
-        //         if (!response
-        //             || typeof response !== "object"
-        //             || !("status" in response)
-        //             || !("data" in response)
-        //             || !serviceJobs.isStatusObject(response.data)
-
-        //         ) {
-        //             throw Error("Error: server did not properly respond");
-        //         }
-
-        //         if (response.status === 201) {
-        //             setStatusName("");
-        //             setStatusDesc("");
-        //             setStatusDate(new Date().toISOString().split("T")[0]);
-
-        //             // setStatusArray(statusArray.concat(response.data));
-        //         } else {
-        //             throw Error("Error: unknown error occured on server while creating new stage status");
-        //         }
-
-        //     } catch (error) {
-        //         if (error instanceof Error) {
-        //             console.log(error.message);
-        //         }
-        //     }
-        // })();
     };
 
 
@@ -123,12 +83,10 @@ const AddStatusModal = ({ modalAddStatusForm, job_id, statusArray }: Props) => {
                                             className="select select-bordered w-full max-w-xs"
                                         >
                                             <option disabled></option>
-                                            <option>Test task received</option>
-                                            <option>Test task completed</option>
-                                            <option>Interview scheduled</option>
-                                            <option>Interview conducted</option>
-                                            <option>Job denied</option>
-                                            <option>Offer granted</option>
+                                            <option>Test task</option>
+                                            <option>Interview</option>
+                                            <option>Rejected</option>
+                                            <option>Offer</option>
                                         </select>
                                     </label>
 

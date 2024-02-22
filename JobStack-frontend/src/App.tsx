@@ -62,30 +62,30 @@ function App() {
                         path="/"
                         element={
                             <>
-                                <div id="main-field-without-margins" className="w-full h-full flex justify-center">
-                                    <div id="main-content-field" className="m-10 flex flex-col">
-                                        <div className="">
-                                            <Stats />
-                                        </div>
+                                {/* <div id="main-field-without-margins" className="w-full h-full flex justify-center"> */}
+                                <div id="main-content-field" className="flex flex-col justify-center">
+                                    <div className="">
+                                        <Stats />
+                                    </div>
 
-                                        <div className="flex flex-row gap-x-10">
-                                            <JobsList
-                                                jobsList={jobsList}
-                                                handleShowAddJobForm={handleShowAddJobForm}
-                                                pagesTotalAmount={pagesTotalAmount}
-                                                setPagesTotalAmount={setPagesTotalAmount}
-                                                currentPage={currentPage}
-                                                setCurrentPage={setCurrentPage}
-                                                jobsPerPage={jobsPerPage}
-                                                setJobsPerPage={setJobsPerPage}
-                                                setSelectedJob={setSelectedJob}
-                                            />
-                                            <div className="shrink-0">
-                                                {selectedJob && <StatusBox job_id={selectedJob} />}
-                                            </div>
+                                    <div className="flex flex-row gap-x-10">
+                                        <JobsList
+                                            jobsList={jobsList}
+                                            handleShowAddJobForm={handleShowAddJobForm}
+                                            pagesTotalAmount={pagesTotalAmount}
+                                            setPagesTotalAmount={setPagesTotalAmount}
+                                            currentPage={currentPage}
+                                            setCurrentPage={setCurrentPage}
+                                            jobsPerPage={jobsPerPage}
+                                            setJobsPerPage={setJobsPerPage}
+                                            setSelectedJob={setSelectedJob}
+                                        />
+                                        <div className="shrink-0">
+                                            {selectedJob && <StatusBox job_id={selectedJob} />}
                                         </div>
                                     </div>
                                 </div>
+                                {/* </div> */}
                             </>
                         }
                     >

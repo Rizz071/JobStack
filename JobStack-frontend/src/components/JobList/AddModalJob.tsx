@@ -12,6 +12,8 @@ const ModalAddJob = ({ modalAddJobForm }: Props) => {
 
     const [newJobTitle, setNewJobTitle] = useState<string>("");
     const [newJobDesc, setNewJobDesc] = useState<string>("");
+    const [newJobDate, setNewJobDate] = useState<string>(new Date().toISOString().split("T")[0]);
+
 
     const newJobsMutation = useMutation({
         mutationFn: () => axios
@@ -20,7 +22,8 @@ const ModalAddJob = ({ modalAddJobForm }: Props) => {
                 {
                     job_title: newJobTitle,
                     job_desc: newJobDesc,
-                    date_of_apply: new Date().toISOString(),
+                    // date_of_apply: new Date().toISOString(),
+                    date_of_apply: newJobDate,
                     current_status_desc: "Just applied",
                     active: true,
                 },
@@ -77,13 +80,29 @@ const ModalAddJob = ({ modalAddJobForm }: Props) => {
                     >
                         ✕
                     </button>
-                    <h3 className="text-lg font-bold">New job vacancy</h3>
-                    {/* <p className="py-4">Press ESC key or click on ✕ button to close</p> */}
+
+                    <div className="flex justify-between">
+                        <h3 className="text-lg font-bold">New job vacancy</h3>
+                        {/* <p className="py-4">Press ESC key or click on ✕ button to close</p> */}
+                        <label className="flex mr-5">
+                            <div className="label">
+                                <span className="label-text">Event date</span>
+                            </div>
+                            <input
+                                type="date"
+                                name="status_date"
+                                id="status_date"
+                                className="input input-sm input-bordered rounded-md border-neutral"
+                                value={newJobDate}
+                                onChange={event => setNewJobDate(event.target.value)}
+                            />
+                        </label>
+                    </div>
                     <div>
                         <div className="flex flex-col">
                             <label
                                 htmlFor="job_title"
-                                className="label-text mt-6 text-neutral"
+                                className="label-text mt-0 text-neutral"
                             >
                                 Job header
                             </label>
