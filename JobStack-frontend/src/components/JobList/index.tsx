@@ -20,6 +20,7 @@ interface Props {
     jobsPerPage: number;
     setJobsPerPage: React.Dispatch<React.SetStateAction<number>>;
     setSelectedJob: React.Dispatch<React.SetStateAction<number | undefined>>;
+    selectedJob: number | undefined;
 }
 
 interface CheckboxSelect {
@@ -35,6 +36,7 @@ export default function JobsList({
     setCurrentPage,
     jobsPerPage,
     setJobsPerPage,
+    selectedJob,
     setSelectedJob
 }: Props) {
     const modalAddJobForm = useRef<HTMLDialogElement>(null);
@@ -251,7 +253,8 @@ export default function JobsList({
                             .map((jobItem) => (
                                 <li
                                     key={jobItem.id}
-                                    className="flex max-h-14 min-h-14 justify-between gap-x-6 border-black bg-base-100 last:rounded-b-lg hover:bg-base-200"
+                                    className={`flex max-h-14 min-h-14 justify-between gap-x-6 border-black bg-base-100 last:rounded-b-lg hover:bg-base-200 
+                                    ${selectedJob === jobItem.id ? "bg-secondary-content" : "bg-base-100"}`}
                                 >
                                     <input
                                         type="checkbox"
@@ -271,7 +274,7 @@ export default function JobsList({
                                         className="flex flex-1 gap-x-4"
                                     >
                                         <div className="flex flex-1 items-center">
-                                            <p className="line-clamp-2 text-md text-primary font-light">
+                                            <p className="line-clamp-2 text-md text-secondary font-light">
                                                 {jobItem.job_title}
                                             </p>
 
