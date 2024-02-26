@@ -1,6 +1,7 @@
+/* eslint-disable indent */
 import React from "react";
 import { MouseEventHandler, useEffect, useRef, useState } from "react";
-import { JobItem } from "../../types";
+import { JobItem, StatusFilter, StatusObject } from "../../types";
 import thrashIcon from "../../assets/icons/thrash.svg";
 import editIcon from "../../assets/icons/edit.svg";
 import SearchField from "./SearchField";
@@ -9,10 +10,12 @@ import ModalAddJob from "./AddModalJob";
 import { useNavigate } from "react-router-dom";
 import serviceJobs from "../../../services/serviceJobs";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
+import StatusSort from "./StatusSort";
 
 interface Props {
     jobsList: JobItem[];
     handleShowAddJobForm: MouseEventHandler<HTMLElement>;
+    statusList: StatusObject[];
     pagesTotalAmount: number;
     setPagesTotalAmount: React.Dispatch<React.SetStateAction<number>>;
     currentPage: number;
@@ -21,6 +24,8 @@ interface Props {
     setJobsPerPage: React.Dispatch<React.SetStateAction<number>>;
     setSelectedJob: React.Dispatch<React.SetStateAction<number | undefined>>;
     selectedJob: number | undefined;
+    statusFilter: StatusFilter;
+    setStatusFilter: React.Dispatch<React.SetStateAction<StatusFilter>>;
 }
 
 interface CheckboxSelect {
@@ -30,6 +35,7 @@ interface CheckboxSelect {
 
 export default function JobsList({
     jobsList,
+    statusList,
     pagesTotalAmount,
     setPagesTotalAmount,
     currentPage,
@@ -37,7 +43,9 @@ export default function JobsList({
     jobsPerPage,
     setJobsPerPage,
     selectedJob,
-    setSelectedJob
+    setSelectedJob,
+    statusFilter,
+    setStatusFilter
 }: Props) {
     const modalAddJobForm = useRef<HTMLDialogElement>(null);
     const [filteredJobList, setFilteredJobList] = useState<JobItem[]>([]);
@@ -47,6 +55,9 @@ export default function JobsList({
     const navigate = useNavigate();
 
     const queryClient = useQueryClient();
+    // const statusArray: StatusObject[] = queryClient.getQueryData(["statuses"]) || [];
+
+
 
     const deleteMutation = useMutation({
         mutationFn: (id: number) => serviceJobs.deleteJob(id),
@@ -75,22 +86,57 @@ export default function JobsList({
             console.log("...jobsList.length === 0 exiting");
             return;
         }
+
+        setFilteredJobList(
+            (() => jobsList)()
+                .filter((jobItem: JobItem) => {
+
+                    switch (statusFilter) {
+                        case "all":
+                            return jobItem;
+                        case "in_progress":
+                            if (statusList
+                                .filter(status => status.job_id === jobItem.id)
+                                .every(status => status.status.toLowerCase() !== "rejected" && status.status.toLowerCase() !== "offer"))
+                                return jobItem;
+                            break;
+                        case "rejected":
+                            if (statusList
+                                .filter(status => status.job_id === jobItem.id)
+                                .find(statusObj => {
+                                    if (statusObj.status.toLowerCase() === "rejected") return true;
+                                }))
+                                return jobItem;
+                            break;
+                        case "offer":
+                            if (statusList
+                                .filter(status => status.job_id === jobItem.id)
+                                .find(statusObj => {
+                                    if (statusObj.status.toLowerCase() === "offer") return true;
+                                }))
+                                return jobItem;
+                            break;
+                    }
+                }));
+
         if (filterString) {
             console.log("filterString=true");
             setFilteredJobList(
-                (() => jobsList)().filter(
-                    (jobItem: JobItem) =>
-                        jobItem.job_title
-                            .toLowerCase()
-                            .includes(filterString.toLowerCase()) ||
-                        jobItem.job_desc.toLowerCase().includes(filterString.toLowerCase())
-                )
+                (() => jobsList)()
+                    .filter(
+                        (jobItem: JobItem) =>
+                            jobItem.job_title
+                                .toLowerCase()
+                                .includes(filterString.toLowerCase()) ||
+                            jobItem.job_desc.toLowerCase().includes(filterString.toLowerCase())
+                    )
             );
-        } else {
-            setFilteredJobList([...jobsList]);
         }
+        // } else {
+        //     setFilteredJobList([...jobsList]);
+        // }
         console.log("filtered", ((filteredJobList) => filteredJobList)());
-    }, [jobsList, jobsList.length, filterString]);
+    }, [jobsList, statusList, jobsList.length, filterString, statusFilter]);
 
     /* Initialization state of all checkboxes to false
      * CONDITION: jobsList.length changed
@@ -176,10 +222,14 @@ export default function JobsList({
 
     return (
         <div className="flex flex-col">
+            {/* <StatusSort statusFilter={statusFilter} setStatusFilter={setStatusFIlter} /> */}
 
             <ModalAddJob modalAddJobForm={modalAddJobForm} />
-            <div className="mb-5 mt-8 flex flex-col shadow">
-                <div className="flex flex-row justify-between bg-base-100 pt-5 pb-4">
+            <div className="mb-5 flex flex-col">
+                <StatusSort statusFilter={statusFilter} setStatusFilter={setStatusFilter} />
+
+                <div className="flex flex-row justify-between bg-base-200 pt-5 pb-4 flex-wrap">
+
                     <div className="flex flex-row justify-start w-1/2">
                         <input
                             type="checkbox"
@@ -208,10 +258,12 @@ export default function JobsList({
                             className="checkbox my-auto ml-6 size-5 shrink-0 rounded-none"
                             id={"custom-checkbox-select-all"}
                         />
-                        <h2 className="ml-6 text-xl font-light text-neutral">
+                        <h2 className="ml-6 text-lg font-light text-neutral">
                             Applied jobs
                         </h2>
+
                     </div>
+
 
                     <div className="flex w-1/2 flex-row justify-end">
                         <button
@@ -239,8 +291,15 @@ export default function JobsList({
                         </div>
                     </div>
                 </div>
+
+
+                <hr />
+
+
+                {/* <StatusSort statusFilter={statusFilter} setStatusFilter={setStatusFIlter} /> */}
+
                 {jobsList.length === 0 ? (
-                    <div className="flex flex-row bg-base-100 w-full rounded-b-lg p-2 justify-center">
+                    <div className="flex flex-row p-2 justify-center">
                         <p className="prose">Jobs not found</p>
                     </div>
                 ) : (
@@ -253,8 +312,8 @@ export default function JobsList({
                             .map((jobItem) => (
                                 <li
                                     key={jobItem.id}
-                                    className={`flex max-h-14 min-h-14 justify-between gap-x-6 border-black bg-base-100 last:rounded-b-lg hover:bg-base-200 
-                                    ${selectedJob === jobItem.id ? "bg-secondary-content" : "bg-base-100"}`}
+                                    className={`flex max-h-14 shadow min-h-14 justify-between gap-x-6 my-4  bg-base-100 hover:bg-base-200 
+                                    ${selectedJob === jobItem.id ? "border-l-4 border-solid border-primary -ml-[4px]" : ""}`}
                                 >
                                     <input
                                         type="checkbox"
@@ -274,11 +333,9 @@ export default function JobsList({
                                         className="flex flex-1 gap-x-4"
                                     >
                                         <div className="flex flex-1 items-center">
-                                            <p className="line-clamp-2 text-md text-secondary font-light">
+                                            <p className="line-clamp-2 text-sm text-neutral">
                                                 {jobItem.job_title}
                                             </p>
-
-
 
 
                                             {/* <div className="flex gap-x-4"> */}

@@ -1,0 +1,6 @@
+GET http://127.0.0.1:3001/api/status/multiple
+Content-Type: application/json
+
+{
+    "jobs_array": [260, 261]
+}

@@ -5,6 +5,7 @@ import { StatusObject, NewStatusObject } from "../src/types";
 const isStatusObject = (object: unknown): object is StatusObject => {
     return !!(object && typeof object === "object"
         && "id" in object && typeof object.id === "number"
+        && "job_id" in object && typeof object.job_id === "number"
         && "status" in object && typeof object.status === "string"
         && "status_desc" in object && typeof object.status_desc === "string"
         && "date" in object
@@ -27,12 +28,12 @@ const requestJobStatusList = async (job_id: number) => {
             || typeof response !== "object"
             || !("data" in response)
             || !Array.isArray(response.data))
-            return new Error("error while retrieving job list from server");
+            throw new Error("error while retrieving job list from server");
 
 
         const data: unknown[] = response.data;
 
-        console.log(data);
+        // console.log(data);
         if (data && isStatusObjectArray(data)) return data;
     } catch (error) {
         if (error instanceof Error) {
@@ -41,6 +42,35 @@ const requestJobStatusList = async (job_id: number) => {
     }
     return [];
 };
+
+/* Requesting mnultiple jobs from backend
+ * XMLHttpRequest ignores the body of the request in case the method is GET,
+ * so we are using POST request now */
+const requestMultipleJobStatusList = async (jobs_array: number[]) => {
+    // console.log("jobs_array", jobs_array);
+    try {
+        const response: unknown = await axios.post("/api/status/multiple", { jobs_array });
+
+        /* Narrowing type Status Object*/
+        if (!response
+            || typeof response !== "object"
+            || !("data" in response)
+            || !Array.isArray(response.data))
+            return new Error("error while retrieving job list from server");
+
+
+        const data: unknown[] = response.data;
+
+        // console.log(data);
+        if (data && isStatusObjectArray(data)) return data;
+    } catch (error) {
+        if (error instanceof Error) {
+            throw new Error("Error while requesting statuses from backend");
+        }
+    }
+    return [];
+};
+
 
 const addStatus = async (job_id: number, newStatusObject: NewStatusObject) => {
 
@@ -125,5 +155,5 @@ const addStatus = async (job_id: number, newStatusObject: NewStatusObject) => {
 // };
 
 export default {
-    requestJobStatusList, addStatus
+    requestJobStatusList, requestMultipleJobStatusList, addStatus
 };

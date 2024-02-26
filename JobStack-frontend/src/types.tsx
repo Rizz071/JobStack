@@ -13,10 +13,16 @@ export interface JobItem {
 
 export interface StatusObject {
     id: number;
+    job_id: number;
     position: number;
     status: string;
     status_desc: string;
     date: Date;
 }
 
-export type NewStatusObject = Omit<StatusObject, "id">;
+// export type OneStatusObject = Omit<StatusObject, "id" | "job_id">;
+
+export type NewStatusObject = Omit<StatusObject, "id" | "job_id">;
+
+
+export type StatusFilter = "all" | "in_progress" | "rejected" | "offer";
