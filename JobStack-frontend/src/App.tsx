@@ -20,13 +20,18 @@ function App() {
     const [selectedJob, setSelectedJob] = useState<number | undefined>(undefined);
     const [statusFilter, setStatusFilter] = useState<StatusFilter>("all");
     // const [statusList, setStatusList] = useState<StatusObject[]>([]);
+    const [headerHeight, setHeaderHeight] = useState<number>(0);
 
+
+    const headerRef = useRef<HTMLDivElement>(null);
     const ref = useRef<HTMLDialogElement>(null);
     const handleShowAddJobForm = useCallback<
         MouseEventHandler<HTMLElement>
     >(() => {
         ref.current?.showModal();
     }, [ref]);
+
+
 
     // interface StyleType {
     //     backgroundImage: string;
@@ -81,7 +86,7 @@ function App() {
                         element={
                             <>
                                 <div id="main-content-field" className="flex flex-col justify-center">
-                                    <div className="">
+                                    <div ref={headerRef} className="">
                                         <Stats />
                                     </div>
 
@@ -100,6 +105,9 @@ function App() {
                                             setSelectedJob={setSelectedJob}
                                             statusFilter={statusFilter}
                                             setStatusFilter={setStatusFilter}
+                                            headerHeight={headerHeight}
+                                            setHeaderHeight={setHeaderHeight}
+                                            headerRef={headerRef}
                                         />
 
                                         {/* <div className="flex flex-col gap-y-[15px] mt-[38px]"> */}

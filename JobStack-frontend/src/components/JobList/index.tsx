@@ -26,6 +26,9 @@ interface Props {
     selectedJob: number | undefined;
     statusFilter: StatusFilter;
     setStatusFilter: React.Dispatch<React.SetStateAction<StatusFilter>>;
+    headerHeight: number;
+    setHeaderHeight: React.Dispatch<React.SetStateAction<number>>;
+    headerRef: React.RefObject<HTMLDivElement>;
 }
 
 interface CheckboxSelect {
@@ -45,12 +48,16 @@ export default function JobsList({
     selectedJob,
     setSelectedJob,
     statusFilter,
-    setStatusFilter
+    setStatusFilter,
+    headerRef,
+    headerHeight,
+    setHeaderHeight
 }: Props) {
     const modalAddJobForm = useRef<HTMLDialogElement>(null);
     const [filteredJobList, setFilteredJobList] = useState<JobItem[]>([]);
     const [filterString, setFilterString] = useState<string>("");
     const [checkAll, setCheckAll] = useState<boolean>(false);
+    const [visibleStateAddAndSearch, setVisibleStateAddAndSearch] = useState<boolean>(true);
 
     const navigate = useNavigate();
 
@@ -66,10 +73,11 @@ export default function JobsList({
         }
     });
 
-    // const [width, setWidth] = useState(window.innerWidth);
+
+    const [width, setWidth] = useState(window.innerWidth);
     const [height, setHeight] = useState(window.innerHeight);
     const updateDimensions = () => {
-        // setWidth(window.innerWidth);
+        setWidth(window.innerWidth);
         setHeight(window.innerHeight);
     };
     useEffect(() => {
@@ -77,6 +85,11 @@ export default function JobsList({
         window.addEventListener("resize", updateDimensions);
         return () => window.removeEventListener("resize", updateDimensions);
     }, []);
+
+    useEffect(() => {
+        if (headerRef.current) setHeaderHeight(headerRef.current.clientHeight + headerRef.current.getBoundingClientRect().top);
+    }, [headerRef, setHeaderHeight, headerHeight, width]); //empty dependency array so it only runs once at render
+
 
     const [checkedState, setCheckedState] = useState<CheckboxSelect[]>([]);
 
@@ -157,7 +170,7 @@ export default function JobsList({
     useEffect(() => {
         console.log("useEffect => setCheckedState + setPagesTotalAmount");
 
-        const jobs_per_page: number = Math.floor((height - 320) / 80);
+        const jobs_per_page: number = Math.floor((height - headerHeight - 320) / 56);
 
         if (jobs_per_page < 3) {
             setJobsPerPage(3);
@@ -168,7 +181,7 @@ export default function JobsList({
         setPagesTotalAmount(Math.ceil(filteredJobList.length / jobsPerPage));
         console.log("jobsPerPage", jobsPerPage);
         console.log("pagesTotalAmount: ", pagesTotalAmount);
-    }, [filteredJobList.length, height, jobsPerPage, pagesTotalAmount, setJobsPerPage, setPagesTotalAmount]);
+    }, [filteredJobList.length, height, jobsPerPage, pagesTotalAmount, setJobsPerPage, setPagesTotalAmount, headerHeight]);
 
     /* Last page calculation after window resizing */
     useEffect(() => {
@@ -221,16 +234,16 @@ export default function JobsList({
     }
 
     return (
-        <div className="flex flex-col grow">
-            {/* <StatusSort statusFilter={statusFilter} setStatusFilter={setStatusFIlter} /> */}
+        <div className="flex flex-col grow mx-8 md:mx-0">
 
             <ModalAddJob modalAddJobForm={modalAddJobForm} />
             <div className="mb-5 flex flex-col">
                 <StatusSort statusFilter={statusFilter} setStatusFilter={setStatusFilter} />
 
-                <div className="flex flex-row justify-between bg-base-200 pt-5 pb-0 flex-wrap">
+                <div className="flex bg-base-200 pt-5 pb-0 gap-x-8 justify-between">
 
-                    <div className="flex flex-row justify-start w-1/2">
+                    <div className="flex-row justify-start flex w-2/3">
+
                         <input
                             type="checkbox"
                             checked={checkAll}
@@ -258,37 +271,44 @@ export default function JobsList({
                             className="checkbox my-auto ml-6 size-5 shrink-0 rounded-none"
                             id={"custom-checkbox-select-all"}
                         />
-                        <h2 className="ml-6 text-lg font-light text-neutral">
+
+                        <h2 className="hidden lg:block xl:block ml-6 text-lg font-light text-neutral">
                             All applied positions
+                        </h2>
+                        <h2 className="block lg:hidden xl:hidden ml-6 text-lg font-light text-neutral">
+                            All
                         </h2>
 
                     </div>
 
 
-                    <div className="flex w-1/2 flex-row justify-end">
+                    <div className="flex flex-row justify-end">
+
                         <button
                             onClick={() => handleBulkDelete()}
                             className={`${checkedState.every((checkElem) => !checkElem.state)
                                 ? "hidden"
                                 : ""
                                 // eslint-disable-next-line indent
-                                } btn btn-error btn-sm mr-6 rounded-none`}
+                                } btn btn-error btn-sm mr-0 rounded-none`}
                         >
                             Delete selected
                         </button>
+
                         <button
                             onClick={() => modalAddJobForm.current?.showModal()}
-                            className="btn btn-sm btn-success btn-outline mr-6 rounded-none"
+                            className={`btn btn-sm btn-success btn-outline mr-6 rounded-none ${checkedState.every((checkElem) => !checkElem.state) ? "block" : "hidden"}`}
                         >
                             Add
                         </button>
 
-                        <div className="shrink-0 w-3/5">
+                        <div className={`${checkedState.every((checkElem) => !checkElem.state) ? "block" : "hidden"}`}>
                             <SearchField
                                 filterString={filterString}
                                 setFilterString={setFilterString}
                             />
                         </div>
+
                     </div>
                 </div>
 
@@ -312,7 +332,7 @@ export default function JobsList({
                             .map((jobItem) => (
                                 <li
                                     key={jobItem.id}
-                                    className={`flex max-h-14 shadow min-h-14 justify-between gap-x-6 my-4  bg-base-100 hover:bg-base-200 
+                                    className={`last:mb-0 flex max-h-14 shadow min-h-14 justify-between gap-x-6 my-4  bg-base-100 hover:bg-base-200 
                                     ${selectedJob === jobItem.id ? "border-l-4 border-solid border-primary -ml-[4px]" : ""}`}
                                 >
                                     <input
@@ -372,13 +392,15 @@ export default function JobsList({
                     </ul>
                 )}
             </div>
-            {pagesTotalAmount > 0 && (
-                <PaginationBox
-                    currentPage={currentPage}
-                    setCurrentPage={setCurrentPage}
-                    pagesTotalAmount={pagesTotalAmount}
-                />
-            )}
-        </div>
+            {
+                pagesTotalAmount > 0 && (
+                    <PaginationBox
+                        currentPage={currentPage}
+                        setCurrentPage={setCurrentPage}
+                        pagesTotalAmount={pagesTotalAmount}
+                    />
+                )
+            }
+        </div >
     );
 }

@@ -55,7 +55,7 @@ const StatusBox = ({ job_id, statusList }: Props) => {
                 statusArray={statusArray}
             />
 
-            <div className="flex h-fit flex-col bg-base-100 shadow">
+            <div className="flex h-fit flex-col bg-base-100 shadow mt-6 md:mt-0">
                 <div className="flex flex-row justify-between bg-base-100 pt-5">
                     <h2 className="my-auto mb-1 ml-6 text-lg font-light text-neutral">
                         Stage
