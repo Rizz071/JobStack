@@ -221,14 +221,14 @@ export default function JobsList({
     }
 
     return (
-        <div className="flex flex-col">
+        <div className="flex flex-col grow">
             {/* <StatusSort statusFilter={statusFilter} setStatusFilter={setStatusFIlter} /> */}
 
             <ModalAddJob modalAddJobForm={modalAddJobForm} />
             <div className="mb-5 flex flex-col">
                 <StatusSort statusFilter={statusFilter} setStatusFilter={setStatusFilter} />
 
-                <div className="flex flex-row justify-between bg-base-200 pt-5 pb-4 flex-wrap">
+                <div className="flex flex-row justify-between bg-base-200 pt-5 pb-0 flex-wrap">
 
                     <div className="flex flex-row justify-start w-1/2">
                         <input
@@ -259,7 +259,7 @@ export default function JobsList({
                             id={"custom-checkbox-select-all"}
                         />
                         <h2 className="ml-6 text-lg font-light text-neutral">
-                            Applied jobs
+                            All applied positions
                         </h2>
 
                     </div>
@@ -293,7 +293,7 @@ export default function JobsList({
                 </div>
 
 
-                <hr />
+                {/* <hr /> */}
 
 
                 {/* <StatusSort statusFilter={statusFilter} setStatusFilter={setStatusFIlter} /> */}

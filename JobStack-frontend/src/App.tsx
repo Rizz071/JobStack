@@ -85,7 +85,7 @@ function App() {
                                         <Stats />
                                     </div>
 
-                                    <div className="mt-8 flex flex-col md:flex-row md:gap-x-10">
+                                    <div className="mt-8 flex flex-col md:flex-row md:gap-x-10 justify-between">
                                         <JobsList
                                             jobsList={jobsList}
                                             statusList={statusList}

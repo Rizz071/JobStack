@@ -9,7 +9,7 @@ interface Props {
 const StatusSort = ({ statusFilter, setStatusFilter }: Props) => {
     return (
         <div className="flex flex-row bg-base-200">
-            <div role="tablist" className="flex w-full justify-around tabs tabs-bordered tabs-sm">
+            <div role="tablist" className="flex w-full justify-evenly tabs tabs-bordered tabs-sm">
                 <a
                     role="tab"
                     className={`tab ${statusFilter === "all" ? "tab-active" : ""}`}
