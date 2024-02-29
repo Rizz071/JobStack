@@ -9,29 +9,44 @@ interface Props {
 const StatusSort = ({ statusFilter, setStatusFilter }: Props) => {
     return (
         <div className="flex flex-row bg-base-200">
-            <div role="tablist" className="flex w-full justify-evenly tabs tabs-bordered tabs-sm">
+            <div
+                role="tablist"
+                className="tabs tabs-bordered tabs-sm flex w-full justify-evenly"
+            >
                 <a
                     role="tab"
-                    className={`tab ${statusFilter === "all" ? "tab-active" : ""}`}
-                    onClick={() => setStatusFilter("all")}>
+                    className={`tab ${
+                        statusFilter === "all" ? "tab-active" : ""
+                    }`}
+                    onClick={() => setStatusFilter("all")}
+                >
                     All
                 </a>
                 <a
                     role="tab"
-                    className={`tab ${statusFilter === "in_progress" ? "tab-active" : ""} `}
-                    onClick={() => setStatusFilter("in_progress")}>
+                    className={`tab ${
+                        statusFilter === "in_progress" ? "tab-active" : ""
+                    } `}
+                    onClick={() => setStatusFilter("in_progress")}
+                >
                     In progress
                 </a>
                 <a
                     role="tab"
-                    className={`tab ${statusFilter === "rejected" ? "tab-active" : ""} `}
-                    onClick={() => setStatusFilter("rejected")}>
+                    className={`tab ${
+                        statusFilter === "rejected" ? "tab-active" : ""
+                    } `}
+                    onClick={() => setStatusFilter("rejected")}
+                >
                     Rejected
                 </a>
                 <a
                     role="tab"
-                    className={`tab ${statusFilter === "offer" ? "tab-active" : ""} `}
-                    onClick={() => setStatusFilter("offer")}>
+                    className={`tab ${
+                        statusFilter === "offer" ? "tab-active" : ""
+                    } `}
+                    onClick={() => setStatusFilter("offer")}
+                >
                     Offer
                 </a>
             </div>

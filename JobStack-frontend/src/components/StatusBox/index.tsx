@@ -14,7 +14,6 @@ interface Props {
 const StatusBox = ({ job_id, statusList }: Props) => {
     const modalAddStatusForm = useRef<HTMLDialogElement>(null);
 
-
     /* Requesting data from server via REST API */
     // const result = useQuery({
     //     queryKey: ["statuses", job_id],
@@ -45,7 +44,7 @@ const StatusBox = ({ job_id, statusList }: Props) => {
     // if (result.isSuccess) {
     //     const statusArray: StatusObject[] = result.data;
 
-    const statusArray = statusList.filter(status => status.job_id === job_id);
+    const statusArray = statusList.filter((status) => status.job_id === job_id);
 
     return (
         <>
@@ -55,14 +54,14 @@ const StatusBox = ({ job_id, statusList }: Props) => {
                 statusArray={statusArray}
             />
 
-            <div className="flex h-fit flex-col bg-base-100 shadow mt-6 md:mt-0">
+            <div className="mt-6 flex h-fit flex-col bg-base-100 shadow md:mt-0">
                 <div className="flex flex-row justify-between bg-base-100 pt-5">
                     <h2 className="my-auto mb-1 ml-6 text-lg font-light text-neutral">
                         Stage
                     </h2>
                     <button
                         onClick={() => modalAddStatusForm.current?.showModal()}
-                        className="btn btn-sm btn-success btn-outline mr-6 rounded-none"
+                        className="btn btn-outline btn-success btn-sm mr-6 rounded-none"
                     >
                         Add
                     </button>
@@ -74,7 +73,5 @@ const StatusBox = ({ job_id, statusList }: Props) => {
     // } else {
     //     return null;
     //     }
-}
-    ;
-
+};
 export default StatusBox;

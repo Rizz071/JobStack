@@ -17,18 +17,24 @@ interface Props {
 const AddStatusModal = ({ modalAddStatusForm, job_id, statusArray }: Props) => {
     const [statusName, setStatusName] = useState<string>("");
     const [statusDesc, setStatusDesc] = useState<string>("");
-    const [statusDate, setStatusDate] = useState<string>(new Date().toISOString().split("T")[0]);
+    const [statusDate, setStatusDate] = useState<string>(
+        new Date().toISOString().split("T")[0]
+    );
 
     const queryClient = useQueryClient();
 
     const addStatusMutation = useMutation({
-        mutationFn: (passObject: PassObject) => serviceStatuses.addStatus(passObject.job_id, passObject.newStatusObject),
+        mutationFn: (passObject: PassObject) =>
+            serviceStatuses.addStatus(
+                passObject.job_id,
+                passObject.newStatusObject
+            ),
         onSuccess: () => {
             setStatusName("");
             setStatusDesc("");
             setStatusDate(new Date().toISOString().split("T")[0]);
             queryClient.invalidateQueries({ queryKey: ["statuses"] });
-        }
+        },
     });
 
     const handleSubmit = (event: SyntheticEvent) => {
@@ -37,24 +43,29 @@ const AddStatusModal = ({ modalAddStatusForm, job_id, statusArray }: Props) => {
         /* Adding new stage */
         // void (async () => {
         const newStatusObject: NewStatusObject = {
-            position: Math.max(...statusArray.map(status => Number(status.position))) + 1,
+            position:
+                Math.max(
+                    ...statusArray.map((status) => Number(status.position))
+                ) + 1,
             status: statusName,
             status_desc: statusDesc,
-            date: new Date(statusDate)
+            date: new Date(statusDate),
         };
-
 
         const passObject: PassObject = {
             job_id,
-            newStatusObject
+            newStatusObject,
         };
 
         addStatusMutation.mutate(passObject);
     };
 
-
     return (
-        <dialog ref={modalAddStatusForm} id="modal_add_status" className="modal">
+        <dialog
+            ref={modalAddStatusForm}
+            id="modal_add_status"
+            className="modal"
+        >
             <div className="modal-box w-1/3 max-w-none rounded-md">
                 <form method="dialog" onSubmit={handleSubmit}>
                     {/* if there is a button in form, it will close the modal */}
@@ -65,21 +76,27 @@ const AddStatusModal = ({ modalAddStatusForm, job_id, statusArray }: Props) => {
                     >
                         ✕
                     </button>
-                    <h3 className="text-lg font-bold">Adding a new job search stage</h3>
+                    <h3 className="text-lg font-bold">
+                        Adding a new job search stage
+                    </h3>
                     {/* <p className="py-4">Press ESC key or click on ✕ button to close</p> */}
                     <div>
                         <div className="flex flex-col">
-
                             <div className="mt-2">
                                 <div className="flex flex-row gap-x-6">
-
                                     <label className="form-control w-full">
                                         <div className="label">
-                                            <span className="label-text">Stage selection</span>
+                                            <span className="label-text">
+                                                Stage selection
+                                            </span>
                                         </div>
                                         <select
                                             value={statusName}
-                                            onChange={event => setStatusName(event.target.value)}
+                                            onChange={(event) =>
+                                                setStatusName(
+                                                    event.target.value
+                                                )
+                                            }
                                             className="select select-bordered w-full max-w-xs"
                                         >
                                             <option disabled></option>
@@ -90,10 +107,11 @@ const AddStatusModal = ({ modalAddStatusForm, job_id, statusArray }: Props) => {
                                         </select>
                                     </label>
 
-
                                     <label className="form-control w-full">
                                         <div className="label">
-                                            <span className="label-text">Event date</span>
+                                            <span className="label-text">
+                                                Event date
+                                            </span>
                                         </div>
                                         <input
                                             type="date"
@@ -101,14 +119,20 @@ const AddStatusModal = ({ modalAddStatusForm, job_id, statusArray }: Props) => {
                                             id="status_date"
                                             className="input input-bordered w-full"
                                             value={statusDate}
-                                            onChange={event => setStatusDate(event.target.value)}
+                                            onChange={(event) =>
+                                                setStatusDate(
+                                                    event.target.value
+                                                )
+                                            }
                                         />
                                     </label>
                                 </div>
 
                                 <label className="form-control w-full">
                                     <div className="label">
-                                        <span className="label-text">Comment</span>
+                                        <span className="label-text">
+                                            Comment
+                                        </span>
                                     </div>
                                     <input
                                         type="text"
@@ -116,7 +140,9 @@ const AddStatusModal = ({ modalAddStatusForm, job_id, statusArray }: Props) => {
                                         id="status_comment"
                                         className="input input-bordered w-full"
                                         value={statusDesc}
-                                        onChange={(event) => setStatusDesc(event.target.value)}
+                                        onChange={(event) =>
+                                            setStatusDesc(event.target.value)
+                                        }
                                     />
                                 </label>
                             </div>

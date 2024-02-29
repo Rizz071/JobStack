@@ -7,35 +7,36 @@ interface Props {
 }
 
 const ModalAddJob = ({ modalAddJobForm }: Props) => {
-
     const queryClient = useQueryClient();
 
     const [newJobTitle, setNewJobTitle] = useState<string>("");
     const [newJobDesc, setNewJobDesc] = useState<string>("");
-    const [newJobDate, setNewJobDate] = useState<string>(new Date().toISOString().split("T")[0]);
-
+    const [newJobDate, setNewJobDate] = useState<string>(
+        new Date().toISOString().split("T")[0]
+    );
 
     const newJobsMutation = useMutation({
-        mutationFn: () => axios
-            .post(
-                "/api/jobs/1",
-                {
-                    job_title: newJobTitle,
-                    job_desc: newJobDesc,
-                    // date_of_apply: new Date().toISOString(),
-                    date_of_apply: newJobDate,
-                    current_status_desc: "Just applied",
-                    active: true,
-                },
-                {
-                    headers: {
-                        "Content-Type": "application/json",
+        mutationFn: () =>
+            axios
+                .post(
+                    "/api/jobs/1",
+                    {
+                        job_title: newJobTitle,
+                        job_desc: newJobDesc,
+                        // date_of_apply: new Date().toISOString(),
+                        date_of_apply: newJobDate,
+                        current_status_desc: "Just applied",
+                        active: true,
                     },
-                })
-            /* Getting id of created job */
-            /* Adding first status for new job */
-            .then(response => newStatusMutation.mutate(response.data.id)),
-
+                    {
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                    }
+                )
+                /* Getting id of created job */
+                /* Adding first status for new job */
+                .then((response) => newStatusMutation.mutate(response.data.id)),
     });
 
     // /* Adding first status for new job */
@@ -47,7 +48,7 @@ const ModalAddJob = ({ modalAddJobForm }: Props) => {
                     position: 0,
                     status: "Just applied",
                     status_desc: "",
-                    date: new Date().toISOString()
+                    date: new Date().toISOString(),
                 },
                 {
                     headers: {
@@ -59,7 +60,6 @@ const ModalAddJob = ({ modalAddJobForm }: Props) => {
             queryClient.invalidateQueries({ queryKey: ["jobs"] });
         },
     });
-
 
     const handleSubmit = (event: SyntheticEvent) => {
         event.preventDefault();
@@ -84,7 +84,7 @@ const ModalAddJob = ({ modalAddJobForm }: Props) => {
                     <div className="flex justify-between">
                         <h3 className="text-lg font-bold">New job vacancy</h3>
                         {/* <p className="py-4">Press ESC key or click on ✕ button to close</p> */}
-                        <label className="flex mr-5">
+                        <label className="mr-5 flex">
                             <div className="label">
                                 <span className="label-text">Event date</span>
                             </div>
@@ -94,7 +94,9 @@ const ModalAddJob = ({ modalAddJobForm }: Props) => {
                                 id="status_date"
                                 className="input input-sm input-bordered rounded-md border-neutral"
                                 value={newJobDate}
-                                onChange={event => setNewJobDate(event.target.value)}
+                                onChange={(event) =>
+                                    setNewJobDate(event.target.value)
+                                }
                             />
                         </label>
                     </div>
@@ -113,7 +115,9 @@ const ModalAddJob = ({ modalAddJobForm }: Props) => {
                                     id="job_title"
                                     className="input input-sm input-bordered w-full resize-none rounded-md border-neutral"
                                     value={newJobTitle}
-                                    onChange={(event) => setNewJobTitle(event.target.value)}
+                                    onChange={(event) =>
+                                        setNewJobTitle(event.target.value)
+                                    }
                                 />
                             </div>
 
@@ -130,10 +134,14 @@ const ModalAddJob = ({ modalAddJobForm }: Props) => {
                                     rows={6}
                                     className="textarea textarea-bordered w-full resize-none rounded-md border-neutral"
                                     value={newJobDesc}
-                                    onChange={(event) => setNewJobDesc(event.target.value)}
+                                    onChange={(event) =>
+                                        setNewJobDesc(event.target.value)
+                                    }
                                 />
                             </div>
-                            <p className="label-text-alt">Paste here all of a description</p>
+                            <p className="label-text-alt">
+                                Paste here all of a description
+                            </p>
                         </div>
 
                         <div className="mt-4 flex justify-between ">

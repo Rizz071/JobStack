@@ -5,13 +5,13 @@ import { useNavigate } from "react-router-dom";
 const SidePanel = () => {
     const navigate = useNavigate();
 
-
     return (
-        <div className="hidden grow-0 shrink-0 flex-col md:w-1/4 lg:w-1/5 xl:w-1/6 h-screen bg-neutral text-neutral-content font-light lg:flex">
-
-            <div id="menu-content" className="mx-10 flex flex-col h-full gap-y-10">
-
-                <div id="logo" className="mt-10 mb-10">
+        <div className="hidden h-screen shrink-0 grow-0 flex-col bg-neutral font-light text-neutral-content md:w-1/4 lg:flex lg:w-1/5 xl:w-1/6">
+            <div
+                id="menu-content"
+                className="mx-10 flex h-full flex-col gap-y-10"
+            >
+                <div id="logo" className="mb-10 mt-10">
                     <div
                         className="flex flex-col items-center"
                         onClick={() => navigate("/")}
@@ -33,13 +33,12 @@ const SidePanel = () => {
                     </div>
                 </div> */}
 
-                <div id="setting" className="text-lg mr-auto mt-auto">
+                <div id="setting" className="mr-auto mt-auto text-lg">
                     Settings
                 </div>
-                <div id="setting" className="text-lg mr-auto mb-10">
+                <div id="setting" className="mb-10 mr-auto text-lg">
                     Logout
                 </div>
-
             </div>
         </div>
     );

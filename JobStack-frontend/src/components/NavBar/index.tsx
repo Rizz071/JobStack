@@ -11,7 +11,11 @@ export default function NavBar() {
         <div className="navbar sticky top-2 mx-auto bg-neutral text-neutral-content shadow-xl sm:w-full md:w-full lg:w-full xl:w-3/4 xl:rounded-md">
             <div className="navbar-start">
                 <div className="dropdown">
-                    <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
+                    <div
+                        tabIndex={0}
+                        role="button"
+                        className="btn btn-ghost lg:hidden"
+                    >
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
                             className="h-5 w-5"
@@ -50,7 +54,10 @@ export default function NavBar() {
                         </li>
                     </ul>
                 </div>
-                <a className="btn btn-ghost text-xl" onClick={() => navigate("/")}>
+                <a
+                    className="btn btn-ghost text-xl"
+                    onClick={() => navigate("/")}
+                >
                     <ChevronDoubleUpIcon className="w-10 " />
                     Job Stack
                 </a>

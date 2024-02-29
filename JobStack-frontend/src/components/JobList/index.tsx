@@ -51,28 +51,24 @@ export default function JobsList({
     setStatusFilter,
     headerRef,
     headerHeight,
-    setHeaderHeight
+    setHeaderHeight,
 }: Props) {
     const modalAddJobForm = useRef<HTMLDialogElement>(null);
     const [filteredJobList, setFilteredJobList] = useState<JobItem[]>([]);
     const [filterString, setFilterString] = useState<string>("");
     const [checkAll, setCheckAll] = useState<boolean>(false);
-    const [visibleStateAddAndSearch, setVisibleStateAddAndSearch] = useState<boolean>(true);
 
     const navigate = useNavigate();
 
     const queryClient = useQueryClient();
     // const statusArray: StatusObject[] = queryClient.getQueryData(["statuses"]) || [];
 
-
-
     const deleteMutation = useMutation({
         mutationFn: (id: number) => serviceJobs.deleteJob(id),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["jobs"] });
-        }
+        },
     });
-
 
     const [width, setWidth] = useState(window.innerWidth);
     const [height, setHeight] = useState(window.innerHeight);
@@ -87,9 +83,12 @@ export default function JobsList({
     }, []);
 
     useEffect(() => {
-        if (headerRef.current) setHeaderHeight(headerRef.current.clientHeight + headerRef.current.getBoundingClientRect().top);
+        if (headerRef.current)
+            setHeaderHeight(
+                headerRef.current.clientHeight +
+                    headerRef.current.getBoundingClientRect().top
+            );
     }, [headerRef, setHeaderHeight, headerHeight, width]); //empty dependency array so it only runs once at render
-
 
     const [checkedState, setCheckedState] = useState<CheckboxSelect[]>([]);
 
@@ -101,48 +100,73 @@ export default function JobsList({
         }
 
         setFilteredJobList(
-            (() => jobsList)()
-                .filter((jobItem: JobItem) => {
-
-                    switch (statusFilter) {
-                        case "all":
+            (() => jobsList)().filter((jobItem: JobItem) => {
+                switch (statusFilter) {
+                    case "all":
+                        return jobItem;
+                    case "in_progress":
+                        if (
+                            statusList
+                                .filter(
+                                    (status) => status.job_id === jobItem.id
+                                )
+                                .every(
+                                    (status) =>
+                                        status.status.toLowerCase() !==
+                                            "rejected" &&
+                                        status.status.toLowerCase() !== "offer"
+                                )
+                        )
                             return jobItem;
-                        case "in_progress":
-                            if (statusList
-                                .filter(status => status.job_id === jobItem.id)
-                                .every(status => status.status.toLowerCase() !== "rejected" && status.status.toLowerCase() !== "offer"))
-                                return jobItem;
-                            break;
-                        case "rejected":
-                            if (statusList
-                                .filter(status => status.job_id === jobItem.id)
-                                .find(statusObj => {
-                                    if (statusObj.status.toLowerCase() === "rejected") return true;
-                                }))
-                                return jobItem;
-                            break;
-                        case "offer":
-                            if (statusList
-                                .filter(status => status.job_id === jobItem.id)
-                                .find(statusObj => {
-                                    if (statusObj.status.toLowerCase() === "offer") return true;
-                                }))
-                                return jobItem;
-                            break;
-                    }
-                }));
+                        break;
+                    case "rejected":
+                        if (
+                            statusList
+                                .filter(
+                                    (status) => status.job_id === jobItem.id
+                                )
+                                .find((statusObj) => {
+                                    if (
+                                        statusObj.status.toLowerCase() ===
+                                        "rejected"
+                                    )
+                                        return true;
+                                })
+                        )
+                            return jobItem;
+                        break;
+                    case "offer":
+                        if (
+                            statusList
+                                .filter(
+                                    (status) => status.job_id === jobItem.id
+                                )
+                                .find((statusObj) => {
+                                    if (
+                                        statusObj.status.toLowerCase() ===
+                                        "offer"
+                                    )
+                                        return true;
+                                })
+                        )
+                            return jobItem;
+                        break;
+                }
+            })
+        );
 
         if (filterString) {
             console.log("filterString=true");
             setFilteredJobList(
-                (() => jobsList)()
-                    .filter(
-                        (jobItem: JobItem) =>
-                            jobItem.job_title
-                                .toLowerCase()
-                                .includes(filterString.toLowerCase()) ||
-                            jobItem.job_desc.toLowerCase().includes(filterString.toLowerCase())
-                    )
+                (() => jobsList)().filter(
+                    (jobItem: JobItem) =>
+                        jobItem.job_title
+                            .toLowerCase()
+                            .includes(filterString.toLowerCase()) ||
+                        jobItem.job_desc
+                            .toLowerCase()
+                            .includes(filterString.toLowerCase())
+                )
             );
         }
         // } else {
@@ -170,7 +194,9 @@ export default function JobsList({
     useEffect(() => {
         console.log("useEffect => setCheckedState + setPagesTotalAmount");
 
-        const jobs_per_page: number = Math.floor((height - headerHeight - 320) / 56);
+        const jobs_per_page: number = Math.floor(
+            (height - headerHeight - 320) / 56
+        );
 
         if (jobs_per_page < 3) {
             setJobsPerPage(3);
@@ -181,7 +207,15 @@ export default function JobsList({
         setPagesTotalAmount(Math.ceil(filteredJobList.length / jobsPerPage));
         console.log("jobsPerPage", jobsPerPage);
         console.log("pagesTotalAmount: ", pagesTotalAmount);
-    }, [filteredJobList.length, height, jobsPerPage, pagesTotalAmount, setJobsPerPage, setPagesTotalAmount, headerHeight]);
+    }, [
+        filteredJobList.length,
+        height,
+        jobsPerPage,
+        pagesTotalAmount,
+        setJobsPerPage,
+        setPagesTotalAmount,
+        headerHeight,
+    ]);
 
     /* Last page calculation after window resizing */
     useEffect(() => {
@@ -195,7 +229,8 @@ export default function JobsList({
             return;
         }
 
-        if (currentPage >= pagesTotalAmount) setCurrentPage(pagesTotalAmount - 1);
+        if (currentPage >= pagesTotalAmount)
+            setCurrentPage(pagesTotalAmount - 1);
         if (currentPage < 0) setCurrentPage(0);
     }, [filteredJobList.length, pagesTotalAmount, currentPage, setCurrentPage]);
 
@@ -234,36 +269,50 @@ export default function JobsList({
     }
 
     return (
-        <div className="flex flex-col grow mx-8 md:mx-0">
-
+        <div className="mx-8 flex grow flex-col md:mx-0">
             <ModalAddJob modalAddJobForm={modalAddJobForm} />
             <div className="mb-5 flex flex-col">
-                <StatusSort statusFilter={statusFilter} setStatusFilter={setStatusFilter} />
+                <StatusSort
+                    statusFilter={statusFilter}
+                    setStatusFilter={setStatusFilter}
+                />
 
-                <div className="flex bg-base-200 pt-5 pb-0 gap-x-8 justify-between">
-
-                    <div className="flex-row justify-start flex w-2/3">
-
+                <div className="flex justify-between gap-x-8 bg-base-200 pb-0 pt-5">
+                    <div className="flex w-2/3 flex-row items-center justify-start">
                         <input
                             type="checkbox"
                             checked={checkAll}
                             onChange={() => {
                                 if (
-                                    ((filteredJobList: JobItem[]) => filteredJobList).length !== 0
+                                    ((filteredJobList: JobItem[]) =>
+                                        filteredJobList).length !== 0
                                 ) {
                                     setCheckedState(
-                                        checkedState.map((checkItem: CheckboxSelect) => {
-                                            filteredJobList
-                                                .slice(
-                                                    currentPage * jobsPerPage,
-                                                    currentPage * jobsPerPage + jobsPerPage
-                                                )
-                                                .forEach((jobOnScreen: JobItem) => {
-                                                    if (jobOnScreen.id === checkItem.id)
-                                                        checkItem.state = !checkAll;
-                                                });
-                                            return checkItem;
-                                        })
+                                        checkedState.map(
+                                            (checkItem: CheckboxSelect) => {
+                                                filteredJobList
+                                                    .slice(
+                                                        currentPage *
+                                                            jobsPerPage,
+                                                        currentPage *
+                                                            jobsPerPage +
+                                                            jobsPerPage
+                                                    )
+                                                    .forEach(
+                                                        (
+                                                            jobOnScreen: JobItem
+                                                        ) => {
+                                                            if (
+                                                                jobOnScreen.id ===
+                                                                checkItem.id
+                                                            )
+                                                                checkItem.state =
+                                                                    !checkAll;
+                                                        }
+                                                    );
+                                                return checkItem;
+                                            }
+                                        )
                                     );
                                     setCheckAll(!checkAll);
                                 }
@@ -272,54 +321,63 @@ export default function JobsList({
                             id={"custom-checkbox-select-all"}
                         />
 
-                        <h2 className="hidden lg:block xl:block ml-6 text-lg font-light text-neutral">
+                        <h2 className="ml-6 hidden text-lg font-light text-neutral lg:block xl:block">
                             All applied positions
                         </h2>
-                        <h2 className="block lg:hidden xl:hidden ml-6 text-lg font-light text-neutral">
+                        <h2 className="ml-6 block text-lg font-light text-neutral lg:hidden xl:hidden">
                             All
                         </h2>
-
                     </div>
 
-
                     <div className="flex flex-row justify-end">
-
                         <button
                             onClick={() => handleBulkDelete()}
-                            className={`${checkedState.every((checkElem) => !checkElem.state)
-                                ? "hidden"
-                                : ""
+                            className={`${
+                                checkedState.every(
+                                    (checkElem) => !checkElem.state
+                                )
+                                    ? "hidden"
+                                    : ""
                                 // eslint-disable-next-line indent
-                                } btn btn-error btn-sm mr-0 rounded-none`}
+                            } btn btn-error btn-sm mr-0 rounded-none`}
                         >
                             Delete selected
                         </button>
 
                         <button
                             onClick={() => modalAddJobForm.current?.showModal()}
-                            className={`btn btn-sm btn-success btn-outline mr-6 rounded-none ${checkedState.every((checkElem) => !checkElem.state) ? "block" : "hidden"}`}
+                            className={`btn btn-outline btn-success btn-sm mr-6 rounded-none ${
+                                checkedState.every(
+                                    (checkElem) => !checkElem.state
+                                )
+                                    ? "block"
+                                    : "hidden"
+                            }`}
                         >
                             Add
                         </button>
 
-                        <div className={`${checkedState.every((checkElem) => !checkElem.state) ? "block" : "hidden"}`}>
+                        <div
+                            className={`${
+                                checkedState.every(
+                                    (checkElem) => !checkElem.state
+                                )
+                                    ? "block"
+                                    : "hidden"
+                            }`}
+                        >
                             <SearchField
                                 filterString={filterString}
                                 setFilterString={setFilterString}
                             />
                         </div>
-
                     </div>
                 </div>
 
-
                 {/* <hr /> */}
 
-
-                {/* <StatusSort statusFilter={statusFilter} setStatusFilter={setStatusFIlter} /> */}
-
                 {jobsList.length === 0 ? (
-                    <div className="flex flex-row p-2 justify-center">
+                    <div className="flex flex-row justify-center p-2">
                         <p className="prose">Jobs not found</p>
                     </div>
                 ) : (
@@ -332,8 +390,12 @@ export default function JobsList({
                             .map((jobItem) => (
                                 <li
                                     key={jobItem.id}
-                                    className={`last:mb-0 flex max-h-14 shadow min-h-14 justify-between gap-x-6 my-4  bg-base-100 hover:bg-base-200 
-                                    ${selectedJob === jobItem.id ? "border-l-4 border-solid border-primary -ml-[4px]" : ""}`}
+                                    className={`my-4 flex max-h-14 min-h-14 justify-between gap-x-6 bg-base-100 shadow  last:mb-0 hover:bg-primary-content
+                                    ${
+                                        selectedJob === jobItem.id
+                                            ? "-ml-[4px] border-l-4 border-solid border-primary"
+                                            : ""
+                                    }`}
                                 >
                                     <input
                                         type="checkbox"
@@ -343,20 +405,23 @@ export default function JobsList({
                                                     stateElem.id === jobItem.id
                                             )?.state || false
                                         }
-                                        onChange={() => handleCheckboxChange(jobItem.id)}
+                                        onChange={() =>
+                                            handleCheckboxChange(jobItem.id)
+                                        }
                                         className="checkbox my-auto ml-6 size-5 shrink-0 rounded-none"
                                         id={`custom-checkbox-${jobItem.id}`}
                                     />
 
                                     <div
-                                        onClick={() => setSelectedJob(jobItem.id)}
+                                        onClick={() =>
+                                            setSelectedJob(jobItem.id)
+                                        }
                                         className="flex flex-1 gap-x-4"
                                     >
                                         <div className="flex flex-1 items-center">
                                             <p className="line-clamp-2 text-sm text-neutral">
                                                 {jobItem.job_title}
                                             </p>
-
 
                                             {/* <div className="flex gap-x-4"> */}
                                             {/* <p className="mt-1 text-xs leading-5 text-secondary">
@@ -374,9 +439,11 @@ export default function JobsList({
                                     <button
                                         onClick={() => {
                                             setSelectedJob(jobItem.id);
-                                            navigate(`/detailview/${jobItem.id}`, { replace: true });
-                                        }
-                                        }
+                                            navigate(
+                                                `/detailview/${jobItem.id}`,
+                                                { replace: true }
+                                            );
+                                        }}
                                         className="my-auto w-5"
                                     >
                                         <img src={editIcon}></img>
@@ -385,22 +452,23 @@ export default function JobsList({
                                         onClick={() => handleDelete(jobItem.id)}
                                         className="my-auto mr-6 w-5"
                                     >
-                                        <img className="" src={thrashIcon}></img>
+                                        <img
+                                            className=""
+                                            src={thrashIcon}
+                                        ></img>
                                     </button>
                                 </li>
                             ))}
                     </ul>
                 )}
             </div>
-            {
-                pagesTotalAmount > 0 && (
-                    <PaginationBox
-                        currentPage={currentPage}
-                        setCurrentPage={setCurrentPage}
-                        pagesTotalAmount={pagesTotalAmount}
-                    />
-                )
-            }
-        </div >
+            {pagesTotalAmount > 0 && (
+                <PaginationBox
+                    currentPage={currentPage}
+                    setCurrentPage={setCurrentPage}
+                    pagesTotalAmount={pagesTotalAmount}
+                />
+            )}
+        </div>
     );
 }

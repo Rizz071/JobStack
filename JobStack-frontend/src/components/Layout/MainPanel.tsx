@@ -6,8 +6,14 @@ interface Props {
 
 const MainPanel = ({ children }: Props) => {
     return (
-        <div id="main-panel" className="flex flex-col w-full h-screen bg-base-200">
-            <div id="main-field-with-margins" className="md:m-8 xl:w-5/6 shrink-0 xl:mx-auto flex justify-center">
+        <div
+            id="main-panel"
+            className="flex h-screen w-full flex-col bg-base-200"
+        >
+            <div
+                id="main-field-with-margins"
+                className="flex shrink-0 justify-center md:m-8 xl:mx-auto xl:w-5/6"
+            >
                 {children}
             </div>
         </div>

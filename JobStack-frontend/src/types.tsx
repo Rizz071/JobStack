@@ -10,7 +10,6 @@ export interface JobItem {
 
 // export type NewJob = Omit<JobItem, "id">;
 
-
 export interface StatusObject {
     id: number;
     job_id: number;
@@ -23,6 +22,5 @@ export interface StatusObject {
 // export type OneStatusObject = Omit<StatusObject, "id" | "job_id">;
 
 export type NewStatusObject = Omit<StatusObject, "id" | "job_id">;
-
 
 export type StatusFilter = "all" | "in_progress" | "rejected" | "offer";

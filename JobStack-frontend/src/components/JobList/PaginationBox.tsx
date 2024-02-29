@@ -21,9 +21,10 @@ const PaginationBox = ({
             <button
                 onClick={() => handleClick(i)}
                 key={i}
-                className={`btn join-item shadow rounded-none ${currentPage === i ? "btn-neutral" : ""
+                className={`btn join-item rounded-none shadow ${
+                    currentPage === i ? "btn-neutral" : ""
                     // eslint-disable-next-line indent
-                    } btn-sm`}
+                } btn-sm`}
             >
                 {i + 1}
             </button>
@@ -39,7 +40,7 @@ const PaginationBox = ({
           Total {pagesTotalAmount} entries
         </button> */}
             </div>
-            <div className="join shadow-xl">{pagArray}</div>
+            <div className="join shadow">{pagArray}</div>
         </div>
     );
 };

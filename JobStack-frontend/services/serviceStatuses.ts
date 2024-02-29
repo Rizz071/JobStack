@@ -3,19 +3,26 @@ import { StatusObject, NewStatusObject } from "../src/types";
 
 /*Narrowing StatusObject type*/
 const isStatusObject = (object: unknown): object is StatusObject => {
-    return !!(object && typeof object === "object"
-        && "id" in object && typeof object.id === "number"
-        && "job_id" in object && typeof object.job_id === "number"
-        && "status" in object && typeof object.status === "string"
-        && "status_desc" in object && typeof object.status_desc === "string"
-        && "date" in object
-        && "position" in object && typeof object.position === "number");
+    return !!(
+        object &&
+        typeof object === "object" &&
+        "id" in object &&
+        typeof object.id === "number" &&
+        "job_id" in object &&
+        typeof object.job_id === "number" &&
+        "status" in object &&
+        typeof object.status === "string" &&
+        "status_desc" in object &&
+        typeof object.status_desc === "string" &&
+        "date" in object &&
+        "position" in object &&
+        typeof object.position === "number"
+    );
 };
-
 
 /*Narrowing Array of StatusObject */
 const isStatusObjectArray = (object: unknown[]): object is StatusObject[] => {
-    return object.every(i => isStatusObject((i)));
+    return object.every((i) => isStatusObject(i));
 };
 
 // /*Requesting all jobs from backend*/
@@ -24,12 +31,13 @@ const requestJobStatusList = async (job_id: number) => {
         const response: unknown = await axios.get(`/api/status/${job_id}`);
 
         /* Narrowing type Status Object*/
-        if (!response
-            || typeof response !== "object"
-            || !("data" in response)
-            || !Array.isArray(response.data))
+        if (
+            !response ||
+            typeof response !== "object" ||
+            !("data" in response) ||
+            !Array.isArray(response.data)
+        )
             throw new Error("error while retrieving job list from server");
-
 
         const data: unknown[] = response.data;
 
@@ -49,15 +57,18 @@ const requestJobStatusList = async (job_id: number) => {
 const requestMultipleJobStatusList = async (jobs_array: number[]) => {
     // console.log("jobs_array", jobs_array);
     try {
-        const response: unknown = await axios.post("/api/status/multiple", { jobs_array });
+        const response: unknown = await axios.post("/api/status/multiple", {
+            jobs_array,
+        });
 
         /* Narrowing type Status Object*/
-        if (!response
-            || typeof response !== "object"
-            || !("data" in response)
-            || !Array.isArray(response.data))
+        if (
+            !response ||
+            typeof response !== "object" ||
+            !("data" in response) ||
+            !Array.isArray(response.data)
+        )
             return new Error("error while retrieving job list from server");
-
 
         const data: unknown[] = response.data;
 
@@ -71,9 +82,7 @@ const requestMultipleJobStatusList = async (jobs_array: number[]) => {
     return [];
 };
 
-
 const addStatus = async (job_id: number, newStatusObject: NewStatusObject) => {
-
     try {
         const response: unknown = await axios.post(
             `/api/status/${job_id}`,
@@ -81,17 +90,17 @@ const addStatus = async (job_id: number, newStatusObject: NewStatusObject) => {
             {
                 headers: {
                     "Content-Type": "application/json",
-                }
+                },
             }
         );
 
         /* Narrowing response */
-        if (!response
-            || typeof response !== "object"
-            || !("status" in response)
-            || !("data" in response)
-            || !isStatusObject(response.data)
-
+        if (
+            !response ||
+            typeof response !== "object" ||
+            !("status" in response) ||
+            !("data" in response) ||
+            !isStatusObject(response.data)
         ) {
             throw Error("Error: server did not properly respond");
         }
@@ -101,7 +110,6 @@ const addStatus = async (job_id: number, newStatusObject: NewStatusObject) => {
         }
     }
 };
-
 
 // const deleteJob = async (id: number) => {
 //     try {
@@ -155,5 +163,7 @@ const addStatus = async (job_id: number, newStatusObject: NewStatusObject) => {
 // };
 
 export default {
-    requestJobStatusList, requestMultipleJobStatusList, addStatus
+    requestJobStatusList,
+    requestMultipleJobStatusList,
+    addStatus,
 };

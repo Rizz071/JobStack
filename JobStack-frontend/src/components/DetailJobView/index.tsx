@@ -5,7 +5,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import serviceJobs from "../../../services/serviceJobs";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
 
-
 const DetailJobView = () => {
     const [jobTitle, setJobTitle] = useState<string>("");
     const [jobDescription, setJobDescription] = useState<string>("");
@@ -17,21 +16,22 @@ const DetailJobView = () => {
 
     const jobsList: JobItem[] = queryClient.getQueryData(["jobs"]) || [];
 
-    const currentJob: JobItem | undefined = jobsList.find(job => job.id === Number(id));
-
+    const currentJob: JobItem | undefined = jobsList.find(
+        (job) => job.id === Number(id)
+    );
 
     const deleteMutation = useMutation({
         mutationFn: (id: number) => serviceJobs.deleteJob(id),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["jobs"] });
-        }
+        },
     });
 
     const saveMutation = useMutation({
         mutationFn: (jobToPut: JobItem) => serviceJobs.putJob(jobToPut),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["jobs"] });
-        }
+        },
     });
 
     const handleDelete = async () => {
@@ -47,7 +47,7 @@ const DetailJobView = () => {
         const jobToPut: JobItem = {
             ...currentJob,
             job_title: jobTitle,
-            job_desc: jobDescription
+            job_desc: jobDescription,
         };
 
         saveMutation.mutate(jobToPut);
@@ -88,7 +88,6 @@ const DetailJobView = () => {
                 </div>
             </div>
 
-
             <div className="mx-8 mb-4 flex h-full flex-col gap-y-2">
                 <label htmlFor="job_title_desc" className="label-text mt-6">
                     Job title
@@ -98,9 +97,7 @@ const DetailJobView = () => {
                     name="job_title_desc"
                     className="textarea textarea-bordered textarea-md resize-none border-neutral text-lg"
                     defaultValue={`${currentJob.job_title}`}
-                    onChange={(event) =>
-                        setJobTitle(event.target.value)
-                    }
+                    onChange={(event) => setJobTitle(event.target.value)}
                 />
                 <div className="border-dotted border-black"></div>
 
@@ -110,16 +107,13 @@ const DetailJobView = () => {
                 <textarea
                     id="job_detail_desc"
                     name="job_detail_desc"
-                    className="textarea border mb-4 h-full resize-none border-neutral"
+                    className="textarea mb-4 h-full resize-none border border-neutral"
                     defaultValue={`${currentJob.job_desc}`}
-                    onChange={(event) =>
-                        setJobDescription(event.target.value)
-                    }
+                    onChange={(event) => setJobDescription(event.target.value)}
                 />
             </div>
         </div>
     );
 };
-
 
 export default DetailJobView;
