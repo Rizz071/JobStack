@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 import serviceJobs from "../../../services/serviceJobs";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
 import StatusSort from "./StatusSort";
+import ModalConfirmation from "../ModalConfirmation";
 
 interface Props {
     jobsList: JobItem[];
@@ -59,6 +60,12 @@ export default function JobsList({
     const [checkAll, setCheckAll] = useState<boolean>(false);
 
     const navigate = useNavigate();
+
+    /* Part of Confirmation Dialog's implementation */
+    const modalConfirmation = useRef<HTMLDialogElement>(null);
+    const [acceptFunc, setAcceptFunc] = useState<() => Promise<void>>(
+        async () => {}
+    );
 
     const queryClient = useQueryClient();
     // const statusArray: StatusObject[] = queryClient.getQueryData(["statuses"]) || [];
@@ -271,6 +278,10 @@ export default function JobsList({
     return (
         <div className="mx-8 flex grow flex-col md:mx-0">
             <ModalAddJob modalAddJobForm={modalAddJobForm} />
+            <ModalConfirmation
+                modalConfirmation={modalConfirmation}
+                acceptFunc={acceptFunc}
+            />
             <div className="mb-5 flex flex-col">
                 <StatusSort
                     statusFilter={statusFilter}
@@ -449,7 +460,14 @@ export default function JobsList({
                                         <img src={editIcon}></img>
                                     </button>
                                     <button
-                                        onClick={() => handleDelete(jobItem.id)}
+                                        onClick={() => {
+                                            setAcceptFunc(
+                                                () => () =>
+                                                    handleDelete(jobItem.id)
+                                            );
+                                            modalConfirmation.current?.showModal();
+                                            // () => handleDelete(jobItem.id)
+                                        }}
                                         className="my-auto mr-6 w-5"
                                     >
                                         <img
