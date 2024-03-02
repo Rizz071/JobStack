@@ -59,29 +59,29 @@ const DetailJobView = () => {
     if (!currentJob) return null;
 
     return (
-        <div className="mt-8 flex h-[85vh] w-4/5 flex-col rounded-lg border border-neutral bg-base-100 shadow-xl">
-            <div className="flex flex-row justify-between rounded-t-md bg-neutral py-2">
-                <div className="flex w-1/3 flex-row justify-start ">
-                    <h2 className=" card card-title ml-4 text-xl font-light text-base-100">
+        <div className="mt-8 flex h-[85vh] w-4/5 flex-col rounded-md border border-neutral-content bg-base-100 shadow-lg">
+            <div className="flex justify-between rounded-md bg-base-100 py-2">
+                <div className="flex w-1/3 justify-start text-lg">
+                    <h2 className=" card card-title ml-4 text-xl text-neutral">
                         Detail job view
                     </h2>
                 </div>
-                <div className="flex w-1/3 shrink flex-row justify-end align-baseline">
+                <div className="flex w-1/3 shrink justify-end align-baseline">
                     <button
                         onClick={() => handleDelete()}
-                        className="btn btn-sm my-auto mr-4 w-1/3"
+                        className="btn btn-outline btn-error btn-sm my-auto mr-4 w-1/3"
                     >
                         Delete
                     </button>
                     <button
                         onClick={() => handleSave()}
-                        className="btn btn-sm my-auto mr-4  w-1/3"
+                        className="btn btn-outline btn-success btn-sm  my-auto mr-4 w-1/3"
                     >
                         Save
                     </button>
                     <button
                         onClick={() => navigate("/")}
-                        className="btn btn-sm my-auto mr-4  w-1/3"
+                        className="btn btn-active btn-sm my-auto mr-4 w-1/3"
                     >
                         Cancel
                     </button>
@@ -95,7 +95,7 @@ const DetailJobView = () => {
                 <textarea
                     id="job_title_desc"
                     name="job_title_desc"
-                    className="textarea textarea-bordered textarea-md resize-none border-neutral text-lg"
+                    className="textarea textarea-bordered textarea-md resize-none border-neutral-content text-lg"
                     defaultValue={`${currentJob.job_title}`}
                     onChange={(event) => setJobTitle(event.target.value)}
                 />
@@ -107,7 +107,7 @@ const DetailJobView = () => {
                 <textarea
                     id="job_detail_desc"
                     name="job_detail_desc"
-                    className="textarea mb-4 h-full resize-none border border-neutral"
+                    className="textarea mb-4 h-full resize-none border border-neutral-content"
                     defaultValue={`${currentJob.job_desc}`}
                     onChange={(event) => setJobDescription(event.target.value)}
                 />
