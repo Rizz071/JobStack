@@ -21,17 +21,6 @@ const isJobItem = (object: unknown): object is JobItem => {
     );
 };
 
-/*Narrowing StatusObject type*/
-// const isStatusObject = (object: unknown): object is StatusObject => {
-//     return !!(object && typeof object === "object"
-//         && "id" in object && typeof object.id === "number"
-//         && "status" in object && typeof object.status === "string"
-//         && "status_desc" in object && typeof object.status_desc === "string"
-//         && "date" in object
-//         && "position" in object && typeof object.position === "number"
-//         && "job_id" in object && typeof object.job_id === "number");
-// };
-
 /*Narrowing Array of JobItem*/
 const isJobItemArray = (object: unknown[]): object is JobItem[] => {
     return object.every((i) => isJobItem(i));

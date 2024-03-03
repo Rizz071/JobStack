@@ -1,16 +1,17 @@
-import React, { useRef } from "react";
+import React, { useContext, useRef } from "react";
 import { useState } from "react";
 import { JobItem } from "../../types";
 import { useNavigate, useParams } from "react-router-dom";
 import serviceJobs from "../../../services/serviceJobs";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
 import ModalConfirmation from "../ModalConfirmation";
+import AlertContext from "../Contexts/AlertContext";
 
 const DetailJobView = () => {
     const [jobTitle, setJobTitle] = useState<string>();
     const [jobDescription, setJobDescription] = useState<string>();
 
-    /* Part of Confirmation Dialog's implementation */
+    /* Confirmation Dialog's implementation */
     const modalConfirmation = useRef<HTMLDialogElement>(null);
     const [acceptFunc, setAcceptFunc] = useState<() => Promise<void>>(
         async () => {}
@@ -31,6 +32,7 @@ const DetailJobView = () => {
         mutationFn: (id: number) => serviceJobs.deleteJob(id),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["jobs"] });
+            setAlerts(alerts.concat("Deleted successfully"));
         },
     });
 
@@ -38,6 +40,7 @@ const DetailJobView = () => {
         mutationFn: (jobToPut: JobItem) => serviceJobs.putJob(jobToPut),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["jobs"] });
+            setAlerts(alerts.concat("Saved successfully"));
         },
     });
 
@@ -62,6 +65,11 @@ const DetailJobView = () => {
         saveMutation.mutate(jobToPut);
     };
 
+    /* Access to global context AlertContext */
+    const alertContext = useContext(AlertContext);
+    if (!alertContext) return;
+    const { alerts, setAlerts } = alertContext;
+
     /* Waiting for data arrival */
     if (!currentJob) return null;
 
@@ -79,7 +87,7 @@ const DetailJobView = () => {
                 <div className="flex justify-between rounded-md bg-base-100 py-2">
                     <div className="flex w-1/3 justify-start text-lg">
                         <h2 className=" card card-title ml-4 text-xl text-neutral">
-                            Job edition
+                            Job editing
                         </h2>
                     </div>
                     <div className="flex w-1/3 shrink justify-end align-baseline">

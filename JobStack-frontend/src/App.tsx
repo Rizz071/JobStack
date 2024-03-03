@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { MouseEventHandler, useCallback, useRef, useState } from "react";
 import JobsList from "./components/JobList";
 import { JobItem, StatusFilter, StatusObject } from "./types";
@@ -11,6 +11,8 @@ import serviceJobs from "../services/serviceJobs";
 import LoadingProgress from "./components/LoadingProgress";
 import Layout from "./components/Layout";
 import serviceStatuses from "../services/serviceStatuses";
+import Alert from "./components/Alert";
+import AlertContext from "./components/Contexts/AlertContext";
 
 function App() {
     const [pagesTotalAmount, setPagesTotalAmount] = useState<number>(0);
@@ -20,8 +22,10 @@ function App() {
         undefined
     );
     const [statusFilter, setStatusFilter] = useState<StatusFilter>("all");
-    // const [statusList, setStatusList] = useState<StatusObject[]>([]);
     const [headerHeight, setHeaderHeight] = useState<number>(0);
+
+    // const [alertsStack, setAlertsStack] = useState<string[]>([]);
+    const alertsContext = useContext(AlertContext);
 
     const headerRef = useRef<HTMLDivElement>(null);
     const ref = useRef<HTMLDialogElement>(null);
@@ -121,17 +125,28 @@ function App() {
                                             headerRef={headerRef}
                                         />
 
-                                        {/* <div className="flex flex-col gap-y-[15px] mt-[38px]"> */}
+                                        <div className="flex flex-col gap-y-8">
+                                            <div className="shrink-0">
+                                                {selectedJob && (
+                                                    <StatusBox
+                                                        job_id={selectedJob}
+                                                        statusList={statusList}
+                                                    />
+                                                )}
+                                            </div>
 
-                                        <div className="shrink-0">
-                                            {selectedJob && (
-                                                <StatusBox
-                                                    job_id={selectedJob}
-                                                    statusList={statusList}
-                                                />
-                                            )}
+                                            <div className="mt-auto align-bottom">
+                                                {alertsContext &&
+                                                    alertsContext.alerts.map(
+                                                        (alert, index) => (
+                                                            <Alert
+                                                                key={index}
+                                                                message={alert}
+                                                            />
+                                                        )
+                                                    )}
+                                            </div>
                                         </div>
-                                        {/* </div> */}
                                     </div>
                                 </div>
                             </>

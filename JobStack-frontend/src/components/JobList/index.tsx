@@ -1,5 +1,5 @@
 /* eslint-disable indent */
-import React from "react";
+import React, { useContext } from "react";
 import { MouseEventHandler, useEffect, useRef, useState } from "react";
 import { JobItem, StatusFilter, StatusObject } from "../../types";
 import thrashIcon from "../../assets/icons/thrash.svg";
@@ -12,6 +12,7 @@ import serviceJobs from "../../../services/serviceJobs";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
 import StatusSort from "./StatusSort";
 import ModalConfirmation from "../ModalConfirmation";
+import AlertContext from "../Contexts/AlertContext";
 
 interface Props {
     jobsList: JobItem[];
@@ -68,12 +69,12 @@ export default function JobsList({
     );
 
     const queryClient = useQueryClient();
-    // const statusArray: StatusObject[] = queryClient.getQueryData(["statuses"]) || [];
 
     const deleteMutation = useMutation({
         mutationFn: (id: number) => serviceJobs.deleteJob(id),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["jobs"] });
+            setAlerts(alerts.concat("Deleted successfully"));
         },
     });
 
@@ -268,6 +269,11 @@ export default function JobsList({
         });
         setCheckAll(false);
     };
+
+    /* Access to global context AlertContext */
+    const alertContext = useContext(AlertContext);
+    if (!alertContext) return;
+    const { alerts, setAlerts } = alertContext;
 
     /* Waiting for data arrival */
     if (((jobsList: JobItem[]) => jobsList).length === 0) {
@@ -466,7 +472,6 @@ export default function JobsList({
                                                     handleDelete(jobItem.id)
                                             );
                                             modalConfirmation.current?.showModal();
-                                            // () => handleDelete(jobItem.id)
                                         }}
                                         className="my-auto mr-6 w-5"
                                     >

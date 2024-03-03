@@ -1,6 +1,7 @@
-import React, { useState, SyntheticEvent } from "react";
+import React, { useState, SyntheticEvent, useContext } from "react";
 import axios from "axios";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
+import AlertContext from "../Contexts/AlertContext";
 
 interface Props {
     modalAddJobForm: React.RefObject<HTMLDialogElement>;
@@ -58,6 +59,7 @@ const ModalAddJob = ({ modalAddJobForm }: Props) => {
             ),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["jobs"] });
+            setAlerts(alerts.concat("New job was added successfully"));
         },
     });
 
@@ -67,6 +69,11 @@ const ModalAddJob = ({ modalAddJobForm }: Props) => {
         /* Adding new job */
         newJobsMutation.mutate();
     };
+
+    /* Access to global context AlertContext */
+    const alertContext = useContext(AlertContext);
+    if (!alertContext) return;
+    const { alerts, setAlerts } = alertContext;
 
     return (
         <dialog ref={modalAddJobForm} id="modal_add_job" className="modal">

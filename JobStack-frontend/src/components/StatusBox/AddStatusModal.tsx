@@ -1,7 +1,8 @@
-import React, { useState, SyntheticEvent } from "react";
+import React, { useState, SyntheticEvent, useContext } from "react";
 import { StatusObject, NewStatusObject } from "../../types";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
 import serviceStatuses from "../../../services/serviceStatuses";
+import AlertContext from "../Contexts/AlertContext";
 
 interface PassObject {
     job_id: number;
@@ -34,6 +35,7 @@ const AddStatusModal = ({ modalAddStatusForm, job_id, statusArray }: Props) => {
             setStatusDesc("");
             setStatusDate(new Date().toISOString().split("T")[0]);
             queryClient.invalidateQueries({ queryKey: ["statuses"] });
+            setAlerts(alerts.concat("New stage was added successfully"));
         },
     });
 
@@ -59,6 +61,11 @@ const AddStatusModal = ({ modalAddStatusForm, job_id, statusArray }: Props) => {
 
         addStatusMutation.mutate(passObject);
     };
+
+    /* Access to global context AlertContext */
+    const alertContext = useContext(AlertContext);
+    if (!alertContext) return;
+    const { alerts, setAlerts } = alertContext;
 
     return (
         <dialog
