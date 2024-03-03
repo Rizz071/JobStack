@@ -1,7 +1,7 @@
 /* eslint-disable indent */
 import React, { useContext } from "react";
 import { MouseEventHandler, useEffect, useRef, useState } from "react";
-import { JobItem, StatusFilter, StatusObject } from "../../types";
+import { AlertsType, JobItem, StatusFilter, StatusObject } from "../../types";
 import thrashIcon from "../../assets/icons/thrash.svg";
 import editIcon from "../../assets/icons/edit.svg";
 import SearchField from "./SearchField";
@@ -77,6 +77,9 @@ export default function JobsList({
             setAlerts(alerts.concat("Deleted successfully"));
         },
     });
+
+    /* Access to global context AlertContext */
+    const { alerts, setAlerts } = useContext(AlertContext) as AlertsType;
 
     const [width, setWidth] = useState(window.innerWidth);
     const [height, setHeight] = useState(window.innerHeight);
@@ -269,11 +272,6 @@ export default function JobsList({
         });
         setCheckAll(false);
     };
-
-    /* Access to global context AlertContext */
-    const alertContext = useContext(AlertContext);
-    if (!alertContext) return;
-    const { alerts, setAlerts } = alertContext;
 
     /* Waiting for data arrival */
     if (((jobsList: JobItem[]) => jobsList).length === 0) {

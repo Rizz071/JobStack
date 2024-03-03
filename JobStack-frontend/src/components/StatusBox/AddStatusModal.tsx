@@ -1,5 +1,5 @@
 import React, { useState, SyntheticEvent, useContext } from "react";
-import { StatusObject, NewStatusObject } from "../../types";
+import { StatusObject, NewStatusObject, AlertsType } from "../../types";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
 import serviceStatuses from "../../../services/serviceStatuses";
 import AlertContext from "../Contexts/AlertContext";
@@ -63,9 +63,7 @@ const AddStatusModal = ({ modalAddStatusForm, job_id, statusArray }: Props) => {
     };
 
     /* Access to global context AlertContext */
-    const alertContext = useContext(AlertContext);
-    if (!alertContext) return;
-    const { alerts, setAlerts } = alertContext;
+    const { alerts, setAlerts } = useContext(AlertContext) as AlertsType;
 
     return (
         <dialog

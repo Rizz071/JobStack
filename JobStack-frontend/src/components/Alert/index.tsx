@@ -1,6 +1,7 @@
 import React from "react";
 import { useContext } from "react";
 import AlertContext from "../Contexts/AlertContext";
+import { AlertsType } from "../../types";
 
 interface Props {
     message: string;
@@ -8,9 +9,7 @@ interface Props {
 
 const Alert = ({ message }: Props) => {
     /* Access to global context AlertContext */
-    const alertContext = useContext(AlertContext);
-    if (!alertContext) return;
-    const { alerts, setAlerts } = alertContext;
+    const { alerts, setAlerts } = useContext(AlertContext) as AlertsType;
 
     setTimeout(() => {
         setAlerts(alerts.filter((alert) => alert !== message));

@@ -24,3 +24,8 @@ export interface StatusObject {
 export type NewStatusObject = Omit<StatusObject, "id" | "job_id">;
 
 export type StatusFilter = "all" | "in_progress" | "rejected" | "offer";
+
+export interface AlertsType {
+    alerts: string[];
+    setAlerts: React.Dispatch<React.SetStateAction<string[]>>;
+}

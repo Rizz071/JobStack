@@ -1,11 +1,7 @@
 /* eslint-disable indent */
 import React, { useState } from "react";
 import { createContext } from "react";
-
-interface AlertsType {
-    alerts: string[];
-    setAlerts: React.Dispatch<React.SetStateAction<string[]>>;
-}
+import { AlertsType } from "../../types";
 
 const AlertContext = createContext<AlertsType | null>(null);
 
