@@ -1,6 +1,6 @@
 import React, { useContext, useRef } from "react";
 import { useState } from "react";
-import { AlertsType, JobItem } from "../../types";
+import { JobItem } from "../../types";
 import { useNavigate, useParams } from "react-router-dom";
 import serviceJobs from "../../../services/serviceJobs";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
@@ -66,7 +66,7 @@ const DetailJobView = () => {
     };
 
     /* Access to global context AlertContext */
-    const { alerts, setAlerts } = useContext(AlertContext) as AlertsType;
+    const { alerts, setAlerts } = useContext(AlertContext);
 
     /* Waiting for data arrival */
     if (!currentJob) return null;

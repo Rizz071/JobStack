@@ -1,22 +1,15 @@
 import React, { useContext, useState } from "react";
 import serviceLogin from "../../../services/serviceLogin";
 import AlertContext from "../Contexts/AlertContext";
-import { AlertsType } from "../../types";
 import Alert from "../Alert";
 import UserContext from "../Contexts/UserContext";
-
-// interface Props {
-//     // user: LoggedUser | null;
-//     setUser: React.Dispatch<React.SetStateAction<LoggedUser | null>>;
-// }
 
 const Hero = () => {
     const [username, setUsername] = useState<string>("admin");
     const [password, setPassword] = useState<string>("11111");
 
     /* Access to global context AlertContext */
-    const alertsContext = useContext(AlertContext);
-    const { alerts, setAlerts } = useContext(AlertContext) as AlertsType;
+    const { alerts, setAlerts } = useContext(AlertContext);
 
     /* Access to global context UserContext */
     const { setUser } = useContext(UserContext);
@@ -49,8 +42,8 @@ const Hero = () => {
     return (
         <>
             <div className="ml-auto align-bottom">
-                {alertsContext &&
-                    alertsContext.alerts.map((alert, index) => (
+                {alerts &&
+                    alerts.map((alert, index) => (
                         <Alert key={index} message={alert} />
                     ))}
             </div>
@@ -59,9 +52,7 @@ const Hero = () => {
                     <div className="text-center lg:text-left">
                         <h1 className="text-5xl font-bold">Login now!</h1>
                         <p className="py-6">
-                            Provident cupiditate voluptatem et in. Quaerat
-                            fugiat ut assumenda excepturi exercitationem quasi.
-                            In deleniti eaque aut repudiandae et a id nisi.
+                            Just press Login button to enter!
                         </p>
                     </div>
                     <div className="card w-full max-w-sm shrink-0 bg-base-100 shadow-2xl">
@@ -75,7 +66,7 @@ const Hero = () => {
                                 </label>
                                 <input
                                     type="text"
-                                    placeholder="email"
+                                    placeholder="Login"
                                     className="input input-bordered"
                                     value={username}
                                     onChange={(event) =>

@@ -1,7 +1,7 @@
 /* eslint-disable indent */
 import React, { useContext } from "react";
 import { MouseEventHandler, useEffect, useRef, useState } from "react";
-import { AlertsType, JobItem, StatusFilter, StatusObject } from "../../types";
+import { JobItem, StatusFilter, StatusObject } from "../../types";
 import thrashIcon from "../../assets/icons/thrash.svg";
 import editIcon from "../../assets/icons/edit.svg";
 import SearchField from "./SearchField";
@@ -79,7 +79,7 @@ export default function JobsList({
     });
 
     /* Access to global context AlertContext */
-    const { alerts, setAlerts } = useContext(AlertContext) as AlertsType;
+    const { alerts, setAlerts } = useContext(AlertContext);
 
     const [width, setWidth] = useState(window.innerWidth);
     const [height, setHeight] = useState(window.innerHeight);

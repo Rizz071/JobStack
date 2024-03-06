@@ -3,7 +3,10 @@ import React, { useState } from "react";
 import { createContext } from "react";
 import { AlertsType } from "../../types";
 
-const AlertContext = createContext<AlertsType | null>(null);
+const AlertContext = createContext<AlertsType>({
+    alerts: [],
+    setAlerts: () => {},
+});
 
 interface Props {
     children: React.ReactNode;

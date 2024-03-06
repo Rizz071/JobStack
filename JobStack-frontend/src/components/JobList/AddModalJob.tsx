@@ -2,7 +2,6 @@ import React, { useState, SyntheticEvent, useContext } from "react";
 import axios from "axios";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
 import AlertContext from "../Contexts/AlertContext";
-import { AlertsType } from "../../types";
 
 interface Props {
     modalAddJobForm: React.RefObject<HTMLDialogElement>;
@@ -72,7 +71,7 @@ const ModalAddJob = ({ modalAddJobForm }: Props) => {
     };
 
     /* Access to global context AlertContext */
-    const { alerts, setAlerts } = useContext(AlertContext) as AlertsType;
+    const { alerts, setAlerts } = useContext(AlertContext);
 
     return (
         <dialog ref={modalAddJobForm} id="modal_add_job" className="modal">

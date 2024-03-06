@@ -24,7 +24,7 @@ const Dashboard = () => {
     const [headerHeight, setHeaderHeight] = useState<number>(0);
 
     /* Access to global context AlertContext */
-    const alertsContext = useContext(AlertContext);
+    const { alerts } = useContext(AlertContext);
 
     /* Access to global context UserContext */
     const { user } = useContext(UserContext);
@@ -122,8 +122,8 @@ const Dashboard = () => {
                         </div>
 
                         <div className="mt-auto align-bottom">
-                            {alertsContext &&
-                                alertsContext.alerts.map((alert, index) => (
+                            {alerts &&
+                                alerts.map((alert, index) => (
                                     <Alert key={index} message={alert} />
                                 ))}
                         </div>
