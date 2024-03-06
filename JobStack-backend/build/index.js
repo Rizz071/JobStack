@@ -7,12 +7,14 @@ const express_1 = __importDefault(require("express"));
 require("dotenv/config");
 const app = (0, express_1.default)();
 const cors_1 = __importDefault(require("cors"));
+const login_1 = __importDefault(require("./controllers/login"));
 const users_1 = __importDefault(require("./controllers/users"));
 const jobs_1 = __importDefault(require("./controllers/jobs"));
 const status_1 = __importDefault(require("./controllers/status"));
 app.use((0, cors_1.default)());
 app.use(express_1.default.json());
 /* Setup routers */
+app.use("/api/login", login_1.default);
 app.use("/api/users", users_1.default);
 app.use("/api/", jobs_1.default);
 app.use("/api/status/", status_1.default);

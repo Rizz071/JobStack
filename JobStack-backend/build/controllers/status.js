@@ -17,7 +17,7 @@ const router = express();
 const db_1 = __importDefault(require("../db"));
 /* Request statuses for multiple jobs by array of job_id */
 router.post("/multiple", (req, res, next) => {
-    console.log(req.body);
+    // console.log(req.body);
     void (() => __awaiter(void 0, void 0, void 0, function* () {
         try {
             const result = yield db_1.default.query(`SELECT *
