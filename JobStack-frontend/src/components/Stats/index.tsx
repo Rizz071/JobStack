@@ -78,7 +78,7 @@ const Stats = () => {
     //TODO compare jobs amount in this month to last month
 
     return (
-        <div className="stats w-full grid-flow-row-dense grid-cols-3 rounded-none shadow sm:grid-cols-3 md:grid-cols-6 md:gap-0">
+        <div className="stats mx-8 mt-4 grid-flow-row-dense grid-cols-3 gap-0 rounded-none shadow sm:grid-cols-3 md:mx-0 md:mt-0 md:w-full md:grid-cols-6 md:gap-0">
             <div className="stat">
                 <div className="stat-figure text-secondary">
                     <svg

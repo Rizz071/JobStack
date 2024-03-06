@@ -2,18 +2,14 @@ import { ChevronDoubleUpIcon } from "@heroicons/react/24/outline";
 import React, { useContext } from "react";
 import { Navigate } from "react-router-dom";
 import UserContext from "../Contexts/UserContext";
+import serviceLogin from "../../../services/serviceLogin";
 
 const SidePanel = () => {
     /* Access to global context UserContext */
     const { user, setUser } = useContext(UserContext);
 
-    const logoutUser = () => {
-        window.localStorage.removeItem("loggedUser");
-        setUser(null);
-    };
-
     return (
-        <div className="hidden h-screen shrink-0 grow-0 flex-col bg-neutral font-light text-neutral-content md:w-1/4 lg:flex lg:w-1/5 xl:w-1/6">
+        <div className="hidden h-full shrink-0 grow-0 flex-col bg-neutral font-light text-neutral-content md:w-1/4 lg:flex lg:w-1/5 xl:w-1/6">
             <div
                 id="menu-content"
                 className="mx-auto flex h-full flex-col gap-y-10"
@@ -58,7 +54,11 @@ const SidePanel = () => {
                 </div> */}
                 {user && (
                     <div id="setting" className="mx-auto mb-10 mt-auto text-lg">
-                        <button onClick={logoutUser}>Logout</button>
+                        <button
+                            onClick={() => serviceLogin.logoutUser(setUser)}
+                        >
+                            Logout
+                        </button>
                     </div>
                 )}
             </div>

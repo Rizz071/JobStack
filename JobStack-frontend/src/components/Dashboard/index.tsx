@@ -87,7 +87,7 @@ const Dashboard = () => {
                 id="main-content-field"
                 className="flex flex-col justify-center"
             >
-                <div ref={headerRef} className="">
+                <div ref={headerRef} className="mx-auto">
                     <Stats />
                 </div>
 
@@ -112,7 +112,7 @@ const Dashboard = () => {
                     />
 
                     <div className="flex flex-col gap-y-8">
-                        <div className="shrink-0">
+                        <div className="shrink-1">
                             {selectedJob && (
                                 <StatusBox
                                     job_id={selectedJob}

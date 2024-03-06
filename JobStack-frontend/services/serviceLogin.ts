@@ -63,4 +63,11 @@ const requestUser = async ({
     return null;
 };
 
-export default { requestUser };
+const logoutUser = (
+    setUser: React.Dispatch<React.SetStateAction<LoggedUser | null>>
+) => {
+    window.localStorage.removeItem("loggedUser");
+    setUser(null);
+};
+
+export default { requestUser, logoutUser };
