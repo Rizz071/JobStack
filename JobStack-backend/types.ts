@@ -4,6 +4,8 @@ export interface UserObject {
     password: string;
 }
 
+export type LoginUserObject = Omit<UserObject, "fullname">;
+
 export interface JobObject {
     job_title: string;
     job_desc: string;

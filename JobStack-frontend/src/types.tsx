@@ -29,3 +29,19 @@ export interface AlertsType {
     alerts: string[];
     setAlerts: React.Dispatch<React.SetStateAction<string[]>>;
 }
+
+export interface LoggedUser {
+    username: string;
+    fullname: string;
+    token: string;
+}
+
+export interface LoggingUser {
+    username: string;
+    password: string;
+}
+
+export interface UsersType {
+    user: LoggedUser | null;
+    setUser: React.Dispatch<React.SetStateAction<LoggedUser | null>>;
+}

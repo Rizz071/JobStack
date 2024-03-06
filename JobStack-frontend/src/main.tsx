@@ -5,6 +5,7 @@ import App from "./App";
 import { BrowserRouter } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { AlertContextProvider } from "./components/Contexts/AlertContext";
+import { UserContextProvider } from "./components/Contexts/UserContext";
 
 const queryClient = new QueryClient();
 
@@ -15,9 +16,11 @@ root.render(
     <React.StrictMode>
         <BrowserRouter>
             <QueryClientProvider client={queryClient}>
-                <AlertContextProvider>
-                    <App />
-                </AlertContextProvider>
+                <UserContextProvider>
+                    <AlertContextProvider>
+                        <App />
+                    </AlertContextProvider>
+                </UserContextProvider>
             </QueryClientProvider>
         </BrowserRouter>
     </React.StrictMode>

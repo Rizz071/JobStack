@@ -8,7 +8,7 @@ import { StatusObject } from "../types";
 
 /* Request statuses for multiple jobs by array of job_id */
 router.post("/multiple", (req: Request, res: Response, next: NextFunction) => {
-    console.log(req.body);
+    // console.log(req.body);
     void (async () => {
         try {
             const result: unknown = await db.query(

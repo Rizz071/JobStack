@@ -3,6 +3,7 @@ import "dotenv/config";
 const app = express();
 import cors from "cors";
 
+import loginRouter from "./controllers/login";
 import usersRouter from "./controllers/users";
 import jobsRouter from "./controllers/jobs";
 import statusRouter from "./controllers/status";
@@ -11,6 +12,7 @@ app.use(cors());
 app.use(express.json());
 
 /* Setup routers */
+app.use("/api/login", loginRouter);
 app.use("/api/users", usersRouter);
 app.use("/api/", jobsRouter);
 app.use("/api/status/", statusRouter);
