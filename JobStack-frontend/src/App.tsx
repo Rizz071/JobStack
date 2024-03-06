@@ -38,7 +38,7 @@ function App() {
                     {/* <Route index element={<Home />} /> */}
                 </Route>
                 <Route path="/login" element={<Hero />}></Route>
-                <Route path="/dashboard" element={<Dashboard />}></Route>
+                {/* <Route path="/dashboard" element={<Dashboard />}></Route> */}
                 {/* <Route path="/login" element={<Hero />}></Route> */}
                 <Route
                     path="/detailview/:id"

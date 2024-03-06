@@ -83,57 +83,56 @@ const Dashboard = () => {
         if (!user) return <Navigate to="/" />;
 
         return (
-            <>
-                <div
-                    id="main-content-field"
-                    className="flex flex-col justify-center"
-                >
-                    <div ref={headerRef} className="">
-                        <Stats />
-                    </div>
+            <div
+                id="main-content-field"
+                className="flex flex-col justify-center"
+            >
+                <div ref={headerRef} className="">
+                    <Stats />
+                </div>
 
-                    <div className="mt-8 flex flex-col justify-between md:flex-row md:gap-x-10">
-                        <JobsList
-                            jobsList={jobsList}
-                            statusList={statusList}
-                            handleShowAddJobForm={handleShowAddJobForm}
-                            pagesTotalAmount={pagesTotalAmount}
-                            setPagesTotalAmount={setPagesTotalAmount}
-                            currentPage={currentPage}
-                            setCurrentPage={setCurrentPage}
-                            jobsPerPage={jobsPerPage}
-                            setJobsPerPage={setJobsPerPage}
-                            selectedJob={selectedJob}
-                            setSelectedJob={setSelectedJob}
-                            statusFilter={statusFilter}
-                            setStatusFilter={setStatusFilter}
-                            headerHeight={headerHeight}
-                            setHeaderHeight={setHeaderHeight}
-                            headerRef={headerRef}
-                        />
+                <div className="mt-8 flex flex-col justify-between md:flex-row md:gap-x-10">
+                    <JobsList
+                        jobsList={jobsList}
+                        statusList={statusList}
+                        handleShowAddJobForm={handleShowAddJobForm}
+                        pagesTotalAmount={pagesTotalAmount}
+                        setPagesTotalAmount={setPagesTotalAmount}
+                        currentPage={currentPage}
+                        setCurrentPage={setCurrentPage}
+                        jobsPerPage={jobsPerPage}
+                        setJobsPerPage={setJobsPerPage}
+                        selectedJob={selectedJob}
+                        setSelectedJob={setSelectedJob}
+                        statusFilter={statusFilter}
+                        setStatusFilter={setStatusFilter}
+                        headerHeight={headerHeight}
+                        setHeaderHeight={setHeaderHeight}
+                        headerRef={headerRef}
+                    />
 
-                        <div className="flex flex-col gap-y-8">
-                            <div className="shrink-0">
-                                {selectedJob && (
-                                    <StatusBox
-                                        job_id={selectedJob}
-                                        statusList={statusList}
-                                    />
-                                )}
-                            </div>
+                    <div className="flex flex-col gap-y-8">
+                        <div className="shrink-0">
+                            {selectedJob && (
+                                <StatusBox
+                                    job_id={selectedJob}
+                                    statusList={statusList}
+                                />
+                            )}
+                        </div>
 
-                            <div className="mt-auto align-bottom">
-                                {alertsContext &&
-                                    alertsContext.alerts.map((alert, index) => (
-                                        <Alert key={index} message={alert} />
-                                    ))}
-                            </div>
+                        <div className="mt-auto align-bottom">
+                            {alertsContext &&
+                                alertsContext.alerts.map((alert, index) => (
+                                    <Alert key={index} message={alert} />
+                                ))}
                         </div>
                     </div>
                 </div>
-            </>
+            </div>
         );
     }
+    return null;
 };
 
 export default Dashboard;
