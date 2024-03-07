@@ -87,7 +87,7 @@ const Dashboard = () => {
                 id="main-content-field"
                 className="flex flex-col justify-center"
             >
-                <div ref={headerRef} className="mx-auto">
+                <div ref={headerRef} className="flex w-full justify-center">
                     <Stats />
                 </div>
 
