@@ -74,7 +74,7 @@ const Stats = () => {
     //TODO compare jobs amount in this month to last month
 
     return (
-        <div className="stats mx-8 mt-4 grid-flow-row-dense grid-cols-3 gap-0 rounded-none shadow sm:grid-cols-6 md:mx-0 md:mt-0 md:w-full md:gap-0">
+        <div className="stats mx-8 mt-4 grid-flow-row-dense grid-cols-3 rounded-none shadow sm:grid-cols-6 md:mx-0 md:mt-0 md:w-full md:gap-0">
             <div className="stat">
                 <div className="stat-figure text-secondary">
                     <svg
@@ -94,7 +94,9 @@ const Stats = () => {
                 <div className="stat-title text-xs md:text-sm">
                     Total applied
                 </div>
-                <div className="stat-value text-3xl">{totalJobsAmount}</div>
+                <div className="stat-value text-3xl font-semibold">
+                    {totalJobsAmount}
+                </div>
                 <div className="stat-desc">
                     {firstDate.toLocaleString("default", {
                         month: "short",
@@ -128,7 +130,9 @@ const Stats = () => {
                     <div className="stat-title text-xs md:text-sm">
                         Avg per day
                     </div>
-                    <div className="stat-value text-3xl">{avgJobs_perDay}</div>
+                    <div className="stat-value text-3xl font-semibold">
+                        {avgJobs_perDay}
+                    </div>
                     <div className="stat-desc">↘︎ 90 (14%)</div>
                 </div>
             </div>
@@ -152,7 +156,7 @@ const Stats = () => {
                 <div className="stat-title text-xs md:text-sm">
                     Success rate
                 </div>
-                <div className="stat-value text-3xl">
+                <div className="stat-value text-3xl font-semibold">
                     {(offeredAmount / totalJobsAmount).toFixed(1)} %
                 </div>
                 <div className="stat-desc">↘︎ 90 (14%)</div>
@@ -178,7 +182,9 @@ const Stats = () => {
                     <div className="stat-title text-xs md:text-sm">
                         In process
                     </div>
-                    <div className="stat-value text-3xl">{inProcessAmount}</div>
+                    <div className="stat-value text-3xl font-semibold">
+                        {inProcessAmount}
+                    </div>
                     <div className="stat-desc">↗︎ 400 (22%)</div>
                 </div>
             </div>
@@ -200,7 +206,9 @@ const Stats = () => {
                     </svg>
                 </div>
                 <div className="stat-title text-xs md:text-sm">Offers</div>
-                <div className="stat-value text-3xl">{offeredAmount}</div>
+                <div className="stat-value text-3xl font-semibold">
+                    {offeredAmount}
+                </div>
                 <div className="stat-desc">↘︎ 90 (14%)</div>
             </div>
 
@@ -221,7 +229,9 @@ const Stats = () => {
                     </svg>
                 </div>
                 <div className="stat-title text-xs md:text-sm">Rejected</div>
-                <div className="stat-value text-3xl">{rejectedAmount}</div>
+                <div className="stat-value text-3xl font-semibold">
+                    {rejectedAmount}
+                </div>
                 <div className="stat-desc">↘︎ 90 (14%)</div>
             </div>
         </div>
