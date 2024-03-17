@@ -54,6 +54,7 @@ const requestUser = async ({
             ? response.data
             : null;
 
+        /* Saving user to local storage */
         window.localStorage.setItem("loggedUser", JSON.stringify(receivedUser));
 
         /* Returning LoggedUser object or null if user wasn't founded */
