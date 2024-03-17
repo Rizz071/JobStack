@@ -89,7 +89,7 @@ const Dashboard = () => {
 
         const statusList: StatusObject[] = result_jobsStatuses.data;
 
-        if (!user) return <Navigate to="/login" />;
+        if (!user) return <Navigate to="/index" />;
 
         return (
             <div
@@ -141,7 +141,7 @@ const Dashboard = () => {
             </div>
         );
     }
-    return <Navigate to="/login" />;
+    return <Navigate to="/index" />;
 };
 
 export default Dashboard;

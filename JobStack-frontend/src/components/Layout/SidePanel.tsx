@@ -3,6 +3,8 @@ import { Navigate } from "react-router-dom";
 import UserContext from "../Contexts/UserContext";
 import serviceLogin from "../../../services/serviceLogin";
 
+import imgLogo from "../../assets/images/Logo-6.jpeg";
+
 const SidePanel = () => {
     /* Access to global context UserContext */
     const { user, setUser } = useContext(UserContext);
@@ -20,7 +22,7 @@ const SidePanel = () => {
                     >
                         {/* <ChevronDoubleUpIcon className="w-14" /> */}
                         <img
-                            src="src\assets\images\Logo-6.jpeg"
+                            src={imgLogo}
                             alt="JobStack Application Logo"
                             className="h-40 rounded "
                         />

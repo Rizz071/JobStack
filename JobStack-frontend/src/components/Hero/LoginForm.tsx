@@ -122,9 +122,9 @@ const LoginForm = ({ demoLoginButtonRef }: Props) => {
                         </button>
                         <button
                             type="button"
-                            className="btn btn-outline btn-success btn-sm mt-4"
+                            className="btn btn-ghost btn-sm mt-2"
                         >
-                            <Link to="/registration">
+                            <Link to="/registration" className="prose prose-sm">
                                 New user registration
                             </Link>
                         </button>

@@ -9,7 +9,7 @@ export default function NavBar() {
     /* Access to global context UserContext */
     const { user, setUser } = useContext(UserContext);
 
-    if (!user) return;
+    if (!user) return <></>;
 
     return (
         <>

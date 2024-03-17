@@ -1,6 +1,14 @@
 import React, { useRef } from "react";
 import LoginForm from "./LoginForm";
 
+import imgHipster from "../../assets/images/Hipster4.jpeg";
+import imgCategorization from "../../assets/images/Categorization.jpeg";
+import imgEvent from "../../assets/images/Event.jpeg";
+import imgFreeSoftware from "../../assets/images/FreeSoftware1.jpeg";
+import imgSearch from "../../assets/images/Search1.jpeg";
+import imgDuplicates from "../../assets/images/Duplicates.jpeg";
+import imgBackup from "../../assets/images/Backup2.jpeg";
+
 const Hero = () => {
     const demoLoginButtonRef = useRef<HTMLButtonElement>(null);
 
@@ -21,7 +29,7 @@ const Hero = () => {
                         <div className="mx-auto flex flex-col justify-between gap-5 md:mx-0 md:flex-row">
                             <figure className="mb-6 mt-auto lg:hidden xl:block">
                                 <img
-                                    src="src\assets\images\Hipster4.jpeg"
+                                    src={imgHipster}
                                     alt="Hipster standing"
                                     className="rounded"
                                 />
@@ -60,7 +68,7 @@ const Hero = () => {
                         <div className="card w-72 border bg-base-100 shadow-xl">
                             <figure>
                                 <img
-                                    src="src\assets\images\Categorization.jpeg"
+                                    src={imgCategorization}
                                     alt="Categorization"
                                 />
                             </figure>
@@ -77,10 +85,7 @@ const Hero = () => {
 
                         <div className="card w-72 border bg-base-100 shadow-xl">
                             <figure>
-                                <img
-                                    src="src\assets\images\Event.jpeg"
-                                    alt="Event tracking"
-                                />
+                                <img src={imgEvent} alt="Event tracking" />
                             </figure>
                             <div className="card-body">
                                 <h2 className="card-title">Event Tracking</h2>
@@ -95,8 +100,8 @@ const Hero = () => {
                         <div className="card w-72 border bg-base-100 shadow-xl">
                             <figure>
                                 <img
-                                    src="src\assets\images\FreeSoftware1.jpeg"
-                                    alt="Search"
+                                    src={imgFreeSoftware}
+                                    alt="Free Software"
                                 />
                             </figure>
                             <div className="card-body">
@@ -115,10 +120,7 @@ const Hero = () => {
                     >
                         <div className="card w-72 border bg-base-100 shadow-xl">
                             <figure>
-                                <img
-                                    src="src\assets\images\Search1.jpeg"
-                                    alt="Search"
-                                />
+                                <img src={imgSearch} alt="Search" />
                             </figure>
                             <div className="card-body">
                                 <h2 className="card-title">Efficient Search</h2>
@@ -132,7 +134,7 @@ const Hero = () => {
                         <div className="card w-72 border bg-base-100 shadow-xl">
                             <figure>
                                 <img
-                                    src="src\assets\images\Duplicates.jpeg"
+                                    src={imgDuplicates}
                                     alt="Duplicates detection"
                                 />
                             </figure>
@@ -149,10 +151,7 @@ const Hero = () => {
 
                         <div className="card w-72 border bg-base-100 shadow-xl">
                             <figure>
-                                <img
-                                    src="src\assets\images\Backup2.jpeg"
-                                    alt="Backup"
-                                />
+                                <img src={imgBackup} alt="Backup" />
                             </figure>
                             <div className="card-body">
                                 <h2 className="card-title">Data Backup</h2>
@@ -170,10 +169,14 @@ const Hero = () => {
                     id="footer-wrapper"
                     className="prose prose-xl mx-auto flex flex-col"
                 >
-                    <p className="text-center">
+                    <p className="font-base text-center">
                         Take control of your hiring process and streamline your
                         workflow with our powerful job application management
-                        tool. Sign up today and experience the difference!
+                        tool.
+                        <br />
+                        <strong>
+                            Sign up today and experience the difference!
+                        </strong>
                     </p>
                     <button
                         className="btn btn-success mx-auto w-1/2"
