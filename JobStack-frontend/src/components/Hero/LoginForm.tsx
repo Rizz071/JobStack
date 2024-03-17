@@ -10,8 +10,8 @@ interface Props {
 }
 
 const LoginForm = ({ demoLoginButtonRef }: Props) => {
-    const [username, setUsername] = useState<string>("admin");
-    const [password, setPassword] = useState<string>("11111");
+    const [username, setUsername] = useState<string>("");
+    const [password, setPassword] = useState<string>("");
 
     /* Access to global context AlertContext */
     // const { alerts, setAlerts } = useContext(AlertContext);
