@@ -62,6 +62,9 @@ export default function JobsList({
 
     const navigate = useNavigate();
 
+    /* Access to global context UserContext */
+    // const { user } = useContext(UserContext);
+
     /* Part of Confirmation Dialog's implementation */
     const modalConfirmation = useRef<HTMLDialogElement>(null);
     const [acceptFunc, setAcceptFunc] = useState<() => Promise<void>>(
@@ -72,8 +75,15 @@ export default function JobsList({
 
     const deleteMutation = useMutation({
         mutationFn: (id: number) => serviceJobs.deleteJob(id),
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["jobs"] });
+        onSuccess: (data, variables) => {
+            queryClient.invalidateQueries();
+
+            const id = variables;
+            /* If we have not any jobs in list - don't select any jobs */
+            if (jobsList.length !== 0) {
+                if (selectedJob === id) setSelectedJob(jobsList[0].id);
+            }
+
             setAlerts(alerts.concat("Deleted successfully"));
         },
     });
@@ -278,6 +288,11 @@ export default function JobsList({
         console.log("waiting for data arrival");
         return null;
     }
+
+    /* If we have not any jobs in list - don't select any jobs */
+    // if (jobsList.length !== 0) {
+    //     !selectedJob ? setSelectedJob(jobsList[0].id) : undefined;
+    // }
 
     return (
         <div className="mx-8 flex grow flex-col md:mx-0">

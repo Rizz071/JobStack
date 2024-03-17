@@ -68,8 +68,9 @@ const ModalAddJob = ({ modalAddJobForm }: Props) => {
             );
         },
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["jobs", user?.id] });
-            queryClient.invalidateQueries({ queryKey: ["statuses"] });
+            queryClient.invalidateQueries();
+            // queryClient.invalidateQueries({ queryKey: ["jobs", user?.id] });
+            // queryClient.invalidateQueries({ queryKey: ["statuses"] });
             setAlerts(alerts.concat("New job was added successfully"));
         },
     });
@@ -79,6 +80,8 @@ const ModalAddJob = ({ modalAddJobForm }: Props) => {
 
         /* Adding new job */
         newJobsMutation.mutate();
+
+        modalAddJobForm.current?.close();
     };
 
     return (
@@ -169,21 +172,21 @@ const ModalAddJob = ({ modalAddJobForm }: Props) => {
                             >
                                 Cancel
                             </button>
-                            <button
+                            {/* <button
                                 type="button"
                                 onClick={handleSubmit}
                                 className="btn btn-active btn-sm"
                             >
                                 Save
-                            </button>
+                            </button> */}
                             <button
                                 type="submit"
-                                onClick={() => {
-                                    modalAddJobForm.current?.close();
-                                }}
+                                // onClick={() => {
+                                //     modalAddJobForm.current?.close();
+                                // }}
                                 className="btn btn-active btn-sm"
                             >
-                                Save and close
+                                Save
                             </button>
                         </div>
                     </div>

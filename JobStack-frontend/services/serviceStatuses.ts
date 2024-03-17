@@ -67,8 +67,10 @@ const requestMultipleJobStatusList = async (jobs_array: number[]) => {
             typeof response !== "object" ||
             !("data" in response) ||
             !Array.isArray(response.data)
-        )
-            return new Error("error while retrieving job list from server");
+        ) {
+            console.error("error while retrieving job list from server");
+            return [] as StatusObject[];
+        }
 
         const data: unknown[] = response.data;
 
@@ -79,7 +81,7 @@ const requestMultipleJobStatusList = async (jobs_array: number[]) => {
             console.error("Error while requesting statuses from backend");
         }
     }
-    return [];
+    return [] as StatusObject[];
 };
 
 const addStatus = async (job_id: number, newStatusObject: NewStatusObject) => {

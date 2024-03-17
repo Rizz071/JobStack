@@ -25,10 +25,10 @@ function App() {
 
     return (
         <>
-            {user && <Navigate to="/dashboard" />}
+            {user ? <Navigate to="/dashboard" /> : <Navigate to="/login" />}
             <Routes>
                 <Route path="/" element={<Layout />}>
-                    <Route
+                    {/* <Route
                         index
                         element={
                             user ? (
@@ -37,7 +37,7 @@ function App() {
                                 <Navigate to="/login" />
                             )
                         }
-                    />
+                    /> */}
                     <Route path="/login" element={<Hero />} />
                     <Route path="/dashboard" element={<Dashboard />} />
                     <Route path="/registration" element={<Registration />} />

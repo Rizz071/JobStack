@@ -49,6 +49,7 @@ const Dashboard = () => {
         "jobsList fetching",
         JSON.parse(JSON.stringify(result_jobsList))
     );
+
     /* Requesting jobs statuses data from server via REST API,
      * but first waiting for result_jobsList is loaded successfully */
     const result_jobsStatuses = useQuery({
@@ -74,17 +75,19 @@ const Dashboard = () => {
 
     // We can assume by this point that `isSuccess === true`
 
-    if (result_jobsList.isSuccess && result_jobsStatuses.isSuccess) {
+    if (
+        result_jobsList.isSuccess &&
+        result_jobsStatuses.isSuccess &&
+        !result_jobsStatuses.isError
+    ) {
         const jobsList: JobItem[] = result_jobsList.data;
 
         /* If we have not any jobs in list - don't select any jobs */
         if (jobsList.length !== 0) {
-            !selectedJob ? setSelectedJob(jobsList.slice(-1)[0].id) : undefined;
+            !selectedJob ? setSelectedJob(jobsList[0].id) : undefined;
         }
 
-        // TODO Unsafe!!!
-        const statusList: StatusObject[] =
-            result_jobsStatuses.data as StatusObject[];
+        const statusList: StatusObject[] = result_jobsStatuses.data;
 
         if (!user) return <Navigate to="/login" />;
 
@@ -118,7 +121,7 @@ const Dashboard = () => {
                     />
 
                     <div className="flex flex-col gap-y-8">
-                        <div className="shrink-1">
+                        <div className="shrink-0">
                             {selectedJob && (
                                 <StatusBox
                                     job_id={selectedJob}
