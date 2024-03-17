@@ -1,4 +1,3 @@
-import { ChevronDoubleUpIcon } from "@heroicons/react/24/outline";
 import React, { useContext } from "react";
 import { Navigate } from "react-router-dom";
 import UserContext from "../Contexts/UserContext";
@@ -14,17 +13,22 @@ const SidePanel = () => {
                 id="menu-content"
                 className="mx-auto flex h-full flex-col gap-y-10"
             >
-                <div id="logo" className="mx-auto mb-10 mt-10">
+                <div id="logo" className="mx-auto mt-8">
                     <button
                         className="flex flex-col items-center"
                         onClick={() => <Navigate to="/dashboard" />}
                     >
-                        <ChevronDoubleUpIcon className="w-14" />
-                        <p className="text-2xl font-light">Job Stack</p>
+                        {/* <ChevronDoubleUpIcon className="w-14" /> */}
+                        <img
+                            src="src\assets\images\Logo-6.jpeg"
+                            alt="JobStack Application Logo"
+                            className="h-40 rounded "
+                        />
+                        {/* <p className="text-2xl font-light">Job Stack</p> */}
                     </button>
                 </div>
                 {user && (
-                    <div className="text-lg">
+                    <div className="prose prose-xl mx-auto text-base-100">
                         {
                             ["Greetings", "Welcome", "Good day", "Hello"][
                                 Math.floor(Math.random() * 4)
@@ -55,6 +59,7 @@ const SidePanel = () => {
                 {user && (
                     <div id="setting" className="mx-auto mb-10 mt-auto text-lg">
                         <button
+                            className="prose prose-xl mx-auto text-base-100"
                             onClick={() => serviceLogin.logoutUser(setUser)}
                         >
                             Logout

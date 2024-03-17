@@ -1,120 +1,192 @@
-import React, { useContext, useState } from "react";
-import serviceLogin from "../../../services/serviceLogin";
-import AlertContext from "../Contexts/AlertContext";
-import Alert from "../Alert";
-import UserContext from "../Contexts/UserContext";
-import { Link } from "react-router-dom";
+import React, { useRef } from "react";
+import LoginForm from "./LoginForm";
 
 const Hero = () => {
-    const [username, setUsername] = useState<string>("admin");
-    const [password, setPassword] = useState<string>("11111");
-
-    /* Access to global context AlertContext */
-    const { alerts, setAlerts } = useContext(AlertContext);
-
-    /* Access to global context UserContext */
-    const { setUser } = useContext(UserContext);
-
-    const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-
-        const loggedUser = await serviceLogin.requestUser({
-            username,
-            password,
-        });
-
-        if (loggedUser) {
-            window.localStorage.setItem(
-                "loggedUser",
-                JSON.stringify(loggedUser)
-            );
-
-            setUsername("");
-            setPassword("");
-
-            setUser(loggedUser);
-
-            // setAlerts(alerts.concat("Login successfull"));
-        } else {
-            setAlerts(alerts.concat("Login failed"));
-        }
-    };
+    const demoLoginButtonRef = useRef<HTMLButtonElement>(null);
 
     return (
-        <>
-            <div className="ml-auto align-bottom">
-                {alerts &&
-                    alerts.map((alert, index) => (
-                        <Alert key={index} message={alert} />
-                    ))}
-            </div>
-            <div className="hero my-auto bg-base-200">
-                <div className="hero-content flex-col lg:flex-row-reverse">
-                    <div className="text-center lg:text-left">
-                        <h1 className="text-5xl font-bold">Login now!</h1>
-                        <p className="py-6">
-                            Just press Login button to enter!
-                        </p>
-                    </div>
-                    <div className="card w-full max-w-sm shrink-0 bg-base-100 shadow-2xl">
-                        <form
-                            className="card-body"
-                            onSubmit={(event) => handleLogin(event)}
-                        >
-                            <div className="form-control">
-                                <label className="label">
-                                    <span className="label-text">Email</span>
-                                </label>
-                                <input
-                                    type="text"
-                                    placeholder="Login"
-                                    className="input input-bordered"
-                                    value={username}
-                                    onChange={(event) =>
-                                        setUsername(event.target.value)
-                                    }
-                                    // required
+        <div id="background" className="border bg-base-200 ">
+            <div
+                id="wrapper"
+                className="xl:4/5 mx-auto flex w-full flex-col justify-between gap-5 rounded-xl bg-base-100 p-10 shadow-2xl sm:mt-10 lg:p-20 2xl:w-3/5"
+            >
+                <div
+                    id="first-block"
+                    className="flex flex-col justify-between gap-10 lg:flex-row"
+                >
+                    <article className="prose prose-sm flex flex-col flex-wrap md:prose-base">
+                        <h1 className="text-center lg:text-left">
+                            Welcome to our job application management platform!
+                        </h1>
+                        <div className="mx-auto flex flex-col justify-between gap-5 md:mx-0 md:flex-row">
+                            <figure className="mb-6 mt-auto lg:hidden xl:block">
+                                <img
+                                    src="src\assets\images\Hipster4.jpeg"
+                                    alt="Hipster standing"
+                                    className="rounded"
                                 />
-                            </div>
-                            <div className="form-control">
-                                <label className="label">
-                                    <span className="label-text">Password</span>
-                                </label>
-                                <input
-                                    type="password"
-                                    placeholder="password"
-                                    className="input input-bordered"
-                                    value={password}
-                                    onChange={(event) =>
-                                        setPassword(event.target.value)
-                                    }
-                                    // required
-                                />
-                                <label className="label">
-                                    <a
-                                        href="#"
-                                        className="link-hover link label-text-alt"
-                                    >
-                                        Forgot password?
-                                    </a>
-                                </label>
-                            </div>
-                            <div className="form-control mt-6">
-                                <button
-                                    type="submit"
-                                    className="btn btn-primary"
-                                >
-                                    Login
-                                </button>
-                            </div>
-                            <Link to="/registration">
-                                New user registration
-                            </Link>
-                        </form>
+                            </figure>
+                            <p className="font-base text-justify">
+                                Are you tired of sifting through endless job
+                                applications and losing track of important
+                                details?
+                                <br />
+                                <br />
+                                Our web application is here to save the day!
+                                With our user-friendly interface, you can easily
+                                organize job postings, track application
+                                responses, quickly search through candidate
+                                profiles, and identify duplicate applications.
+                            </p>
+                        </div>
+                    </article>
+
+                    <div className="mx-auto w-full md:w-72 lg:mx-0">
+                        <LoginForm demoLoginButtonRef={demoLoginButtonRef} />
                     </div>
                 </div>
+
+                <div
+                    id="cards-wrapper"
+                    className="flex flex-col justify-between gap-10"
+                >
+                    <div className="prose mx-auto lg:mx-0">
+                        <h1>Key features</h1>
+                    </div>
+                    <div
+                        id="cards-wrapper-line-1"
+                        className="mx-auto flex flex-col justify-between gap-10 lg:mx-0 lg:flex-row"
+                    >
+                        <div className="card w-72 border bg-base-100 shadow-xl">
+                            <figure>
+                                <img
+                                    src="src\assets\images\Categorization.jpeg"
+                                    alt="Categorization"
+                                />
+                            </figure>
+                            <div className="card-body">
+                                <h2 className="card-title">
+                                    Easy Categorization
+                                </h2>
+                                <p>
+                                    Organize job postings into customizable
+                                    categories for efficient management.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div className="card w-72 border bg-base-100 shadow-xl">
+                            <figure>
+                                <img
+                                    src="src\assets\images\Event.jpeg"
+                                    alt="Event tracking"
+                                />
+                            </figure>
+                            <div className="card-body">
+                                <h2 className="card-title">Event Tracking</h2>
+                                <p>
+                                    Stay updated with real-time notifications on
+                                    application responses and other important
+                                    events.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div className="card w-72 border bg-base-100 shadow-xl">
+                            <figure>
+                                <img
+                                    src="src\assets\images\FreeSoftware1.jpeg"
+                                    alt="Search"
+                                />
+                            </figure>
+                            <div className="card-body">
+                                <h2 className="card-title">Free Software</h2>
+                                <p>
+                                    This software is absolutely free and is
+                                    provided to the user with a GPL license.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div
+                        id="cards-wrapper-line-2"
+                        className="mx-auto flex flex-col justify-between gap-10 lg:mx-0 lg:flex-row"
+                    >
+                        <div className="card w-72 border bg-base-100 shadow-xl">
+                            <figure>
+                                <img
+                                    src="src\assets\images\Search1.jpeg"
+                                    alt="Search"
+                                />
+                            </figure>
+                            <div className="card-body">
+                                <h2 className="card-title">Efficient Search</h2>
+                                <p>
+                                    Find the perfect candidate with our fast and
+                                    intuitive search functionality.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div className="card w-72 border bg-base-100 shadow-xl">
+                            <figure>
+                                <img
+                                    src="src\assets\images\Duplicates.jpeg"
+                                    alt="Duplicates detection"
+                                />
+                            </figure>
+                            <div className="card-body">
+                                <h2 className="card-title">
+                                    Duplicate Detection
+                                </h2>
+                                <p>
+                                    Avoid confusion by identifying and managing
+                                    duplicate applications effortlessly.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div className="card w-72 border bg-base-100 shadow-xl">
+                            <figure>
+                                <img
+                                    src="src\assets\images\Backup2.jpeg"
+                                    alt="Backup"
+                                />
+                            </figure>
+                            <div className="card-body">
+                                <h2 className="card-title">Data Backup</h2>
+                                <p>
+                                    Never worry about losing important
+                                    information. Our app allows you to securely
+                                    back up your data for peace of mind.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr />
+                <div
+                    id="footer-wrapper"
+                    className="prose prose-xl mx-auto flex flex-col"
+                >
+                    <p className="text-center">
+                        Take control of your hiring process and streamline your
+                        workflow with our powerful job application management
+                        tool. Sign up today and experience the difference!
+                    </p>
+                    <button
+                        className="btn btn-success mx-auto w-1/2"
+                        onClick={() =>
+                            demoLoginButtonRef.current &&
+                            demoLoginButtonRef.current.click()
+                        }
+                    >
+                        Demo Login
+                    </button>
+                </div>
             </div>
-        </>
+        </div>
     );
 };
 

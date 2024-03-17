@@ -27,18 +27,8 @@ function App() {
         <>
             {user ? <Navigate to="/dashboard" /> : <Navigate to="/login" />}
             <Routes>
+                <Route path="/login" element={<Hero />} />
                 <Route path="/" element={<Layout />}>
-                    {/* <Route
-                        index
-                        element={
-                            user ? (
-                                <Navigate to="/dashboard" />
-                            ) : (
-                                <Navigate to="/login" />
-                            )
-                        }
-                    /> */}
-                    <Route path="/login" element={<Hero />} />
                     <Route path="/dashboard" element={<Dashboard />} />
                     <Route path="/registration" element={<Registration />} />
                     <Route

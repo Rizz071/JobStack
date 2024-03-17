@@ -11,7 +11,7 @@ const MainPanel = () => {
 
             <div
                 id="main-field-with-margins"
-                className="flex shrink-0 flex-col justify-center md:m-8 xl:mx-auto xl:w-5/6"
+                className="flex shrink-0 flex-col justify-center md:m-8 lg:w-4/5 xl:mx-auto xl:w-5/6"
             >
                 <Outlet />
             </div>
