@@ -3,6 +3,7 @@ import serviceLogin from "../../../services/serviceLogin";
 import AlertContext from "../Contexts/AlertContext";
 import Alert from "../Alert";
 import UserContext from "../Contexts/UserContext";
+import { Link } from "react-router-dom";
 
 const Hero = () => {
     const [username, setUsername] = useState<string>("admin");
@@ -106,6 +107,9 @@ const Hero = () => {
                                     Login
                                 </button>
                             </div>
+                            <Link to="/registration">
+                                New user registration
+                            </Link>
                         </form>
                     </div>
                 </div>

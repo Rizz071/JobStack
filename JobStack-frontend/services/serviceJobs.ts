@@ -27,9 +27,10 @@ const isJobItemArray = (object: unknown[]): object is JobItem[] => {
 };
 
 /*Requesting all jobs from backend*/
-const requestJobList = async () => {
+const requestJobList = async (user_id: number | undefined) => {
+    if (!user_id) return [];
     try {
-        const response: unknown = await axios.get("/api/jobs/1");
+        const response: unknown = await axios.get(`/api/jobs/${user_id}`);
 
         if (
             !response ||

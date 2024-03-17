@@ -49,8 +49,15 @@ router.post("/", (req: Request, res: Response, next: NextFunction) => {
                 return res.status(401).json({ message: "Invalid username or password" });
             }
 
+            /* Checking type of received id */
+            const id: unknown = userFromDB.rows[0].id;
+            if (!isNumber(id)) {
+                return res.status(500).json({ message: "Invalid user ID in DB" });
+            }
+
             /* User was founded in DB */
             const foundedUser: UserObject = {
+                id: Number(userFromDB.rows[0].id),
                 username: String(userFromDB.rows[0].username),
                 password: String(userFromDB.rows[0].password),
                 fullname: String(userFromDB.rows[0].fullname)
@@ -64,12 +71,6 @@ router.post("/", (req: Request, res: Response, next: NextFunction) => {
                 return res.status(401).json({ message: "Invalid username or password" });
             }
 
-            /* Checking type of received id */
-            const id: unknown = userFromDB.rows[0].id;
-            if (!isNumber(id)) {
-                return res.status(500).json({ message: "Invalid user ID in DB" });
-            }
-
             const userForToken = {
                 username: String(foundedUser.username),
                 id,
@@ -79,7 +80,7 @@ router.post("/", (req: Request, res: Response, next: NextFunction) => {
 
             res
                 .status(200)
-                .send({ token, username: userForToken.username, fullname: foundedUser.fullname });
+                .send({ id, token, username: userForToken.username, fullname: foundedUser.fullname });
 
         } catch (error) {
             next(error);

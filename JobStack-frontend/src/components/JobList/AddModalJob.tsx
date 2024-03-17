@@ -2,6 +2,7 @@ import React, { useState, SyntheticEvent, useContext } from "react";
 import axios from "axios";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
 import AlertContext from "../Contexts/AlertContext";
+import UserContext from "../Contexts/UserContext";
 
 interface Props {
     modalAddJobForm: React.RefObject<HTMLDialogElement>;
@@ -16,38 +17,46 @@ const ModalAddJob = ({ modalAddJobForm }: Props) => {
         new Date().toISOString().split("T")[0]
     );
 
+    /* Access to global context AlertContext */
+    const { alerts, setAlerts } = useContext(AlertContext);
+
+    /* Access to global context UserContext */
+    const { user } = useContext(UserContext);
+
     const newJobsMutation = useMutation({
-        mutationFn: () =>
-            axios
-                .post(
-                    "/api/jobs/1",
-                    {
-                        job_title: newJobTitle,
-                        job_desc: newJobDesc,
-                        // date_of_apply: new Date().toISOString(),
-                        date_of_apply: newJobDate,
-                        current_status_desc: "Just applied",
-                        active: true,
+        mutationFn: () => {
+            return axios.post(
+                `/api/jobs/${user?.id}`,
+                {
+                    job_title: newJobTitle,
+                    job_desc: newJobDesc,
+                    // date_of_apply: new Date().toISOString(),
+                    date_of_apply: newJobDate,
+                    current_status_desc: "Applied",
+                    active: true,
+                },
+                {
+                    headers: {
+                        "Content-Type": "application/json",
                     },
-                    {
-                        headers: {
-                            "Content-Type": "application/json",
-                        },
-                    }
-                )
-                /* Getting id of created job */
-                /* Adding first status for new job */
-                .then((response) => newStatusMutation.mutate(response.data.id)),
+                }
+            );
+        },
+        onSuccess(data) {
+            /* Getting id of created job */
+            /* Adding first status for new job */
+            newStatusMutation.mutate(data.data.id);
+        },
     });
 
     // /* Adding first status for new job */
     const newStatusMutation = useMutation({
-        mutationFn: (job_id) =>
-            axios.post(
+        mutationFn: (job_id) => {
+            return axios.post(
                 `/api/status/${job_id}`,
                 {
                     position: 0,
-                    status: "Just applied",
+                    status: "Applied",
                     status_desc: "",
                     date: new Date().toISOString(),
                 },
@@ -56,9 +65,11 @@ const ModalAddJob = ({ modalAddJobForm }: Props) => {
                         "Content-Type": "application/json",
                     },
                 }
-            ),
+            );
+        },
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["jobs"] });
+            queryClient.invalidateQueries({ queryKey: ["jobs", user?.id] });
+            queryClient.invalidateQueries({ queryKey: ["statuses"] });
             setAlerts(alerts.concat("New job was added successfully"));
         },
     });
@@ -69,9 +80,6 @@ const ModalAddJob = ({ modalAddJobForm }: Props) => {
         /* Adding new job */
         newJobsMutation.mutate();
     };
-
-    /* Access to global context AlertContext */
-    const { alerts, setAlerts } = useContext(AlertContext);
 
     return (
         <dialog ref={modalAddJobForm} id="modal_add_job" className="modal">

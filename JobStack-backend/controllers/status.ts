@@ -38,7 +38,7 @@ router.get("/:id", (req: Request, res: Response, next: NextFunction) => {
         try {
             const result: unknown = await db.query(
                 `SELECT id, position, status, status_desc, date
-                FROM job_status WHERE job_id = $1 ORDER BY "position" ASC`,
+                FROM job_status WHERE job_id = $1 ORDER BY position DESC`,
                 [req.params.id]
             );
 

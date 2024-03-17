@@ -1,4 +1,5 @@
 export interface UserObject {
+    id: number;
     username: string;
     fullname: string;
     password: string;

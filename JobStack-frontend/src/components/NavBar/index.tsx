@@ -2,7 +2,6 @@ import React, { useContext } from "react";
 // import { Disclosure, Menu, Transition } from "@headlessui/react";
 // import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { ChevronDoubleUpIcon } from "@heroicons/react/24/outline";
-import { Navigate } from "react-router-dom";
 import UserContext from "../Contexts/UserContext";
 import serviceLogin from "../../../services/serviceLogin";
 
@@ -10,7 +9,7 @@ export default function NavBar() {
     /* Access to global context UserContext */
     const { user, setUser } = useContext(UserContext);
 
-    if (!user) return <Navigate to="/" />;
+    if (!user) return;
 
     return (
         <>

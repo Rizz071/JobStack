@@ -37,20 +37,22 @@ const Dashboard = () => {
         ref.current?.showModal();
     }, [ref]);
 
+    const user_id = user?.id;
+
     /* Requesting jobs data from server via REST API */
     const result_jobsList = useQuery({
-        queryKey: ["jobs"],
-        queryFn: serviceJobs.requestJobList,
+        queryKey: ["jobs", user_id],
+        queryFn: () => serviceJobs.requestJobList(user_id),
+        enabled: !!user_id,
     });
     console.log(
         "jobsList fetching",
         JSON.parse(JSON.stringify(result_jobsList))
     );
-
     /* Requesting jobs statuses data from server via REST API,
      * but first waiting for result_jobsList is loaded successfully */
     const result_jobsStatuses = useQuery({
-        queryKey: ["statuses"],
+        queryKey: ["statuses", result_jobsList.data],
         queryFn: () =>
             serviceStatuses.requestMultipleJobStatusList(
                 result_jobsList.data?.map((job) => job.id) || []
@@ -74,13 +76,17 @@ const Dashboard = () => {
 
     if (result_jobsList.isSuccess && result_jobsStatuses.isSuccess) {
         const jobsList: JobItem[] = result_jobsList.data;
-        !selectedJob ? setSelectedJob(jobsList.slice(-1)[0].id) : undefined;
+
+        /* If we have not any jobs in list - don't select any jobs */
+        if (jobsList.length !== 0) {
+            !selectedJob ? setSelectedJob(jobsList.slice(-1)[0].id) : undefined;
+        }
 
         // TODO Unsafe!!!
         const statusList: StatusObject[] =
             result_jobsStatuses.data as StatusObject[];
 
-        if (!user) return <Navigate to="/" />;
+        if (!user) return <Navigate to="/login" />;
 
         return (
             <div
@@ -132,7 +138,7 @@ const Dashboard = () => {
             </div>
         );
     }
-    return null;
+    return <Navigate to="/login" />;
 };
 
 export default Dashboard;

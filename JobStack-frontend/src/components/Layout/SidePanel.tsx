@@ -9,7 +9,7 @@ const SidePanel = () => {
     const { user, setUser } = useContext(UserContext);
 
     return (
-        <div className="hidden h-full shrink-0 grow-0 flex-col bg-neutral font-light text-neutral-content md:w-1/4 lg:flex lg:w-1/5 xl:w-1/6">
+        <div className="hidden shrink-0 grow-0 flex-col bg-neutral font-light text-neutral-content md:w-1/4 lg:flex lg:w-1/5 xl:w-1/6">
             <div
                 id="menu-content"
                 className="mx-auto flex h-full flex-col gap-y-10"

@@ -30,16 +30,20 @@ export interface AlertsType {
     setAlerts: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
+export interface UserObject {
+    username: string;
+    fullname: string;
+    password: string;
+}
+
 export interface LoggedUser {
+    id: number;
     username: string;
     fullname: string;
     token: string;
 }
 
-export interface LoggingUser {
-    username: string;
-    password: string;
-}
+export type LoggingUser = Omit<UserObject, "fullname">;
 
 export interface UsersType {
     user: LoggedUser | null;

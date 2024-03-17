@@ -393,7 +393,11 @@ export default function JobsList({
 
                 {jobsList.length === 0 ? (
                     <div className="flex flex-row justify-center p-2">
-                        <p className="prose">Jobs not found</p>
+                        <p className="prose">
+                            Jobs not found
+                            <br />
+                            Press Add button to add first applied vacancy
+                        </p>
                     </div>
                 ) : (
                     <ul role="list" className="">

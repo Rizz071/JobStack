@@ -45,7 +45,7 @@ const requestJobStatusList = async (job_id: number) => {
         if (data && isStatusObjectArray(data)) return data;
     } catch (error) {
         if (error instanceof Error) {
-            throw new Error("Error while requesting statuses from backend");
+            console.error("Error while requesting statuses from backend");
         }
     }
     return [];
@@ -76,7 +76,7 @@ const requestMultipleJobStatusList = async (jobs_array: number[]) => {
         if (data && isStatusObjectArray(data)) return data;
     } catch (error) {
         if (error instanceof Error) {
-            throw new Error("Error while requesting statuses from backend");
+            console.error("Error while requesting statuses from backend");
         }
     }
     return [];
@@ -110,57 +110,6 @@ const addStatus = async (job_id: number, newStatusObject: NewStatusObject) => {
         }
     }
 };
-
-// const deleteJob = async (id: number) => {
-//     try {
-//         /* Deleting job entity with ON DELETE CASCADE,
-//          * so will be deleted also status rows in job_status table
-//          */
-//         const response: unknown = await axios.delete(`/api/jobs/${id}`);
-
-//         /* Narrowing response from server and checking code 204 */
-//         if (
-//             !response ||
-//             typeof response !== "object" ||
-//             !("status" in response) ||
-//             response.status !== 204
-//         )
-//             throw new Error("error while deleting entity");
-
-//         // return response;
-//     } catch (error) {
-//         if (error instanceof Error) {
-//             throw new Error("Unknown server error occured while attemped to delete item from server");
-//         }
-//     }
-// };
-
-// const putJob = async (jobToPut: JobItem) => {
-
-//     try {
-//         const response: unknown = await axios.put<JobItem>(
-//             `/api/job/${jobToPut.id}`,
-//             jobToPut
-//         );
-
-//         /* Narrowing response from server and checking code 204 */
-//         if (
-//             !response ||
-//             typeof response !== "object" ||
-//             !("status" in response) ||
-//             response.status !== 201
-//         )
-//             throw new Error("error while changing entity on server");
-
-//     } catch (error) {
-//         if (error instanceof Error) {
-//             throw new Error(
-//                 "unknown server error occured while attemped to delete item from server",
-//                 error
-//             );
-//         }
-//     }
-// };
 
 export default {
     requestJobStatusList,

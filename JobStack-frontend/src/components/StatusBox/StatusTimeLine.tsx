@@ -11,6 +11,21 @@ const StatusTimeLine = ({ statusArray }: Props) => {
         return <p>No elements</p>;
     }
 
+    const comparePosition = (a: StatusObject, b: StatusObject) => {
+        const positionA = a.position;
+        const positionB = b.position;
+
+        if (positionA < positionB) {
+            return -1;
+        }
+        if (positionA > positionB) {
+            return 1;
+        }
+        return 0;
+    };
+
+    statusArray.sort(comparePosition);
+
     return (
         <ul className="timeline timeline-vertical mx-6 my-6 flex">
             {statusArray.map((statusElement, index, arr) => {

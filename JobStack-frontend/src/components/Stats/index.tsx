@@ -1,13 +1,21 @@
-import React from "react";
+import React, { useContext } from "react";
 import { JobItem, StatusObject } from "../../types";
 import { useQueryClient } from "@tanstack/react-query";
+import UserContext from "../Contexts/UserContext";
 
 const Stats = () => {
     const queryClient = useQueryClient();
 
-    const jobsList: JobItem[] = queryClient.getQueryData(["jobs"]) || [];
+    /* Access to global context UserContext */
+    const { user } = useContext(UserContext);
+
+    const jobsList: JobItem[] =
+        queryClient.getQueryData(["jobs", user?.id]) || [];
     const statusList: StatusObject[] =
-        queryClient.getQueryData(["statuses"]) || [];
+        queryClient.getQueryData(["statuses", jobsList]) || [];
+
+    if (jobsList.length === 0 || statusList.length === 0)
+        return <p>Nothing yet...</p>;
 
     const compareDate = (a: JobItem, b: JobItem) => {
         const dateA = Date.parse(a.date_of_apply);
