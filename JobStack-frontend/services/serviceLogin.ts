@@ -54,6 +54,8 @@ const requestUser = async ({
             ? response.data
             : null;
 
+        window.localStorage.setItem("loggedUser", JSON.stringify(receivedUser));
+
         /* Returning LoggedUser object or null if user wasn't founded */
         return receivedUser;
     } catch (error) {

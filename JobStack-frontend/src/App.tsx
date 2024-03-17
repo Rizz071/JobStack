@@ -27,12 +27,15 @@ function App() {
         <>
             {user && <Navigate to="/dashboard" />}
             <Routes>
-                <Route path="/index" element={<Hero />} />
                 <Route path="/" element={<Layout />}>
                     <Route
                         index
                         element={
-                            user ? <Dashboard /> : <Navigate to="/index" />
+                            user ? (
+                                <Navigate to="/dashboard" />
+                            ) : (
+                                <Navigate to="/index" />
+                            )
                         }
                     />
                     <Route path="/dashboard" element={<Dashboard />} />
@@ -47,6 +50,7 @@ function App() {
                     />
                     <Route path="*" element={<p>404 page not found</p>} />
                 </Route>
+                <Route path="index" element={<Hero />} />
             </Routes>
         </>
     );

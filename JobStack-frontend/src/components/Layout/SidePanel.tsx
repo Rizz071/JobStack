@@ -18,7 +18,7 @@ const SidePanel = () => {
                 <div id="logo" className="mx-auto mt-8">
                     <button
                         className="flex flex-col items-center"
-                        onClick={() => <Navigate to="/dashboard" />}
+                        onClick={() => <Navigate to="/" />}
                     >
                         {/* <ChevronDoubleUpIcon className="w-14" /> */}
                         <img
