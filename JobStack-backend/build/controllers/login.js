@@ -49,8 +49,14 @@ router.post("/", (req, res, next) => {
                 console.log("sdfsdfsdf");
                 return res.status(401).json({ message: "Invalid username or password" });
             }
+            /* Checking type of received id */
+            const id = userFromDB.rows[0].id;
+            if (!(0, service_1.isNumber)(id)) {
+                return res.status(500).json({ message: "Invalid user ID in DB" });
+            }
             /* User was founded in DB */
             const foundedUser = {
+                id: Number(userFromDB.rows[0].id),
                 username: String(userFromDB.rows[0].username),
                 password: String(userFromDB.rows[0].password),
                 fullname: String(userFromDB.rows[0].fullname)
@@ -61,11 +67,6 @@ router.post("/", (req, res, next) => {
             if (!passwordCorrect) {
                 return res.status(401).json({ message: "Invalid username or password" });
             }
-            /* Checking type of received id */
-            const id = userFromDB.rows[0].id;
-            if (!(0, service_1.isNumber)(id)) {
-                return res.status(500).json({ message: "Invalid user ID in DB" });
-            }
             const userForToken = {
                 username: String(foundedUser.username),
                 id,
@@ -73,7 +74,7 @@ router.post("/", (req, res, next) => {
             const token = jsonwebtoken_1.default.sign(userForToken, String(process.env.SECRET));
             res
                 .status(200)
-                .send({ token, username: userForToken.username, fullname: foundedUser.fullname });
+                .send({ id, token, username: userForToken.username, fullname: foundedUser.fullname });
         }
         catch (error) {
             next(error);

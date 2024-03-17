@@ -40,6 +40,10 @@ const errorHandler = (err, _req, res, _next) => {
             return res
                 .status(404)
                 .send("ERROR: could not determine data type of parameter $1");
+        case "23505":
+            return res
+                .status(409)
+                .send("ERROR: user already exist in database");
         default:
             console.log(err);
             return res.status(500).send(err);

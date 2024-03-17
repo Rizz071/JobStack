@@ -13,6 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express = require("express");
+const bcrypt_1 = __importDefault(require("bcrypt"));
 const router = express();
 const db_1 = __importDefault(require("../db"));
 const service_1 = require("../services/service");
@@ -79,8 +80,10 @@ router.post("/", (req, res, next) => {
                 !(0, service_1.isString)(obj.fullname)) {
                 throw Error("corrupted data or some field absent in job object received from server");
             }
-            const { username, password, fullname } = obj;
-            yield db_1.default.query(`INSERT INTO users (username, password, fullname) VALUES ($1, $2, $3)`, [username, password, fullname]);
+            const { username, fullname, password } = obj;
+            const saltRounds = 10;
+            const hash = yield bcrypt_1.default.hash(password, saltRounds);
+            yield db_1.default.query(`INSERT INTO users (username, password, fullname) VALUES ($1, $2, $3)`, [username, hash, fullname ? fullname : null]);
             res.status(201).send(req.body);
         }
         catch (error) {

@@ -38,7 +38,7 @@ router.get("/:id", (req, res, next) => {
     void (() => __awaiter(void 0, void 0, void 0, function* () {
         try {
             const result = yield db_1.default.query(`SELECT id, position, status, status_desc, date
-                FROM job_status WHERE job_id = $1 ORDER BY "position" ASC`, [req.params.id]);
+                FROM job_status WHERE job_id = $1 ORDER BY position DESC`, [req.params.id]);
             /* Narrowing received object from server */
             if (!result || typeof result !== "object" || !("rows" in result)) {
                 throw Error("received invalid array of job statuses from server");
