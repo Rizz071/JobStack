@@ -12,8 +12,7 @@ router.post("/multiple", (req: Request, res: Response, next: NextFunction) => {
     void (async () => {
         try {
             const result: unknown = await db.query(
-                `SELECT *
-                FROM job_status WHERE job_id = ANY ($1)`,
+                `SELECT * FROM job_status WHERE job_id = ANY ($1)`,
                 [req.body.jobs_array]
             );
 

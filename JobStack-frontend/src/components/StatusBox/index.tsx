@@ -2,9 +2,6 @@ import React, { useRef } from "react";
 import StatusTimeLine from "./StatusTimeLine";
 import { StatusObject } from "../../types";
 import AddStatusModal from "./AddStatusModal";
-// import { useQuery } from "@tanstack/react-query";
-// import serviceStatuses from "../../../services/serviceStatuses";
-// import LoadingProgress from "../LoadingProgress";
 
 interface Props {
     job_id: number;
@@ -40,8 +37,6 @@ const StatusBox = ({ job_id, statusList }: Props) => {
             </div>
         </>
     );
-    // } else {
-    //     return null;
-    //     }
 };
+
 export default StatusBox;
