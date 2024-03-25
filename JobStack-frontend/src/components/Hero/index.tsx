@@ -16,18 +16,18 @@ const Hero = () => {
         <div id="background" className="border bg-base-200 ">
             <div
                 id="wrapper"
-                className="xl:4/5 mx-auto flex w-full flex-col justify-between gap-5 rounded-xl bg-base-100 p-10 shadow-2xl sm:mt-10 lg:p-20 2xl:w-3/5"
+                className="xl:4/5 mx-auto flex w-full flex-col justify-between gap-5 rounded-xl bg-base-100 p-10 shadow-2xl sm:mt-10 lg:w-4/5 lg:p-20 2xl:w-3/5"
             >
                 <div
                     id="first-block"
-                    className="flex flex-col justify-between gap-10 lg:flex-row"
+                    className="mx-auto flex flex-col justify-between gap-10 lg:mx-0 lg:flex-row"
                 >
                     <article className="prose prose-sm flex flex-col flex-wrap md:prose-base">
                         <h1 className="text-center lg:text-left">
                             Welcome to our job application management platform!
                         </h1>
-                        <div className="mx-auto flex flex-col justify-between gap-5 md:mx-0 md:flex-row">
-                            <figure className="mb-6 mt-auto lg:hidden xl:block">
+                        <div className="mx-auto flex flex-col justify-between gap-5 md:flex-row">
+                            <figure className="flex flex-col lg:hidden xl:block">
                                 <img
                                     src={imgHipster}
                                     alt="Hipster standing"
@@ -40,11 +40,12 @@ const Hero = () => {
                                 details?
                                 <br />
                                 <br />
-                                Our web application is here to save the day!
-                                With our user-friendly interface, you can easily
-                                organize job postings, track application
-                                responses, quickly search through candidate
-                                profiles, and identify duplicate applications.
+                                <strong>We are here to save the day!</strong>
+                                <br />
+                                Our web application gives you peace of mind
+                                knowing that your job search is organized and
+                                under control. You can be sure that you will not
+                                miss a single opportunity.
                             </p>
                         </div>
                     </article>
