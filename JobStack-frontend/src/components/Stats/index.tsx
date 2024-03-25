@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 import React, { useContext } from "react";
 import { JobItem, StatusObject } from "../../types";
 import { useQueryClient } from "@tanstack/react-query";
@@ -34,11 +35,32 @@ const Stats = () => {
     const totalJobsAmount = jobsList.length;
     const firstDate = new Date(sortedJobsList_byDate[0].date_of_apply);
     const lastDate = new Date(sortedJobsList_byDate.slice(-1)[0].date_of_apply);
+
+    /* Evaluating of statistic period */
+    const dummyPeriod: number = 10 * 24 * 60 * 60 * 1000;
+    const currentPeriodStartDate = lastDate.getTime() - dummyPeriod;
+    const pastPeriodStartDate = lastDate.getTime() - 2 * dummyPeriod;
+    /* End of evaluating of statistic period */
+
+    /* Evaluating total days amount of work applying */
     const totalDaysAmount = Math.floor(
         (lastDate.getTime() - firstDate.getTime()) / (24 * 60 * 60 * 1000)
     );
 
-    const inProcessAmount = jobsList.filter((jobItem) => {
+    const currentPeriodJobs = jobsList.filter((jobItem) => {
+        return Date.parse(jobItem.date_of_apply) >= currentPeriodStartDate;
+    });
+
+    const pastPeriodJobs = jobsList.filter((jobItem) => {
+        return (
+            Date.parse(jobItem.date_of_apply) >= pastPeriodStartDate &&
+            Date.parse(jobItem.date_of_apply) < currentPeriodStartDate
+        );
+    });
+    /* End of evaluating total days amount of work applying */
+
+    /* Evaluating in process jobs */
+    const inProcessJobs = jobsList.filter((jobItem) => {
         if (
             statusList
                 .filter((status) => status.job_id === jobItem.id)
@@ -49,7 +71,18 @@ const Stats = () => {
                 )
         )
             return jobItem;
-    }).length;
+    });
+
+    const currentPeriodInProcessJobs = inProcessJobs.filter((jobItem) => {
+        return Date.parse(jobItem.date_of_apply) >= currentPeriodStartDate;
+    });
+    const pastPeriodInProcessJobs = inProcessJobs.filter((jobItem) => {
+        return (
+            Date.parse(jobItem.date_of_apply) >= pastPeriodStartDate &&
+            Date.parse(jobItem.date_of_apply) < currentPeriodStartDate
+        );
+    });
+    /* End of evaluating in process jobs */
 
     const rejectedAmount = jobsList.filter((jobItem) => {
         if (
@@ -91,7 +124,7 @@ const Stats = () => {
                         viewBox="0 0 24 24"
                         strokeWidth={1.5}
                         stroke="currentColor"
-                        className="h-6 w-6"
+                        className="h-8 w-8"
                     >
                         <path
                             strokeLinecap="round"
@@ -128,7 +161,7 @@ const Stats = () => {
                             viewBox="0 0 24 24"
                             strokeWidth={1.5}
                             stroke="currentColor"
-                            className="h-6 w-6"
+                            className="h-8 w-8"
                         >
                             <path
                                 strokeLinecap="round"
@@ -144,7 +177,21 @@ const Stats = () => {
                         {avgJobs_perDay}
                     </div>
                     <div className="stat-desc">
-                        Total {totalDaysAmount} days
+                        {currentPeriodJobs.length > pastPeriodJobs.length
+                            ? `↗︎ ${
+                                  currentPeriodJobs.length -
+                                  pastPeriodJobs.length
+                              }`
+                            : `↘︎ ${
+                                  pastPeriodJobs.length -
+                                  currentPeriodJobs.length
+                              }`}{" "}
+                        (
+                        {(
+                            (currentPeriodJobs.length / pastPeriodJobs.length) *
+                            100
+                        ).toFixed(1)}{" "}
+                        %)
                     </div>
                 </div>
             </div>
@@ -157,7 +204,7 @@ const Stats = () => {
                         viewBox="0 0 24 24"
                         strokeWidth={1.5}
                         stroke="currentColor"
-                        className="h-6 w-6"
+                        className="h-8 w-8"
                     >
                         <path
                             strokeLinecap="round"
@@ -184,7 +231,7 @@ const Stats = () => {
                             viewBox="0 0 24 24"
                             strokeWidth={1.5}
                             stroke="currentColor"
-                            className="h-6 w-6"
+                            className="h-8 w-8"
                         >
                             <path
                                 strokeLinecap="round"
@@ -197,9 +244,32 @@ const Stats = () => {
                         In process
                     </div>
                     <div className="stat-value text-3xl font-semibold">
-                        {inProcessAmount}
+                        {inProcessJobs.length}
                     </div>
-                    <div className="stat-desc">↗︎ 400 (22%)</div>
+                    <div className="stat-desc">
+                        {" "}
+                        {currentPeriodInProcessJobs.length >
+                        pastPeriodInProcessJobs.length
+                            ? `↗︎ ${
+                                  currentPeriodInProcessJobs.length -
+                                  pastPeriodInProcessJobs.length
+                              }`
+                            : `↘︎ ${
+                                  pastPeriodInProcessJobs.length -
+                                  currentPeriodInProcessJobs.length
+                              }`}{" "}
+                        {currentPeriodInProcessJobs.length !== 0 &&
+                        pastPeriodInProcessJobs.length !== 0
+                            ? `(
+                            ${(
+                                (currentPeriodInProcessJobs.length /
+                                    pastPeriodInProcessJobs.length) *
+                                100
+                            ).toFixed(1)}}
+                           
+                        %)`
+                            : ""}
+                    </div>
                 </div>
             </div>
 
@@ -211,7 +281,7 @@ const Stats = () => {
                         viewBox="0 0 24 24"
                         strokeWidth={1.5}
                         stroke="currentColor"
-                        className="h-6 w-6"
+                        className="h-8 w-8"
                     >
                         <path
                             strokeLinecap="round"
@@ -235,7 +305,7 @@ const Stats = () => {
                         viewBox="0 0 24 24"
                         strokeWidth={1.5}
                         stroke="currentColor"
-                        className="h-6 w-6"
+                        className="h-8 w-8"
                     >
                         <path
                             strokeLinecap="round"

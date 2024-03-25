@@ -41,7 +41,16 @@ const requestJobList = async (user_id: number | undefined) => {
             throw new Error("error while retrieving job list from server");
         }
 
+        /* Converting date without timezone from server to local timezone */
+        // response.data.forEach(
+        //     (data) =>
+        //         (data.date_of_apply = new Date(
+        //             Date.parse(data.date_of_apply)
+        //         ).toLocaleDateString())
+        // );
+
         const data: unknown[] = response.data;
+
         if (data && isJobItemArray(data)) return data;
     } catch (error) {
         if (error instanceof Error) {

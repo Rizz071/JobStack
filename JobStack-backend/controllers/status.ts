@@ -111,24 +111,6 @@ router.delete("/:id", (req: Request, res: Response, next: NextFunction) => {
     })();
 });
 
-
-/* Deleting ALL job statuses by id === job_id */
-// router.delete("/all/:id", (req: Request, res: Response, next: NextFunction) => {
-// 	void (async () => {
-// 		try {
-// 			await db.query(`DELETE FROM job_status WHERE job_id = $1`, [
-// 				req.params.id,
-// 			]);
-
-// 			/* Sending No Content if success*/
-// 			// res.status(204).send("item deleted");
-// 			res.sendStatus(204);
-// 		} catch (error) {
-// 			next(error);
-// 		}
-// 	})();
-// });
-
 /* Changing one job status by id === job_id */
 router.put(":id", (req: Request, res: Response, next: NextFunction) => {
     const { position, status, status_desc, date }: StatusObject =

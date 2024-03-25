@@ -43,7 +43,14 @@ const StatusTimeLine = ({ statusArray }: Props) => {
                         )}
                         <div className="timeline-start">
                             <span className="my-auto text-xs font-light text-base-content">
-                                {statusElement.date.toString().split("T")[0]}
+                                {statusElement.date.toLocaleDateString(
+                                    "default",
+                                    {
+                                        day: "numeric",
+                                        month: "short",
+                                        year: "numeric",
+                                    }
+                                )}
                             </span>
                         </div>
                         <div className="timeline-middle mx-1">

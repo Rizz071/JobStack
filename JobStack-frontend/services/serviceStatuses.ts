@@ -25,7 +25,7 @@ const isStatusObjectArray = (object: unknown[]): object is StatusObject[] => {
     return object.every((i) => isStatusObject(i));
 };
 
-// /*Requesting all jobs from backend*/
+// /*Requesting all statuses from backend*/
 const requestJobStatusList = async (job_id: number) => {
     try {
         const response: unknown = await axios.get(`/api/status/${job_id}`);
@@ -39,9 +39,13 @@ const requestJobStatusList = async (job_id: number) => {
         )
             throw new Error("error while retrieving job list from server");
 
+        /* Converting date without timezone from server to local timezone */
+        response.data.forEach(
+            (data) => (data.date = new Date(Date.parse(data.date)))
+        );
+
         const data: unknown[] = response.data;
 
-        // console.log(data);
         if (data && isStatusObjectArray(data)) return data;
     } catch (error) {
         if (error instanceof Error) {
@@ -71,6 +75,10 @@ const requestMultipleJobStatusList = async (jobs_array: number[]) => {
             console.error("error while retrieving job list from server");
             return [] as StatusObject[];
         }
+        /* Converting date without timezone from server to local timezone */
+        response.data.forEach(
+            (data) => (data.date = new Date(Date.parse(data.date)))
+        );
 
         const data: unknown[] = response.data;
 

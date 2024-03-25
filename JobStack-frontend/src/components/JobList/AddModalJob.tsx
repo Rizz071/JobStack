@@ -58,7 +58,7 @@ const ModalAddJob = ({ modalAddJobForm }: Props) => {
                     position: 0,
                     status: "Applied",
                     status_desc: "",
-                    date: new Date().toISOString(),
+                    date: newJobDate,
                 },
                 {
                     headers: {
