@@ -3,13 +3,18 @@ import { useState } from "react";
 import { JobItem } from "../../types";
 import { useNavigate, useParams } from "react-router-dom";
 import serviceJobs from "../../../services/serviceJobs";
-import { useQueryClient, useMutation } from "@tanstack/react-query";
+import { useQueryClient, useMutation, useQuery } from "@tanstack/react-query";
 import ModalConfirmation from "../ModalConfirmation";
 import AlertContext from "../Contexts/AlertContext";
+import UserContext from "../Contexts/UserContext";
+import LoadingProgress from "../LoadingProgress";
 
 const DetailJobView = () => {
     const [jobTitle, setJobTitle] = useState<string>();
     const [jobDescription, setJobDescription] = useState<string>();
+
+    /* Access to global context UserContext */
+    const { user } = useContext(UserContext);
 
     /* Confirmation Dialog's implementation */
     const modalConfirmation = useRef<HTMLDialogElement>(null);
@@ -22,33 +27,65 @@ const DetailJobView = () => {
     const { id } = useParams();
     const navigate = useNavigate();
 
-    const jobsList: JobItem[] = queryClient.getQueryData(["jobs"]) || [];
+    /* Access to global context AlertContext */
+    const { alerts, setAlerts } = useContext(AlertContext);
 
-    const currentJob: JobItem | undefined = jobsList.find(
-        (job) => job.id === Number(id)
-    );
+    // const jobsList: JobItem[] =
+    //     queryClient.getQueryData(["jobs", user_id]) || [];
 
+    // const currentJob: JobItem | undefined = jobsList.find(
+    //     (job) => job.id === Number(id)
+    // );
     const deleteMutation = useMutation({
         mutationFn: (id: number) => serviceJobs.deleteJob(id),
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["jobs"] });
+            queryClient.invalidateQueries({ queryKey: ["jobs", user?.id] });
             setAlerts(alerts.concat("Deleted successfully"));
+
+            navigate("/dashboard");
         },
     });
 
     const saveMutation = useMutation({
         mutationFn: (jobToPut: JobItem) => serviceJobs.putJob(jobToPut),
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["jobs"] });
+            queryClient.invalidateQueries({ queryKey: ["job", user?.id, id] });
             setAlerts(alerts.concat("Saved successfully"));
+
+            setJobTitle("");
+            setJobDescription("");
+
+            navigate("/dashboard");
         },
     });
+    /* Requesting job data from server via REST API by job id */
+    const { isLoading, isError, data, error } = useQuery({
+        queryKey: ["job", user?.id, id],
+        queryFn: () => serviceJobs.requestJobById(Number(id)),
+    });
+    console.log(data);
+
+    if (isLoading) {
+        return <LoadingProgress />;
+    }
+
+    if (isError) {
+        return (
+            <div>
+                Error occured while requesting jobs data from server!
+                <br />
+                {error.message}
+            </div>
+        );
+    }
+
+    const currentJob: JobItem = data as JobItem;
+    console.log(currentJob);
 
     const handleDelete = async () => {
-        if (!currentJob) return;
+        if (!data) return;
 
         deleteMutation.mutate(currentJob.id);
-        navigate("/");
     };
 
     const handleSave = async () => {
@@ -64,12 +101,6 @@ const DetailJobView = () => {
 
         saveMutation.mutate(jobToPut);
     };
-
-    /* Access to global context AlertContext */
-    const { alerts, setAlerts } = useContext(AlertContext);
-
-    /* Waiting for data arrival */
-    if (!currentJob) return null;
 
     if (!jobTitle) setJobTitle(currentJob.job_title);
     if (!jobDescription) setJobDescription(currentJob.job_desc);
@@ -100,12 +131,6 @@ const DetailJobView = () => {
                                     ? "hidden"
                                     : ""
                             } btn btn-outline btn-success btn-sm  my-auto mr-4 w-1/3`}
-                            // disabled={
-                            //     jobTitle === currentJob.job_title &&
-                            //     jobDescription === currentJob.job_desc
-                            //         ? true
-                            //         : false
-                            // }
                         >
                             Save
                         </button>
@@ -119,7 +144,7 @@ const DetailJobView = () => {
                             Delete
                         </button>
                         <button
-                            onClick={() => navigate("/")}
+                            onClick={() => navigate("/dashboard")}
                             className="btn btn-active btn-sm my-auto mr-4 w-1/3"
                         >
                             Cancel

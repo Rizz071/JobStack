@@ -60,6 +60,30 @@ const requestJobList = async (user_id: number | undefined) => {
     return [];
 };
 
+/*Requesting all jobs from backend*/
+const requestJobById = async (job_id: number | undefined) => {
+    if (!job_id) return null;
+    try {
+        const response: unknown = await axios.get(`/api/job/${job_id}`);
+
+        if (
+            !response ||
+            typeof response !== "object" ||
+            !("data" in response)
+        ) {
+            throw new Error("error while retrieving job list from server");
+        }
+        const data: unknown = response.data;
+
+        if (data && isJobItem(data)) return data;
+    } catch (error) {
+        if (error instanceof Error) {
+            throw new Error("unknown server error");
+        }
+    }
+    return null;
+};
+
 const deleteJob = async (id: number) => {
     try {
         /* Deleting job entity with ON DELETE CASCADE,
@@ -113,6 +137,7 @@ const putJob = async (jobToPut: JobItem) => {
 
 export default {
     requestJobList,
+    requestJobById,
     deleteJob,
     putJob,
 };

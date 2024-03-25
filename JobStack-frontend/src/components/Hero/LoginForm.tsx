@@ -3,7 +3,7 @@ import serviceLogin from "../../../services/serviceLogin";
 // import AlertContext from "../Contexts/AlertContext";
 // import Alert from "../Alert";
 import UserContext from "../Contexts/UserContext";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 interface Props {
     demoLoginButtonRef: React.RefObject<HTMLButtonElement>;
@@ -19,6 +19,8 @@ const LoginForm = ({ demoLoginButtonRef }: Props) => {
     /* Access to global context UserContext */
     const { setUser } = useContext(UserContext);
 
+    const navigate = useNavigate();
+
     const demoLogin = async () => {
         const loggedUser = await serviceLogin.requestUser({
             username: "admin",
@@ -27,6 +29,7 @@ const LoginForm = ({ demoLoginButtonRef }: Props) => {
 
         setTimeout(() => {
             setUser(loggedUser);
+            navigate("dashboard");
         }, 0);
     };
 

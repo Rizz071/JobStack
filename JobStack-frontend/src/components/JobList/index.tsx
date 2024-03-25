@@ -474,7 +474,7 @@ export default function JobsList({
                                         onClick={() => {
                                             setSelectedJob(jobItem.id);
                                             navigate(
-                                                `/detailview/${jobItem.id}`,
+                                                `detailview/${jobItem.id}`,
                                                 { replace: true }
                                             );
                                         }}

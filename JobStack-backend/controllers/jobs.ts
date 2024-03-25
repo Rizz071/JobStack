@@ -35,7 +35,7 @@ router.get("/job/:id", (req: Request, res: Response, next: NextFunction) => {
     void (async () => {
         try {
             const result: unknown = await db.query(
-                `SELECT job_title, job_desc, date_of_apply, current_status_desc, active
+                `SELECT id, job_title, job_desc, date_of_apply, current_status_desc, active
                 FROM jobs_data WHERE id = $1`,
                 [req.params.id]
             );

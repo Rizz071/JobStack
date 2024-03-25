@@ -25,32 +25,24 @@ function App() {
 
     return (
         <>
-            {user && <Navigate to="dashboard" />}
             <Routes>
+                <Route
+                    path="/"
+                    element={!user ? <Hero /> : <Navigate to="/dashboard" />}
+                />
                 <Route element={<Layout />}>
-                    <Route
-                        path="/"
-                        element={
-                            user ? (
-                                <Navigate to="dashboard" />
-                            ) : (
-                                <Navigate to="index" />
-                            )
-                        }
-                    />
                     <Route path="dashboard" element={<Dashboard />} />
                     <Route path="registration" element={<Registration />} />
                     <Route
-                        path="detailview/:id"
+                        path="dashboard/detailview/:id"
                         element={
                             <div className="flex w-full flex-row justify-center gap-x-6">
                                 <DetailJobView />
                             </div>
                         }
                     />
-                    <Route path="*" element={<p>404 page not found</p>} />
                 </Route>
-                <Route path="index" element={<Hero />} />
+                <Route path="*" element={<p>404 page not found</p>} />
             </Routes>
         </>
     );
