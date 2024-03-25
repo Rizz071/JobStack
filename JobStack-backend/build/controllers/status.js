@@ -20,8 +20,7 @@ router.post("/multiple", (req, res, next) => {
     // console.log(req.body);
     void (() => __awaiter(void 0, void 0, void 0, function* () {
         try {
-            const result = yield db_1.default.query(`SELECT *
-                FROM job_status WHERE job_id = ANY ($1)`, [req.body.jobs_array]);
+            const result = yield db_1.default.query(`SELECT * FROM job_status WHERE job_id = ANY ($1)`, [req.body.jobs_array]);
             /* Narrowing received object from server */
             if (!result || typeof result !== "object" || !("rows" in result)) {
                 throw Error("received invalid array of job statuses from server");
@@ -92,21 +91,6 @@ router.delete("/:id", (req, res, next) => {
         }
     }))();
 });
-/* Deleting ALL job statuses by id === job_id */
-// router.delete("/all/:id", (req: Request, res: Response, next: NextFunction) => {
-// 	void (async () => {
-// 		try {
-// 			await db.query(`DELETE FROM job_status WHERE job_id = $1`, [
-// 				req.params.id,
-// 			]);
-// 			/* Sending No Content if success*/
-// 			// res.status(204).send("item deleted");
-// 			res.sendStatus(204);
-// 		} catch (error) {
-// 			next(error);
-// 		}
-// 	})();
-// });
 /* Changing one job status by id === job_id */
 router.put(":id", (req, res, next) => {
     const { position, status, status_desc, date } = req.body;
